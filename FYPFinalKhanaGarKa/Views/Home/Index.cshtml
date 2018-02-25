@@ -1,106 +1,422 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Home";
 }
 
-<div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="6000">
-    <ol class="carousel-indicators">
-        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-        <li data-target="#myCarousel" data-slide-to="1"></li>
-        <li data-target="#myCarousel" data-slide-to="2"></li>
-        <li data-target="#myCarousel" data-slide-to="3"></li>
-    </ol>
-    <div class="carousel-inner" role="listbox">
-        <div class="item active">
-            <img src="~/images/banner1.svg" alt="ASP.NET" class="img-responsive" />
-            <div class="carousel-caption" role="option">
-                <p>
-                    Learn how to build ASP.NET apps that can run anywhere.
-                    <a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkID=525028&clcid=0x409">
-                        Learn More
-                    </a>
-                </p>
-            </div>
-        </div>
-        <div class="item">
-            <img src="~/images/banner2.svg" alt="Visual Studio" class="img-responsive" />
-            <div class="carousel-caption" role="option">
-                <p>
-                    There are powerful new features in Visual Studio for building modern web apps.
-                    <a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkID=525030&clcid=0x409">
-                        Learn More
-                    </a>
-                </p>
-            </div>
-        </div>
-        <div class="item">
-            <img src="~/images/banner3.svg" alt="Package Management" class="img-responsive" />
-            <div class="carousel-caption" role="option">
-                <p>
-                    Bring in libraries from NuGet and npm, and automate tasks using Grunt or Gulp.
-                    <a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkID=525029&clcid=0x409">
-                        Learn More
-                    </a>
-                </p>
-            </div>
-        </div>
-        <div class="item">
-            <img src="~/images/banner4.svg" alt="Microsoft Azure" class="img-responsive" />
-            <div class="carousel-caption" role="option">
-                <p>
-                    Learn how Microsoft's Azure cloud platform allows you to build, deploy, and scale web apps.
-                    <a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkID=525027&clcid=0x409">
-                        Learn More
-                    </a>
-                </p>
-            </div>
-        </div>
-    </div>
-    <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
-        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-        <span class="sr-only">Previous</span>
-    </a>
-    <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
-        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-        <span class="sr-only">Next</span>
-    </a>
-</div>
 
-<div class="row">
-    <div class="col-md-3">
-        <h2>Application uses</h2>
-        <ul>
-            <li>Sample pages using ASP.NET Core MVC</li>
-            <li>Theming using <a href="https://go.microsoft.com/fwlink/?LinkID=398939">Bootstrap</a></li>
-        </ul>
+<!-- Content Start -->
+<!-- start static header -->
+<section class="static-section">
+    <div class="container">
+        <div class="row static-header-content-wrapper">
+            <div class="col-md-12 static-header-content">
+                <div class="static-header-text">
+                    <h4 class="white">FIND AMAZING SELECTION OF LOCAL CHEFS DELIVERING FOOD TO YOUR DOOR</h4>
+                    <h2 class="white margin-bottom-30">Hungry? Order Online From Your Favorite Nearby Chef</h2>
+                </div>
+
+            </div>
+        </div>
+
     </div>
-    <div class="col-md-3">
-        <h2>How to</h2>
-        <ul>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=398600">Add a Controller and View</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=699315">Manage User Secrets using Secret Manager.</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=699316">Use logging to log a message.</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=699317">Add packages using NuGet.</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=699319">Target development, staging or production environment.</a></li>
-        </ul>
+</section>
+<!-- end static header -->
+<section class="order-process-step">
+    <div class="container frontend">
+        <div class="clearfix"></div>
+        <!--Facts-->
+        <!--Process Block-->
+        <div class="block process-block">
+            <!--<h2>The process</h2>
+                <h5>4 Steps for Success</h5>-->
+            <div class="row text-center">
+                <ol class="process">
+                    <li class="col-md-3 col-sm-6 col-xs-6">
+                        <i class="fa fa-cutlery" aria-hidden="true"></i>
+                        <h4>Pick a restaurant</h4>
+                    </li>
+                    <li class="col-md-3 col-sm-6 col-xs-6">
+                        <i class="fa fa-car"></i>
+                        <h4>Order a takeaway</h4>
+                    </li>
+                    <li class="col-md-3 col-sm-6 col-xs-6">
+                        <i class="fa fa-beer"></i>
+                        <h4>Your food is delivered</h4>
+                    </li>
+                    <li class="col-md-3 col-sm-6 col-xs-6">
+                        <i class="fa fa-thumbs-o-up"></i>
+                        <h4>Happy, Enjoy</h4>
+                    </li>
+                </ol>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <!--/Process Block-->
+        <div class="clearfix"></div>
+        <!--/Facts-->
     </div>
-    <div class="col-md-3">
-        <h2>Overview</h2>
-        <ul>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=518008">Conceptual overview of what is ASP.NET Core</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=699320">Fundamentals of ASP.NET Core such as Startup and middleware.</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=398602">Working with Data</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=398603">Security</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=699321">Client side development</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=699322">Develop on different platforms</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=699323">Read more on the documentation site</a></li>
-        </ul>
+</section>
+<section id="best-restaurant" class="best-restaurant">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h1 class="font-lg"><span class="font-semibold chef-red">Khana Gar Ka </h1>
+
+                <h2>
+                    SAY GOOD BYE…
+                    TO LOW QUALITY FOOD!
+                </h2>
+
+                <h4><b> WE SAVE YOU FROM UNHEALTHY TOXIC FOOD CHOICES BY SERVING YOU REAL HEALTHY HOMEMADE FOOD AT YOUR DOORSTEP.</b> </h4>
+                <h4>
+                    Not only health is most neglected aspect of our life,
+                    but we have tons of unhealthy toxic food choices around us,
+                    making it hard to live a healthy life. That is why Obesity,
+                    diabetes and heart diseases have become so common in our lives.
+                </h4>
+
+                <h1></h1>
+
+
+                <h4>
+                    At Khana Gar Ka, we decided to bring a CHANGE in the industry.
+                    Not only you get healthy homemade food by families,
+                    but you help us to make this CHANGE happen and empower
+                    our foodie women by giving them an opportunity to sell homemade
+                    food right from their home kitchens. Let’s grow this win-win relationship together!
+                </h4>
+
+                <h3> <span class="font-semibold chef-red"> SAVE YOUR HEALTH, MONEY AND TIME ALTOGETHER  </h3>
+            </div>
+            <!-- col-md-12 -->
+        </div>
+
     </div>
-    <div class="col-md-3">
-        <h2>Run &amp; Deploy</h2>
-        <ul>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=517851">Run your app</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=517853">Run tools such as EF migrations and more</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=398609">Publish to Microsoft Azure Web Apps</a></li>
-        </ul>
+</section>
+
+<section id="best-restaurant" class="best-restaurant">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h2 class="font-lg">
+                    <span class="font-semibold chef-red">
+                        <b>
+                            DOCTORS, IT WORKERS, CORPORATE, STUDENT AND
+                            FAMILIES TRUST OUR SERVICE.
+                        </b>
+                    </span>
+                </h2>
+            </div>
+            <!-- col-md-12 -->
+        </div>
+
     </div>
-</div>
+</section>
+
+<section id="best-restaurant" class="best-restaurant">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h2 class="font-lg">Choose from the  <span class="font-semibold chef-red">Best Chef</span></h2>
+            </div>
+            <!-- col-md-12 -->
+        </div>
+        <!-- Single Restaurant detail -->
+        <div class="row">
+            <!-- Restaurant detail -->
+            <div class="col-md-6 col-xs-12">
+                <div class="item-block">
+                    <header>
+                        <a href="#"><img src="img/r.jpg" alt=""></a>
+                        <div class="hgroup">
+                            <h4><a href="#">Rashid Ali </a></h4>
+                            <h5>Pakistani<span class="label label-warning">Popular</span></h5>
+                        </div>
+                        <div class="header-meta">
+                            <span class="location">Fateh Garh, Sialkot </span>
+                        </div>
+                    </header>
+                    <footer>
+                        <p class="status">
+                            <span>
+                                <span style="color: #ED1C3B;"><i class="fa fa-star"></i></span>
+                                <span style="color: #ED1C3B;"><i class="fa fa-star"></i></span>
+                                <span style="color: #ED1C3B;"><i class="fa fa-star"></i></span>
+                                <span style="color: #ED1C3B;"><i class="fa fa-star"></i></span>
+                                <span style="color: #ED1C3B;"><i class="fa fa-star"></i></span>
+
+                                <span class="review">
+                                </span>
+                            </span>
+                        </p>
+                        <p class="status"><strong>Min:</strong> Rs: 200</p>
+                        <p class="status"><strong>Delivery:</strong> 60 min</p>
+                        <div class="action-btn">
+                            <a class="btn btn-xs btn-danger" href="user-register.html">Place Order</a>
+                        </div>
+                    </footer>
+                </div>
+            </div>
+            <!-- END Restaurant detail -->
+            <!-- Restaurant detail -->
+            <div class="col-md-6 col-xs-12">
+                <div class="item-block">
+                    <header>
+                        <a href="#"><img src="img/avatar-1.jpg" alt=""></a>
+                        <div class="hgroup">
+                            <h4><a href="#">Abu Bakar </a></h4>
+                            <h5>Pakistani</h5>
+                        </div>
+                        <div class="header-meta">
+                            <span class="location">Ogoki, Sialkot </span>
+                        </div>
+                    </header>
+                    <footer>
+                        <p class="status">
+                            <span>
+                                <span style="color: #ED1C3B;"><i class="fa fa-star"></i></span>
+                                <span style="color: #ED1C3B;"><i class="fa fa-star"></i></span>
+                                <span style="color: #ED1C3B;"><i class="fa fa-star"></i></span>
+                                <span style="color: #CCCCCC;"><i class="fa fa-star"></i></span>
+                                <span style="color: #CCCCCC;"><i class="fa fa-star"></i></span>
+                                <span class="review">
+                                    (<span>100</span>)
+                                </span>
+                            </span>
+                        </p>
+                        <p class="status"><strong>Min:</strong> Rs:250</p>
+                        <p class="status"><strong>Delivery:</strong> 60 min</p>
+                        <div class="action-btn">
+                            <a class="btn btn-xs btn-danger" href="user-register.html">Place Order</a>
+                        </div>
+                    </footer>
+                </div>
+            </div>
+            <!-- END Restaurant detail -->
+        </div>
+        <!-- End Single Restaurant detail -->
+        <!-- Single Restaurant detail -->
+        <div class="row">
+            <!-- Restaurant detail -->
+            <div class="col-md-6 col-xs-12">
+                <div class="item-block">
+                    <header>
+                        <a href="#"><img src="img/t.jpg" alt=""></a>
+                        <div class="hgroup">
+                            <h4><a href="#">Muhammad Tayyab</a></h4>
+                            <h5>Pakistani</h5>
+                        </div>
+                        <div class="header-meta">
+                            <span class="location">Adha, Sialkot</span>
+                        </div>
+                    </header>
+                    <footer>
+                        <p class="status">
+                            <span>
+
+                                <span style="color: #ED1C3B;"><i class="fa fa-star"></i></span>
+                                <span style="color: #ED1C3B;"><i class="fa fa-star"></i></span>
+                                <span style="color: #ED1C3B;"><i class="fa fa-star"></i></span>
+                                <span style="color: #ED1C3B;"><i class="fa fa-star"></i></span>
+                                <span style="color: #ED1C3B;"><i class="fa fa-star"></i></span>
+                                <span class="review">
+                                    (<span>46</span>)
+                                </span>
+                            </span>
+                        </p>
+                        <p class="status"><strong>Min:</strong> Rs: 200</p>
+                        <p class="status"><strong>Delivery:</strong> 60 min</p>
+                        <div class="action-btn">
+                            <a class="btn btn-xs btn-danger" href="user-register.html">Place Order</a>
+                        </div>
+                    </footer>
+                </div>
+            </div>
+            <!-- END Restaurant detail -->
+            <!-- Restaurant detail -->
+            <div class="col-md-6 col-xs-12">
+                <div class="item-block">
+                    <header>
+                        <a href="#"><img src="img/avatar-3.jpg" alt=""></a>
+                        <div class="hgroup">
+                            <h4><a href="#">Asim</a></h4>
+                            <h5>Pakistani</h5>
+                        </div>
+                        <div class="header-meta">
+                            <span class="location">Haji pora, Sialkot</span>
+                        </div>
+                    </header>
+                    <footer>
+                        <p class="status">
+                            <span>
+                                <span style="color: #ED1C3B;"><i class="fa fa-star"></i></span>
+                                <span style="color: #ED1C3B;"><i class="fa fa-star"></i></span>
+                                <span style="color: #ED1C3B;"><i class="fa fa-star"></i></span>
+                                <span style="color: #CCCCCC;"><i class="fa fa-star"></i></span>
+                                <span style="color: #CCCCCC;"><i class="fa fa-star"></i></span>
+                                <span class="review">
+                                    (<span>35</span>)
+                                </span>
+                            </span>
+                        </p>
+                        <p class="status"><strong>Min:</strong> Rs: 300</p>
+                        <p class="status"><strong>Delivery:</strong> 60 min</p>
+                        <div class="action-btn">
+                            <a class="btn btn-xs btn-danger" href="user-register.html">Place Order</a>
+                        </div>
+                    </footer>
+                </div>
+            </div>
+            <!-- END Restaurant detail -->
+        </div>
+        <!-- End Single Restaurant detail -->
+        <!-- Single Restaurant detail -->
+        <div class="row">
+            <!-- Restaurant detail -->
+            <div class="col-md-6 col-xs-12">
+                <div class="item-block">
+                    <header>
+                        <a href="#"><img src="img/u.jpg" alt=""></a>
+                        <div class="hgroup">
+                            <h4><a href="#">Muhammad Umair</a></h4>
+                            <h5>Pakistani</h5>
+                        </div>
+                        <div class="header-meta">
+                            <span class="location">Daska</span>
+                        </div>
+                    </header>
+                    <footer>
+                        <p class="status">
+                            <span>
+                                <span style="color: #ED1C3B;"><i class="fa fa-star"></i></span>
+                                <span style="color: #ED1C3B;"><i class="fa fa-star"></i></span>
+                                <span style="color: #ED1C3B;"><i class="fa fa-star"></i></span>
+                                <span class="review">
+                                    (<span>155</span>)
+                                </span>
+                            </span>
+                        </p>
+                        <p class="status"><strong>Min:</strong> Rs: 300</p>
+                        <p class="status"><strong>Delivery:</strong> 60 min</p>
+                        <div class="action-btn">
+                            <a class="btn btn-xs btn-success" href="order-online.html">Offer</a>
+                            <a class="btn btn-xs btn-danger" href="user-register.html">Place Order</a>
+                        </div>
+                    </footer>
+                </div>
+            </div>
+            <!-- END Restaurant detail -->
+            <!-- Restaurant detail -->
+            <div class="col-md-6 col-xs-12">
+                <div class="item-block">
+                    <header>
+                        <a href="#"><img src="img/avatar-2.jpg" alt=""></a>
+                        <div class="hgroup">
+                            <h4><a href="#">Fatima</a></h4>
+                            <h5>Pakistani<span class="label label-warning">Popular</span></h5>
+                        </div>
+                        <div class="header-meta">
+                            <span class="location">Rung Pora, Sialkot</span>
+                        </div>
+                    </header>
+                    <footer>
+                        <p class="status">
+                            <span>
+                                <span style="color: #ED1C3B;"><i class="fa fa-star"></i></span>
+                                <span style="color: #ED1C3B;"><i class="fa fa-star"></i></span>
+                                <span style="color: #ED1C3B;"><i class="fa fa-star"></i></span>
+                                <span style="color: #CCCCCC;"><i class="fa fa-star"></i></span>
+                                <span style="color: #CCCCCC;"><i class="fa fa-star"></i></span>
+                                <span class="review">
+                                    (<span>100</span>)
+                                </span>
+                            </span>
+                        </p>
+                        <p class="status"><strong>Min:</strong> Rs: 300</p>
+                        <p class="status"><strong>Delivery:</strong> 60 min</p>
+                        <div class="action-btn">
+                            <a class="btn btn-xs btn-success" href="order-online.html">Offer</a>
+                            <a class="btn btn-xs btn-danger" href="user-register.html">Place Order</a>
+                        </div>
+                    </footer>
+                </div>
+            </div>
+            <!-- END Restaurant detail -->
+        </div>
+        <!-- End Single Restaurant detail -->
+    </div>
+
+</section>
+
+<section id="best-restaurant" class="best-restaurant">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h2 class="font-lg">
+                    <span class="font-semibold chef-red">
+                        <b>
+                            ہمار١ مشن آپکو صاف اور صحت مند کھانا پہنچانا
+                            اور خواتین کو گھر بیٹھے روزگار فراہم کرنا ہے
+                            کامیابی کے اس مشن میں ہمارا ساتھ دیں
+                        </b>
+                    </span>
+                </h2>
+            </div>
+            <!-- col-md-12 -->
+        </div>
+
+    </div>
+</section>
+
+
+<section id="best-restaurant" class="best-restaurant">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h2 class="font-lg"><span class="font-semibold chef-red"><b>DO YOU LOVE COOKING?</b></span></h2>
+
+                <h4>Join us as a foodlancer and start selling homemade food. </h4>
+                <h4><span class="font-semibold chef-red">KhanaGarka.com helps you turn your passion into your business.</h4>
+                <h4>
+                    True home based business that empower food passionate families by giving them
+                    an opportunity to sell homemade food on the internet.
+                    Join KhanaGarka.com family today and start making money right from your home kitchen.
+                </h4>
+
+
+                <h1><a href="user-register.html" class="btn btn-default"> <span class="font-semibold chef-red"><b>Register Now</b></a></h1>
+            </div>
+            <!-- col-md-12 -->
+        </div>
+
+    </div>
+</section>
+
+
+<section class="bt-block-home-parallax" style="background-image: url(img/blog-1.jpg);">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="lookbook-product">
+                    <h2>Delicious food is just a click away! Explore our enlisted Chefs – we believe, you will love them. </h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- /.bt-block-home-parallax -->
+/n
+/n
+/n
+/n
+/n
+
+
+
+
+
+
+@section scripts{
+    <script>
+        $('body').addClass('style-2 nav-on-header');
+    </script>
+}

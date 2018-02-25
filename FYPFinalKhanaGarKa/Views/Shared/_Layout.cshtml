@@ -3,11 +3,22 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - FYPFinalKhanaGarKa</title>
+    <title>@ViewData["Title"] - KhanaGarKa</title>
 
     <environment include="Development">
-        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
-        <link rel="stylesheet" href="~/css/site.css" />
+        <!-- reset CSS -->
+        <link href="~/css/reset.css" rel="stylesheet">
+        <!-- Bootstrap css -->
+        <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+        <!-- icon CSS -->
+        <link href="~/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+        <!--others-->
+        @RenderSection("StyleLink", required: false)
+        <!-- Main css -->
+        <link href="~/css/main.css" rel="stylesheet" type="text/css">
+
+
+
     </environment>
     <environment exclude="Development">
         <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/css/bootstrap.min.css"
@@ -16,40 +27,166 @@
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
     </environment>
 </head>
-<body>
-    <nav class="navbar navbar-inverse navbar-fixed-top">
+<body class="style-2 nav-on-header-white">
+    <!-- Start Loading -->
+    <section class="loading-overlay">
+        <div class="Loading-Page">
+            <h1 class="loader">Loading...</h1>
+        </div>
+    </section>
+    <!-- End Loading  -->
+    <!-- Start Navigation bar -->
+    <nav class="navbar">
         <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">FYPFinalKhanaGarKa</a>
+            <!-- Logo -->
+            <div class="pull-left">
+                <a class="navbar-toggle" href="#" data-toggle="offcanvas"><i class="ti-menu"></i></a>
+                <div class="logo-wrapper">
+                    <a class="logo" href="index.html"><img src="~/img/logo_gray.png" alt="logo"></a>
+                    <a class="logo-alt" href="index.html"><img src="~/img/logo_gray.png" alt="logo-alt"></a>
+                </div>
             </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
-                </ul>
-                @await Html.PartialAsync("_LoginPartial")
+            <!-- END Logo -->
+            <!-- User account -->
+            <div class="pull-right user-login">
+                <a class="btn btn-sm btn-primary" asp-controller="Home" asp-action="Login">Login</a> or &nbsp;
+                <a class="user-register-btn" asp-controller="Home" asp-action="Register">Register</a>
             </div>
+            <!-- END User account -->
+            <!-- Navigation menu -->
+            <ul class="nav-menu">
+                <li>
+                    <a asp-controller="Home" asp-action="Index">Home</a>
+                </li>
+                <li>
+                    <a asp-controller="Order" asp-action="Index">Order</a>
+                </li>
+                <li>
+                    <a asp-controller="Home" asp-action="About">About Us</a>
+                </li>
+                <li>
+                    <a asp-controller="Home" asp-action="Contact">Contact Us</a>
+                </li>
+            </ul>
+            <!-- END Navigation menu -->
         </div>
     </nav>
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; 2018 - FYPFinalKhanaGarKa</p>
-        </footer>
-    </div>
+    <!-- End Navigation bar -->
+
+    @RenderBody()
+
+    <!-- start footer area -->
+    <section id="index-footer" class="footer-area-content">
+
+        <!-- Newsletter -->
+        <div id="newsletter">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <h3><i class="fa fa-envelope-o"></i>Keep in touch, Join our newsletter</h3>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 col-md-offset-3">
+                        <div class="col-sm-8">
+                            <input type="email" required="required" placeholder="Your Email Address" id="email" class="form-control" name="email">
+                        </div>
+                        <div class="col-sm-4">
+                            <a href="#" class="btn btn-subscribe">Subscribe</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- END: Newsletter -->
+        <div class="container">
+            <div class="footer-wrapper style-3">
+                <footer class="type-1">
+                    <div class="footer-columns-entry">
+
+                        <div class="col-md-3 col-sm-3">
+                            <h3 class="column-title">Khana Gar Ka</h3>
+                            <ul class="column">
+                                <li><a href="about-us.html">About Us</a></li>
+                                <li><a href="page-blog.html">News</a></li>
+                                <li><a href="#">Terms and conditions</a></li>
+                                <li><a href="page-privacy-policy.html"> Privacy policy</a></li>
+                                <li><a href="page-careers.html">Careers</a></li>
+                            </ul>
+                            <div class="clear"></div>
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col-md-3 col-sm-3">
+                                <h3 class="column-title">Popular Chefs</h3>
+                                <ul class="column">
+                                    <li><a href="#">Rashid Ali</a></li>
+                                    <li><a href="#">Mohammad Umair</a></li>
+                                    <li><a href="#">Mohammad Tayyab</a></li>
+
+                                </ul>
+                                <div class="clear"></div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </footer>
+            </div>
+        </div>
+
+        <div class="footer-bottom footer-wrapper style-3">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="footer-bottom-navigation">
+                            <div class="cell-view">
+                                <div class="footer-links">
+                                    <a href="#">Site Map</a>
+                                    <a href="#">Search</a>
+                                    <a href="#">Terms and Conditions</a>
+                                    <a href="page-privacy-policy.html">Privacy policy</a>
+                                    <a href="order-online.html">Order Now</a>
+                                    <a href="page-contact.html">Contact Us</a>
+                                    <a href="page-careers.html">Careers</a>
+                                </div>
+                                <div class="copyright">Created with by <a target="_blank" href="#">Khana Gar Ka</a> . All right reserved</div>
+                            </div>
+                            <div class="cell-view">
+                                <div class="social-content">
+                                    <a class="post-facebook" href="#"><i class="fa fa-facebook"></i></a>
+                                    <a class="post-google-plus" href="#"><i class="fa fa-google-plus"></i></a>
+                                    <a class="post-twitter" href="#"><i class="fa fa-twitter"></i></a>
+                                    <a class="linkedin" href="#"><i class="fa fa-linkedin"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+    <!-- footer area end -->
+    <!-- Back to top Link -->
+    <div id="to-top" class="main-bg"><span class="fa fa-chevron-up"></span></div>
 
     <environment include="Development">
-        <script src="~/lib/jquery/dist/jquery.js"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
-        <script src="~/js/site.js" asp-append-version="true"></script>
+        <!--Jquery-->
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <!-- Bootstrap Javascript -->
+        <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+        <!-- Mynav Bar Script -->
+        <script src="~/js/app.min.js"></script>
+        <script src="~/lib/smoothscroll/dist/smoothscroll.min.js"></script>
+        <script src="~/lib/wow/dist/wow.min.js"></script>
+        <!-- Custom Javascript -->
+        <script src="~/js/custom.js"></script>
+        <!-- others -->
+        <script src="~/lib/jquery.countdown/dist/jquery.countdown.min.js"></script>
+        @RenderSection("ScriptsSrc", required: false)
+
     </environment>
     <environment exclude="Development">
         <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
