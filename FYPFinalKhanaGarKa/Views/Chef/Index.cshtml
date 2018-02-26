@@ -3,33 +3,11 @@
     ViewData["Title"] = "Chef List";
 }
 
-@section StyleLink{ 
-<link href="~/css/fontello.css" rel="stylesheet" />
+@section StyleLink{
+    <link href="~/css/fontello.css" rel="stylesheet" />
 }
 
-<!-- Start Pages Title  -->
-<section id="page-title" class="page-title-style2">
-    <div class="color-overlay"></div>
-    <div class="container inner-img">
-        <div class="row">
-            <div class="Page-title">
-                <div class="col-md-12 text-center">
-                    <div class="title-text">
-                        <h6>A Great Service</h6>
-                        <h2 class="page-title">Order  from 10 of our best Chefs.</h2>
-                    </div>
-                </div>
-                <div class="col-md-12 text-center">
-                    <div class="breadcrumb-trail breadcrumbs">
-                        <span class="trail-begin"><a href="#">Home</a></span>
-                        <span class="sep">/</span> <span class="trail-end">Restaurant List</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<!-- End Pages Title  -->
+@Html.Partial("_PageTitlePartial", ViewData["Title"])
 <!-- Content Start -->
 <main class="main-content">
 
