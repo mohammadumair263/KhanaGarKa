@@ -7,29 +7,7 @@
     <link href="~/css/order-online.css" rel="stylesheet" />
 }
 
-<!-- Start Pages Title  -->
-<section id="page-title" class="page-title-style2">
-    <div class="color-overlay"></div>
-    <div class="container inner-img">
-        <div class="row">
-            <div class="Page-title">
-                <div class="col-md-12 text-center">
-                    <div class="title-text">
-                        <h6>Great Service</h6>
-                        <h2 class="page-title">Order  Online</h2>
-                    </div>
-                </div>
-                <div class="col-md-12 text-center">
-                    <div class="breadcrumb-trail breadcrumbs">
-                        <span class="trail-begin"><a href="#">Home</a></span>
-                        <span class="sep">/</span> <span class="trail-end">Order Online</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<!-- End Pages Title  -->
+@Html.Partial("_PageTitlePartial", ViewData["Title"])
 <!-- Content Start -->
 <main class="main-content">
 
@@ -332,44 +310,6 @@
                                 </div>
                             </div>
                         </div>
-
-                        <!-- start restaurant offer -->
-                        <!--<div class="restaurant-offer">
-                                <ul class="list-unstyled">
-                                    <li>
-                                        <div class="row restaurant-offer-info">
-                                            <div class="col-md-12">
-                                                <div class="restaurant-offer-gift-icon">
-                                                    <i class="fa fa-gift" aria-hidden="true"></i>
-
-                                                </div>
-                                                <div class="restaurant-offer-description">
-                                                    <h6>10% Discount </h6>
-                                                    <p>Breast of chicken tikka grilled withBreast of chicken tikka grilled.</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-
-                                    <li>
-                                        <div class="row restaurant-offer-info">
-                                            <div class="col-md-12">
-                                                <div class="restaurant-offer-gift-icon">
-                                                    <i class="fa fa-gift" aria-hidden="true"></i>
-
-                                                </div>
-                                                <div class="restaurant-offer-description">
-                                                    <h6>10% Discount </h6>
-                                                    <p>Breast of chicken tikka grilled withBreast of chicken tikka grilled.</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-
-                                </ul>
-                            </div>-->
-                        <!-- end restaurant offer -->
-
                     </div>
                     <!-- end cart content -->
                 </div>
