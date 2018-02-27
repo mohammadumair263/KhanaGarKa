@@ -1,4 +1,4 @@
-﻿
+﻿@model IEnumerable<FYPFinalKhanaGarKa.Models.Chef>
 @{
     ViewData["Title"] = "Chef List";
 }
@@ -16,6 +16,8 @@
         <div class="row">
             <!-- Main row -->
             <div class="col-md-12 restaurant-list-three">
+                @foreach (var chef in Model)
+                {
                 <!-- Single Restaurant detail -->
                 <div class="row">
                     <!-- Restaurant detail -->
@@ -24,11 +26,11 @@
                             <header>
                                 <a href="#"><img src="~/img/logo-google.jpg" alt=""></a>
                                 <div class="hgroup">
-                                    <h4><a href="#">Bayleaf Indiantakeaway (Ongar)</a></h4>
-                                    <h5>Google<span class="label label-warning">Popular</span></h5>
+                                    <h4><a href="#">@chef.Name</a></h4>
+                                    <h5><span class="label label-warning">Popular</span></h5>
                                 </div>
                                 <div class="header-meta">
-                                    <span class="location">Menlo park, CA</span>
+                                    <span class="location">@chef.Address</span>
                                 </div>
                             </header>
                             <footer>
@@ -56,165 +58,7 @@
                     <!-- END Restaurant detail -->
                 </div>
                 <!-- End Single Restaurant detail -->
-                <!-- Single Restaurant detail -->
-                <div class="row">
-                    <!-- Restaurant detail -->
-                    <div class="col-xs-12">
-                        <div class="item-block">
-                            <header>
-                                <a href="#"><img src="~/img/Bayleaf.jpg" alt=""></a>
-                                <div class="hgroup">
-                                    <h4><a href="#">Bayleaf</a></h4>
-                                    <h5><a href="#">Google</a></h5>
-                                </div>
-                                <div class="header-meta">
-                                    <span class="location">Menlo park, CA</span>
-                                </div>
-                            </header>
-                            <footer>
-                                <p class="status"><strong>Min:</strong> £15</p>
-                                <p class="status"><strong>Delivery:</strong> 60 min</p>
-                                <p class="status">
-                                    <span>
-                                        <span style="color: #ED1C3B;"><i class="fa fa-star"></i></span>
-                                        <span style="color: #ED1C3B;"><i class="fa fa-star"></i></span>
-                                        <span style="color: #ED1C3B;"><i class="fa fa-star"></i></span>
-                                        <span style="color: #CCCCCC;"><i class="fa fa-star"></i></span>
-                                        <span style="color: #CCCCCC;"><i class="fa fa-star"></i></span>
-                                        <span class="review">
-                                            (<span>35</span>)
-                                        </span>
-                                    </span>
-                                </p>
-                                <div class="action-btn">
-                                    <a class="btn btn-xs btn-success" href="#">Offer</a>
-                                    <a class="btn btn-xs btn-danger" href="#">Place Order</a>
-                                </div>
-                            </footer>
-                        </div>
-                    </div>
-                    <!-- END Restaurant detail -->
-                </div>
-                <!-- End Single Restaurant detail -->
-                <!-- Single Restaurant detail -->
-                <div class="row">
-                    <!-- Restaurant detail -->
-                    <div class="col-xs-12">
-                        <div class="item-block">
-                            <header>
-                                <a href="#"><img src="~/img/Bayleaf-Indiantakeaway-Ongar.jpg" alt=""></a>
-                                <div class="hgroup">
-                                    <h4><a href="#">Bayleaf Indiantakeaway (Ongar)</a></h4>
-                                    <h5>Google<span class="label label-success">Special</span></h5>
-                                </div>
-                                <div class="header-meta">
-                                    <span class="location">Menlo park, CA</span>
-                                </div>
-                            </header>
-                            <footer>
-                                <p class="status"><strong>Min:</strong> £15</p>
-                                <p class="status"><strong>Delivery:</strong> 60 min</p>
-                                <p class="status">
-                                    <span>
-                                        <span style="color: #ED1C3B;"><i class="fa fa-star"></i></span>
-                                        <span style="color: #ED1C3B;"><i class="fa fa-star"></i></span>
-                                        <span style="color: #ED1C3B;"><i class="fa fa-star"></i></span>
-                                        <span style="color: #CCCCCC;"><i class="fa fa-star"></i></span>
-                                        <span style="color: #CCCCCC;"><i class="fa fa-star"></i></span>
-                                        <span class="review">
-                                            (<span>35</span>)
-                                        </span>
-                                    </span>
-                                </p>
-                                <div class="action-btn">
-                                    <a class="btn btn-xs btn-success" href="#">Offer</a>
-                                    <a class="btn btn-xs btn-danger" href="#">Place Order</a>
-                                </div>
-                            </footer>
-                        </div>
-                    </div>
-                    <!-- END Restaurant detail -->
-                </div>
-                <!-- End Single Restaurant detail -->
-                <!-- Single Restaurant detail -->
-                <div class="row">
-                    <!-- Restaurant detail -->
-                    <div class="col-xs-12">
-                        <div class="item-block">
-                            <header>
-                                <a href="#"><img src="~/img/Bayleaf.jpg" alt=""></a>
-                                <div class="hgroup">
-                                    <h4><a href="#">Bayleaf</a></h4>
-                                    <h5><a href="#">Google</a></h5>
-                                </div>
-                                <div class="header-meta">
-                                    <span class="location">Menlo park, CA</span>
-                                </div>
-                            </header>
-                            <footer>
-                                <p class="status"><strong>Min:</strong> £15</p>
-                                <p class="status"><strong>Delivery:</strong> 60 min</p>
-                                <p class="status">
-                                    <span>
-                                        <span style="color: #ED1C3B;"><i class="fa fa-star"></i></span>
-                                        <span style="color: #ED1C3B;"><i class="fa fa-star"></i></span>
-                                        <span style="color: #ED1C3B;"><i class="fa fa-star"></i></span>
-                                        <span style="color: #CCCCCC;"><i class="fa fa-star"></i></span>
-                                        <span style="color: #CCCCCC;"><i class="fa fa-star"></i></span>
-                                        <span class="review">
-                                            (<span>35</span>)
-                                        </span>
-                                    </span>
-                                </p>
-                                <div class="action-btn">
-                                    <a class="btn btn-xs btn-danger" href="#">Place Order</a>
-                                </div>
-                            </footer>
-                        </div>
-                    </div>
-                    <!-- END Restaurant detail -->
-                </div>
-                <!-- End Single Restaurant detail -->
-                <!-- Single Restaurant detail -->
-                <div class="row">
-                    <!-- Restaurant detail -->
-                    <div class="col-xs-12">
-                        <div class="item-block mb-0">
-                            <header>
-                                <a href="#"><img src="~/img/Bayleaf-Indiantakeaway-Ongar.jpg" alt=""></a>
-                                <div class="hgroup">
-                                    <h4><a href="#">Bayleaf Indiantakeaway (Ongar)</a></h4>
-                                    <h5>Google<span class="label label-success">Special</span></h5>
-                                </div>
-                                <div class="header-meta">
-                                    <span class="location">Menlo park, CA</span>
-                                </div>
-                            </header>
-                            <footer>
-                                <p class="status"><strong>Min:</strong> £15</p>
-                                <p class="status"><strong>Delivery:</strong> 60 min</p>
-                                <p class="status">
-                                    <span>
-                                        <span style="color: #ED1C3B;"><i class="fa fa-star"></i></span>
-                                        <span style="color: #ED1C3B;"><i class="fa fa-star"></i></span>
-                                        <span style="color: #ED1C3B;"><i class="fa fa-star"></i></span>
-                                        <span style="color: #CCCCCC;"><i class="fa fa-star"></i></span>
-                                        <span style="color: #CCCCCC;"><i class="fa fa-star"></i></span>
-                                        <span class="review">
-                                            (<span>35</span>)
-                                        </span>
-                                    </span>
-                                </p>
-                                <div class="action-btn">
-                                    <a class="btn btn-xs btn-success" href="#">Offer</a>
-                                    <a class="btn btn-xs btn-danger" href="#">Place Order</a>
-                                </div>
-                            </footer>
-                        </div>
-                    </div>
-                    <!-- END Restaurant detail -->
-                </div>
-                <!-- End Single Restaurant detail -->
+                    }
             </div>
         </div>
         <!-- Main row end -->
