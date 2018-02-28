@@ -18,13 +18,13 @@
             <div class="col-md-12 restaurant-list-three">
                 @foreach (var chef in Model)
                 {
-                <!-- Single Restaurant detail -->
+                <!-- Single Chef detail -->
                 <div class="row">
-                    <!-- Restaurant detail -->
+                    <!-- Chef detail -->
                     <div class="col-xs-12">
                         <div class="item-block">
                             <header>
-                                <a href="#"><img src="~/img/logo-google.jpg" alt=""></a>
+                                <a href="#"><img src="@chef.ImageUrl" alt=""></a>
                                 <div class="hgroup">
                                     <h4><a href="#">@chef.Name</a></h4>
                                     <h5><span class="label label-warning">Popular</span></h5>
@@ -55,9 +55,9 @@
                             </footer>
                         </div>
                     </div>
-                    <!-- END Restaurant detail -->
+                    <!-- END Chef detail -->
                 </div>
-                <!-- End Single Restaurant detail -->
+                <!-- End Single Chef detail -->
                     }
             </div>
         </div>

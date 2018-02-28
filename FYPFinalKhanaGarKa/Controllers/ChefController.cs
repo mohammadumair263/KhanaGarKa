@@ -16,42 +16,42 @@ namespace FYPFinalKhanaGarKa.Controllers
                 ID = 1,
                 Name = "Umair",
                 Address="Daska",
-                ImageUrl = "~/img/logo-google.jpg"
+                ImageUrl = "img/logo-google.jpg"
             });
             chefs.Add(new Chef
             {
                 ID = 2,
                 Name = "Rashid",
                 Address = "Sialkot",
-                ImageUrl = "~/img/logo-google.jpg"
+                ImageUrl = "img/logo-google.jpg"
             });
             chefs.Add(new Chef
             {
                 ID = 1,
                 Name = "Tayyab",
                 Address = "Addah",
-                ImageUrl = "~/img/logo-google.jpg"
+                ImageUrl = "img/logo-google.jpg"
             });
             chefs.Add(new Chef
             {
                 ID = 1,
                 Name = "Sameer",
                 Address = "Sambriyal",
-                ImageUrl = "~/img/logo-google.jpg"
+                ImageUrl = "img/logo-google.jpg"
             });
             chefs.Add(new Chef
             {
                 ID = 1,
                 Name = "Saqlain",
                 Address = "Sialkot",
-                ImageUrl = "~/img/logo-google.jpg"
+                ImageUrl = "img/logo-google.jpg"
             });
             chefs.Add(new Chef
             {
                 ID = 1,
                 Name = "Husnain",
                 Address = "Sialkot",
-                ImageUrl = "~/img/logo-google.jpg"
+                ImageUrl = "img/logo-google.jpg"
             });
 
             return View(chefs);

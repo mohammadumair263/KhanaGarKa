@@ -1,4 +1,4 @@
-﻿
+﻿@model FYPFinalKhanaGarKa.Models.MenuOfferViewModel
 @{
     ViewData["Title"] = "Order";
 }
@@ -50,23 +50,23 @@
                                     <div class="col-md-12 col-sm-12">
                                         <!-- start category single content -->
                                         <div class="category-dish-content">
-
                                             <div class="row">
                                                 <div class="clearfix"></div>
+                                             @foreach (var menus in Model.Menus)
+                                             {
                                                 <div class="col-md-12">
                                                     <div class="dish-content">
                                                         <div class="row" style="transition: all 0.50s ease-in-out">
                                                             <div class="col-md-3 dish-img">
-                                                                <img class="img img-responsive img-thumbnail" alt="Image" src="img/foodimg/menuitem.jpg" />
+                                                                <img class="img img-responsive img-thumbnail" alt="Image" src="@menus.ImageUrl" />
                                                             </div>
                                                             <div class="col-md-6">
-                                                                <div class="dish-name">Onion Bhaji (S)</div>
-                                                                <p>Too deep fried balls of sliced onion, in chana daal batter. With mint sauce.</p>
-                                                                <p><b>Allergens Info:</b> <span class="allergensInfo">Crustaceans,Gluten</span></p>
+                                                                <div class="dish-name">@menus.DishName</div>
+                                                                <p>@menus.Description</p>
                                                             </div>
                                                             <div class="col-md-3">
                                                                 <div class="dish-right-content">
-                                                                    <div class="dish-price">£<span class="dish-price-int">2</span></div>
+                                                                    <div class="dish-price"><span class="dish-price-int">@menus.Price</span>pkr</div>
                                                                     <div class="text-right ui-order-btn">
                                                                         <a href="#"><i class="fa fa-plus addItemBtn"></i></a>
                                                                     </div>
@@ -78,31 +78,7 @@
                                                     <!-- /.dish-content -->
                                                 </div>
                                                 <!-- /.col-md-12 -->
-                                                <div class="col-md-12">
-                                                    <div class="dish-content">
-                                                        <div class="row" style="transition: all 0.50s ease-in-out">
-                                                            <div class="col-md-3 dish-img">
-                                                                <img class="img img-responsive img-thumbnail" alt="Image" src="img/foodimg/menuitem.jpg" />
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <div class="dish-name">alo gobi (S)</div>
-                                                                <p>Too deep fried balls of sliced onion, in chana daal batter. With mint sauce.</p>
-                                                                <p><b>Allergens Info:</b> <span class="allergensInfo">Crustaceans,Gluten</span></p>
-                                                            </div>
-                                                            <div class="col-md-3">
-                                                                <div class="dish-right-content">
-                                                                    <div class="dish-price">£<span class="dish-price-int">3</span></div>
-                                                                    <div class="text-right ui-order-btn">
-                                                                        <a href="#"><i class="fa fa-plus addItemBtn"></i></a>
-                                                                    </div>
-                                                                    <div class="clearfix"></div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <!-- /.dish-content -->
-                                                </div>
-                                                <!-- /.col-md-12 -->
+                                                 }
                                             </div>
 
                                         </div>
@@ -121,21 +97,21 @@
 
                                             <div class="row">
                                                 <div class="clearfix"></div>
+                                                @foreach (var offers in Model.Offers)
+                                                {
                                                 <div class="col-md-12">
                                                     <div class="dish-content">
                                                         <div class="row" style="transition: all 0.50s ease-in-out">
                                                             <div class="col-md-3 dish-img">
-                                                                <img class="img img-responsive img-thumbnail" alt="Image" src="img/foodimg/menuitem.jpg" />
+                                                                <img class="img img-responsive img-thumbnail" alt="Image" src="@offers.ImageUrl" />
                                                             </div>
                                                             <div class="col-md-6">
-                                                                <div class="dish-name">Dhmaka Offer !</div>
-                                                                <p>Too deep fried balls of sliced onion, in chana daal batter. With mint sauce.</p>
-                                                                <p>Plus 1 liter Coca Cola free !</p>
-                                                                <p><b>Allergens Info:</b> <span class="allergensInfo">Crustaceans,Gluten</span></p>
+                                                                <div class="dish-name">@offers.OfferName</div>
+                                                                <p>@offers.Description</p>
                                                             </div>
                                                             <div class="col-md-3">
                                                                 <div class="dish-right-content">
-                                                                    <div class="dish-price">£<span class="dish-price-int">5</span></div>
+                                                                    <div class="dish-price"><span class="dish-price-int">@offers.Price</span>pkr</div>
                                                                     <div class="text-right ui-order-btn">
                                                                         <a href="#"><i class="fa fa-plus addItemBtn"></i></a>
                                                                     </div>
@@ -147,6 +123,7 @@
                                                     <!-- /.dish-content -->
                                                 </div>
                                                 <!-- /.col-md-12 -->
+                                                    }
                                             </div>
 
                                         </div>
