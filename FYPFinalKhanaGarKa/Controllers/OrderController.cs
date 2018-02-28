@@ -65,7 +65,7 @@ namespace FYPFinalKhanaGarKa.Controllers
             offers.Add(new Offer {
                 Id = 1,
                 OfferName = "Dhmaka Offer!",
-                Description = "Too deep fried balls of sliced onion, in chana daal batter. With mint sauce./ 1 liter coke free.",
+                Description = "Too deep fried balls of sliced onion, in chana daal batter. With mint sauce. 1 liter coke free.",
                 Price = 1000,
                 ImageUrl = "img/foodimg/menuitem.jpg"
             });
