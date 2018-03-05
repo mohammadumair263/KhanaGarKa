@@ -9,12 +9,14 @@ namespace FYPFinalKhanaGarKa.Controllers
 {
     public class OrderController : Controller
     {
+        private static List<GroupItem> _list = new List<GroupItem>();
         public IActionResult Index()
         {
             List<Menu> menus = new List<Menu>();
             List<Offer> offers = new List<Offer>();
 
-            menus.Add(new Menu {
+            menus.Add(new Menu
+            {
                 Id = 1,
                 DishName = "Chicken Krahi",
                 Description = "Too deep fried balls of sliced onion, in chana daal batter. With mint sauce.",
@@ -62,7 +64,8 @@ namespace FYPFinalKhanaGarKa.Controllers
                 ImageUrl = "img/foodimg/menuitem.jpg"
             });
 
-            offers.Add(new Offer {
+            offers.Add(new Offer
+            {
                 Id = 1,
                 OfferName = "Dhmaka Offer!",
                 Description = "Too deep fried balls of sliced onion, in chana daal batter. With mint sauce. 1 liter coke free.",
@@ -110,7 +113,8 @@ namespace FYPFinalKhanaGarKa.Controllers
                 ImageUrl = "img/foodimg/menuitem.jpg"
             });
 
-            MenuOfferViewModel MenuOffer = new MenuOfferViewModel {
+            MenuOfferViewModel MenuOffer = new MenuOfferViewModel
+            {
                 Menus = menus,
                 Offers = offers
             };
@@ -140,7 +144,21 @@ namespace FYPFinalKhanaGarKa.Controllers
 
         public IActionResult Process()
         {
-            return View();
+            return View(_list);
+        }
+        [HttpPost]
+        public JsonResult PostJson(GroupItem data)
+        {
+            if (data != null)
+            {
+                _list.Add(data);
+            }
+
+            return Json(new
+            {
+                state = 0,
+                msg = string.Empty
+            });
         }
     }
 }

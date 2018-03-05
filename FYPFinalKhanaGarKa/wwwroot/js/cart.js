@@ -152,6 +152,34 @@
         });
 
         ID++;
+
+        
     });
+    $(document).ready(function () {
+        $('#pro').click(function () {
+            var datasource = {
+                'Price': prices,
+                'Name': names,
+                'Quantity': quantities,
+                'Subtotal': subtotal_price,
+                'Total': full_total_price
+             };
+
+
+            $.ajax({
+                url: "/Order/PostJson",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify(datasource),
+                success: function (data) {
+                    if (data.state == 0) {
+                        document.location.reload();
+                    }
+                }
+            });
+        });
+    });
+    
+
 
 });
