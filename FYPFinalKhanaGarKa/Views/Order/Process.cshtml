@@ -5,10 +5,6 @@
 
 @section StyleLink{
     <link href="~/css/order-online.css" rel="stylesheet" />
-    <style>
-        .cart-table:hover {
-        }
-    </style>
 }
 
 @Html.Partial("_PageTitlePartial", ViewData["Title"])
@@ -96,15 +92,10 @@
                                                         {
                                                         <tr class="hobtr">
                                                             <td class="cross-td custom-spinner">
-                                                                <div class="input-group spinner">
-                                                                    <button class="btn btn-default cust-plus plusBtn" type="button"><i class="fa fa-plus"></i></button>
-                                                                    <input type="text" class="form-control increse-val" value="1">
-                                                                    <button class="btn btn-default cust-plus minusBtn" type="button"><i class="fa fa-minus"></i></button>
-                                                                </div>
-                                                                <span class="qnt-idn">@item.Quantity<span class="qua"></span> x</span>
+                                                                <span>@item.Quantity x</span>
                                                             </td>
-                                                            <td class="itme-td">@item.Name</td>
-                                                            <td class="amont-td"><i class="fa fa-times-circle-o closeBtn"></i> <span class="main-price cart_item_price">@item.Price</span></td>
+                                                            <td>@item.Name</td>
+                                                            <td>@item.Price</td>
                                                         </tr>
                                                         }
                                                     </tbody>
