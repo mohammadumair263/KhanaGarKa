@@ -20,46 +20,14 @@
         '<p class="text-center">Add menu items into your basket</p>' +
         '</div>'
     );
-
-    function get_names() {
-        var name = [];
-        var j = 0;
-        for (var i = 0; i < names.length; i++) {
-            if (names[i] != "") {
-                name[j] = names[i];
-                j++;
-            }
-        }
-        return name;
-    }
-    function get_prices() {
-        var price = [];
-        var j = 0;
-        for (var i = 0; i < prices.length; i++) {
-            if (prices[i] != 0) {
-                price[j] = prices[i];
-                j++;
-            }
-        }
-        return price;
-    }
-    function get_quantities() {
-        var qua = [];
-        var j = 0;
-        for (var i = 0; i < quantities.length; i++) {
-            if (quantities[i] != 0) {
-                qua[j] = quantities[i];
-                j++;
-            }
-        }
-        return qua;
-    }
+    $("#pro").prop('disabled', true); // disabling checkout button.
 
     $(".addItemBtn").off().on('click', function () {
         var cart_item_name = $(this).closest(".dish-content").data("name");
         var cart_item_price = $(this).closest(".dish-content").data("price");
 
         $("#cart").find("#cart-empty-view").remove(); //removing empty cart view
+        $("#pro").prop('disabled', false); // abling checkout button.
         $("#cart").append(
             '<tr class="hobtr" data-id="' + ID + '">' +
             '<td class="cross-td custom-spinner">' +
@@ -94,6 +62,7 @@
                     '<p class="text-center">Add menu items into your basket</p>' +
                     '</div>'
                 );
+                $("#pro").prop('disabled', true); // disabling checkout button.
             }
             //finding what is current value of item.
             var current_price = parseInt(prices[Id]) * parseInt($(this).closest(".hobtr").find(".increse-val").val());
@@ -116,7 +85,7 @@
                 oldval++;
                 var Id = $(this).closest(".hobtr").data("id");
                 $(this).closest(".hobtr").find(".cart_item_price").text((prices[Id] * oldval));// this line will increase the price of single item.
-
+                
                 // getting the price from prices array and then setting it
                 subtotal_price = subtotal_price + parseInt(prices[$(this).closest(".hobtr").data("id")]);
                 $("#subtotal_price").text(subtotal_price);
@@ -155,32 +124,47 @@
 
         
     });
-    $(document).ready(function () {
-        $('#pro').click(function () {
-            var datasource = {
-                'Price': prices,
-                'Name': names,
-                'Quantity': quantities,
-                'Subtotal': subtotal_price,
-                'Total': full_total_price
-             };
 
-
-            $.ajax({
-                url: "/Order/PostJson",
-                type: "POST",
-                contentType: "application/json",
-                data: JSON.stringify(datasource),
-                success: function (data) {
-                    if (data.state == 0) {
-                        document.location.reload();
-                    }
+    Detail = {
+        get_subtotal: function () {
+            return subtotal_price;
+        },
+        get_total: function () {
+            return full_total_price;
+        },
+        get_names: function () {
+            var name = [];
+            var j = 0;
+            for (var i = 0; i < names.length; i++) {
+                if (names[i] != "") {
+                    name[j] = names[i];
+                    j++;
                 }
-            });
-        });
-    });
-    
+            }
+            return name;
+        },
+        get_prices: function () {
+            var price = [];
+            var j = 0;
+            for (var i = 0; i < prices.length; i++) {
+                if (prices[i] != 0) {
+                    price[j] = prices[i];
+                    j++;
+                }
+            }
+            return price;
+        },
+        get_quantities: function () {
+            var qua = [];
+            var j = 0;
+            for (var i = 0; i < quantities.length; i++) {
+                if (quantities[i] != 0) {
+                    qua[j] = quantities[i];
+                    j++;
+                }
+            }
+            return qua;
+        }
 
-
-
+    };
 });

@@ -1,10 +1,14 @@
-﻿
+﻿@model FYPFinalKhanaGarKa.Models.ItemGroup
 @{
     ViewData["Title"] = "Process";
 }
 
 @section StyleLink{
     <link href="~/css/order-online.css" rel="stylesheet" />
+    <style>
+        .cart-table:hover {
+        }
+    </style>
 }
 
 @Html.Partial("_PageTitlePartial", ViewData["Title"])
@@ -50,16 +54,6 @@
                                             <input class="custom-radio-big" type="radio" name="collection" id="collection" checked>
                                             <label for="collection">Collection</label>
                                         </li>
-                                        <li>
-                                            <div class="row">
-                                                <div class="col-md-6 col-xs-6 col-sm-6">
-                                                    <input class="custom-radio-big" type="radio" name="delivery-priority" id="asap" checked>
-                                                    <label for="asap">Delivery</label>
-                                                </div>
-                                               
-                                            </div>
-                                         
-                                        </li>
                                     </ul>
                                 </div>
                                 <div class="col-md-6">
@@ -70,25 +64,14 @@
                             <div class="row order-delivery-address">
                                 <div class="col-md-12">
                                     <h3 class="section-title">Your delivery address</h3>
-                                    <ul class="list-unstyled">
-                                        <li>
-                                            <input type="text" class="text" placeholder="Enter your complete address">
-                                        </li>
-                                        
-                                    </ul>
+                                    <input type="text" class="text" placeholder="Enter your complete address">
                                 </div>
                              
                             </div>
                             <div class="row order-payment-method">
                                 <div class="col-md-12">
                                     <h3 class="section-title">Payment Method</h3>
-                                    <ul class="list-inline payment-method-options">
-                                        <li>
-                                            <label for="method-cash"><b>Cash On Delivey</b></label>
-                                        </li>
-                                       
-                                        
-                                    </ul>
+                                    <label for="method-cash"><b>Cash On Delivey</b></label>
                                 </div>
                                 
                             </div>
@@ -106,16 +89,27 @@
                                     <div class="cfo-cart clearfix">
                                         <div class="cart-info">
                                             <h2>My Order</h2>
-
-
                                             <div class="cart-table">
                                                 <table class="table table-striped">
-                                                    <tbody id="cart">
-                                                    <div class="cart-table ui-empty-cart" id="cart-empty-view" style="border-bottom:none"><i class="fa fa-shopping-basket" aria-hidden="true"></i><p class="text-center">Add menu items into your basket</p></div></tbody>
+                                                    <tbody>
+                                                        @foreach (var item in Model.Items)
+                                                        {
+                                                        <tr class="hobtr">
+                                                            <td class="cross-td custom-spinner">
+                                                                <div class="input-group spinner">
+                                                                    <button class="btn btn-default cust-plus plusBtn" type="button"><i class="fa fa-plus"></i></button>
+                                                                    <input type="text" class="form-control increse-val" value="1">
+                                                                    <button class="btn btn-default cust-plus minusBtn" type="button"><i class="fa fa-minus"></i></button>
+                                                                </div>
+                                                                <span class="qnt-idn">@item.Quantity<span class="qua"></span> x</span>
+                                                            </td>
+                                                            <td class="itme-td">@item.Name</td>
+                                                            <td class="amont-td"><i class="fa fa-times-circle-o closeBtn"></i> <span class="main-price cart_item_price">@item.Price</span></td>
+                                                        </tr>
+                                                        }
+                                                    </tbody>
                                                 </table>
                                             </div>
-
-
                                             <!-- start offer list -->
                                             <div class="ui-order-description">
                                                 <div class="row color-gray">
@@ -123,7 +117,7 @@
                                                         <p>Subtotal: </p>
                                                     </div>
                                                     <div class="col-md-4 col-xs-4 text-right">
-                                                        <span id="subtotal_price">0</span>
+                                                        <span id="subtotal_price">@Model.Subtotal</span>
                                                     </div>
                                                 </div>
                                                 <div class="row color-gray">
@@ -131,7 +125,7 @@
                                                         <p>Delivery Charge: </p>
                                                     </div>
                                                     <div class="col-md-4 col-xs-4 text-right">
-                                                        <span id="delivery_fee_price">0</span>
+                                                        <span id="delivery_fee_price">10</span>
                                                     </div>
                                                 </div>
                                                 <div class="row">
@@ -139,7 +133,7 @@
                                                         <p>Total: </p>
                                                     </div>
                                                     <div class="col-md-4 col-xs-4 text-right">
-                                                        <span id="order-total-amount" class="order-total-amount">£<span id="full_total_price">0</span></span>
+                                                        <span id="order-total-amount" class="order-total-amount"><span id="full_total_price">@Model.Total</span></span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -181,6 +175,9 @@
             </div>
         </div>
         <!--.container-->
+    </div>
+        </div>
+        <!--end container-->
     </div>
     <!--#order-online-->
     <!--end order-online-->

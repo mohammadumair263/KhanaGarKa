@@ -189,7 +189,7 @@
                                                 </div>
                                             </div>
                                             <div class="cfo-checkoutarea">
-                                                <a href="/order/process" type="submit" id="pro" name="a" class="btn btn-primary btn-block custom-checkout">Proceed to Checkout</a>
+                                                <button id="pro" class="btn btn-primary btn-block custom-checkout">Proceed to Checkout</button>
                                             </div>
                                         </div>
                                     </div>
@@ -261,6 +261,42 @@
     <script src="~/lib/jquery-sticky/jquery.sticky.js"></script>
     <script src="~/js/cart.js"></script>
     <script>
-        
+        $('#pro').click(function () {
+            var prices = Detail.get_prices();
+            var quantities = Detail.get_quantities();
+            var names = Detail.get_names();
+            //loop to update values in prices array
+            for (var i = 0; i < prices.length; i++) {
+                prices[i] = prices[i] * quantities[i];
+
+            }
+
+            var CartItems = [];
+            for (var i = 0; i < prices.length; i++) {
+                var obj = {
+                    Quantity: quantities[i],
+                    Name: names[i],
+                    Price: prices[i]
+                };
+                CartItems[i] = obj;
+            }
+            var sendJsonData = {
+                Subtotal: Detail.get_subtotal(),
+                Total: Detail.get_total(),
+                Items: CartItems
+            };
+            console.log(sendJsonData);
+            $.ajax({
+                url: '@Url.Action("PostJson", "Order")',
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify(sendJsonData),
+                success: function (data) {
+                    if (data.state == 0) {
+                        window.location.href = '@Url.Action("Process", "Order")';
+                    }
+                }
+            });
+        });
     </script>
 }

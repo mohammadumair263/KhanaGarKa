@@ -9,7 +9,8 @@ namespace FYPFinalKhanaGarKa.Controllers
 {
     public class OrderController : Controller
     {
-        private static List<GroupItem> _list = new List<GroupItem>();
+        private static ItemGroup ds = new ItemGroup();
+
         public IActionResult Index()
         {
             List<Menu> menus = new List<Menu>();
@@ -144,14 +145,15 @@ namespace FYPFinalKhanaGarKa.Controllers
 
         public IActionResult Process()
         {
-            return View(_list);
+            return View(ds);
         }
+
         [HttpPost]
-        public JsonResult PostJson(GroupItem data)
+        public JsonResult PostJson([FromBody]ItemGroup data)
         {
             if (data != null)
             {
-                _list.Add(data);
+                ds = data;
             }
 
             return Json(new
