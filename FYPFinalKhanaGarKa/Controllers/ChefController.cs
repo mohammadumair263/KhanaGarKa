@@ -15,42 +15,47 @@ namespace FYPFinalKhanaGarKa.Controllers
             chefs.Add(new Chef {
                 ID = 1,
                 Name = "Umair",
-                Address="Daska",
+                City="Sialkot",
+                Area="Daska",
                 ImageUrl = "img/logo-google.jpg"
             });
             chefs.Add(new Chef
             {
                 ID = 2,
                 Name = "Rashid",
-                Address = "Sialkot",
+                City = "Sialkot",
+                Area = "Daska",
                 ImageUrl = "img/logo-google.jpg"
             });
             chefs.Add(new Chef
             {
                 ID = 1,
                 Name = "Tayyab",
-                Address = "Addah",
+                City = "Sialkot",
+                Area = "Daska",
                 ImageUrl = "img/logo-google.jpg"
             });
             chefs.Add(new Chef
             {
                 ID = 1,
-                Name = "Sameer",
-                Address = "Sambriyal",
+                City = "Sialkot",
+                Area = "Daska",
                 ImageUrl = "img/logo-google.jpg"
             });
             chefs.Add(new Chef
             {
                 ID = 1,
                 Name = "Saqlain",
-                Address = "Sialkot",
+                City = "Sialkot",
+                Area = "Daska",
                 ImageUrl = "img/logo-google.jpg"
             });
             chefs.Add(new Chef
             {
                 ID = 1,
                 Name = "Husnain",
-                Address = "Sialkot",
+                City = "Sialkot",
+                Area = "Daska",
                 ImageUrl = "img/logo-google.jpg"
             });
 
@@ -165,6 +170,72 @@ namespace FYPFinalKhanaGarKa.Controllers
                 Offers = offers
             };
             return View(MenuOffer);
+        }
+        [HttpGet]
+        public IActionResult searchChef()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult searchChef(string City, string Area)
+        {
+            List<Chef> chefs = new List<Chef>();
+            chefs.Add(new Chef
+            {
+                ID = 1,
+                Name = "Umair",
+                City = "Sialkot",
+                Area = "Daska",
+                ImageUrl = "img/logo-google.jpg"
+            });
+            chefs.Add(new Chef
+            {
+                ID = 2,
+                Name = "Rashid",
+                City = "Sialkot",
+                Area = "Sialkot",
+                ImageUrl = "img/logo-google.jpg"
+            });
+            chefs.Add(new Chef
+            {
+                ID = 1,
+                Name = "Tayyab",
+                City = "Sialkot",
+                Area = "Daska",
+                ImageUrl = "img/logo-google.jpg"
+            });
+            chefs.Add(new Chef
+            {
+                ID = 1,
+                Name="Sameer",
+                City = "Sialkot",
+                Area = "Sambrial",
+                ImageUrl = "img/logo-google.jpg"
+            });
+            chefs.Add(new Chef
+            {
+                ID = 1,
+                Name = "Saqlain",
+                City = "Sialkot",
+                Area = "Daska",
+                ImageUrl = "img/logo-google.jpg"
+            });
+            chefs.Add(new Chef
+            {
+                ID = 1,
+                Name = "Husnain",
+                City = "Sialkot",
+                Area = "Pasrur",
+                ImageUrl = "img/logo-google.jpg"
+            });
+
+            IList<Chef> searchedchefs = chefs.Where(m => m.City.Contains(City) && m.Area.Contains(Area)).ToList<Chef>();
+
+            return View("searchedchefs",searchedchefs);
+        }
+        public IActionResult searchedchefs()
+        {
+            return View();
         }
     }
 }
