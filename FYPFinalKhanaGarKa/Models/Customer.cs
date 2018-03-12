@@ -3,16 +3,14 @@ using System.Collections.Generic;
 
 namespace FYPFinalKhanaGarKa.Models
 {
-    public partial class Chef
+    public partial class Customer
     {
-        public Chef()
+        public Customer()
         {
-            Menu = new HashSet<Menu>();
-            Offer = new HashSet<Offer>();
             Orders = new HashSet<Orders>();
         }
 
-        public int ChefId { get; set; }
+        public int CustomerId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Gender { get; set; }
@@ -24,16 +22,12 @@ namespace FYPFinalKhanaGarKa.Models
         public string City { get; set; }
         public string Area { get; set; }
         public string Street { get; set; }
-        public string Category { get; set; }
         public string Role { get; set; }
-        public int? Rating { get; set; }
         public string Status { get; set; }
         public DateTime? CreatedDate { get; set; }
         public DateTime? ModifiedDate { get; set; }
         public string ImgUrl { get; set; }
 
-        public ICollection<Menu> Menu { get; set; }
-        public ICollection<Offer> Offer { get; set; }
         public ICollection<Orders> Orders { get; set; }
     }
 }

@@ -1,16 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace FYPFinalKhanaGarKa.Models
 {
-    public class Menu
+    public partial class Menu
     {
-        public int Id { get; set; }
+        public int MenuId { get; set; }
         public string DishName { get; set; }
-        public int Price { get; set; }
         public string Description { get; set; }
-        public string ImageUrl { get; set; }
+        public int Price { get; set; }
+        public string ImgUrl { get; set; }
+        public int ChefId { get; set; }
+        public string Status { get; set; }
+        public DateTime? CreatedDate { get; set; }
+        public DateTime? ModifiedDate { get; set; }
+        public string Feedback { get; set; }
+
+        public Chef Chef { get; set; }
     }
 }
