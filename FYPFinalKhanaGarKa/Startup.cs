@@ -28,6 +28,9 @@ namespace FYPFinalKhanaGarKa
         {
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            //configuring our database as service
+            services.AddDbContext<KhanaGarKaFinalContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("KhanaGarKaFinalConnection")));
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()

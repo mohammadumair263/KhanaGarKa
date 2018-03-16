@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FYPFinalKhanaGarKa.Models;
+using FYPFinalKhanaGarKa.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FYPFinalKhanaGarKa.Controllers
@@ -10,122 +11,38 @@ namespace FYPFinalKhanaGarKa.Controllers
     public class OrderController : Controller
     {
         private static ItemGroup ds = new ItemGroup();
+        private KhanaGarKaFinalContext db = null;
 
-        public IActionResult Index()
+        public OrderController(KhanaGarKaFinalContext db)
         {
-            List<Menu> menus = new List<Menu>();
-            List<Offer> offers = new List<Offer>();
+            this.db = db;
+        }
 
-            menus.Add(new Menu
-            {
-                Id = 1,
-                DishName = "Chicken Krahi",
-                Description = "Too deep fried balls of sliced onion, in chana daal batter. With mint sauce.",
-                Price = 700,
-                ImageUrl = "img/foodimg/menuitem.jpg"
-            });
-            menus.Add(new Menu
-            {
-                Id = 2,
-                DishName = "Daal Chawal",
-                Description = "Too deep fried balls of sliced onion, in chana daal batter. With mint sauce.",
-                Price = 100,
-                ImageUrl = "img/foodimg/menuitem.jpg"
-            });
-            menus.Add(new Menu
-            {
-                Id = 3,
-                DishName = "Alo Gohbi",
-                Description = "Too deep fried balls of sliced onion, in chana daal batter. With mint sauce.",
-                Price = 50,
-                ImageUrl = "img/foodimg/menuitem.jpg"
-            });
-            menus.Add(new Menu
-            {
-                Id = 4,
-                DishName = "Chicken Krahi",
-                Description = "Too deep fried balls of sliced onion, in chana daal batter. With mint sauce.",
-                Price = 700,
-                ImageUrl = "img/foodimg/menuitem.jpg"
-            });
-            menus.Add(new Menu
-            {
-                Id = 5,
-                DishName = "Daal Chawal",
-                Description = "Too deep fried balls of sliced onion, in chana daal batter. With mint sauce.",
-                Price = 100,
-                ImageUrl = "img/foodimg/menuitem.jpg"
-            });
-            menus.Add(new Menu
-            {
-                Id = 6,
-                DishName = "Alo Gohbi",
-                Description = "Too deep fried balls of sliced onion, in chana daal batter. With mint sauce.",
-                Price = 50,
-                ImageUrl = "img/foodimg/menuitem.jpg"
-            });
-
-            offers.Add(new Offer
-            {
-                Id = 1,
-                OfferName = "Dhmaka Offer!",
-                Description = "Too deep fried balls of sliced onion, in chana daal batter. With mint sauce. 1 liter coke free.",
-                Price = 1000,
-                ImageUrl = "img/foodimg/menuitem.jpg"
-            });
-            offers.Add(new Offer
-            {
-                Id = 2,
-                OfferName = "Weekly Offer!",
-                Description = "Too deep fried balls of sliced onion, in chana daal batter. With mint sauce.\n 1 liter coke free.",
-                Price = 900,
-                ImageUrl = "img/foodimg/menuitem.jpg"
-            });
-            offers.Add(new Offer
-            {
-                Id = 3,
-                OfferName = "Monthly Offer!",
-                Description = "Too deep fried balls of sliced onion, in chana daal batter. With mint sauce.\n 1 liter coke free.",
-                Price = 4000,
-                ImageUrl = "img/foodimg/menuitem.jpg"
-            });
-            offers.Add(new Offer
-            {
-                Id = 4,
-                OfferName = "Dhmaka Offer!",
-                Description = "Too deep fried balls of sliced onion, in chana daal batter. With mint sauce.\n 1 liter coke free.",
-                Price = 1000,
-                ImageUrl = "img/foodimg/menuitem.jpg"
-            });
-            offers.Add(new Offer
-            {
-                Id = 5,
-                OfferName = "Weekly Offer!",
-                Description = "Too deep fried balls of sliced onion, in chana daal batter. With mint sauce.\n 1 liter coke free.",
-                Price = 900,
-                ImageUrl = "img/foodimg/menuitem.jpg"
-            });
-            offers.Add(new Offer
-            {
-                Id = 6,
-                OfferName = "Monthly Offer!",
-                Description = "Too deep fried balls of sliced onion, in chana daal batter. With mint sauce.\n 1 liter coke free.",
-                Price = 4000,
-                ImageUrl = "img/foodimg/menuitem.jpg"
-            });
-
-            MenuOfferViewModel MenuOffer = new MenuOfferViewModel
-            {
+        public IActionResult Index(int id)
+        {
+            List<Menu> menus = db.Menu.Where<Menu>(i => i.ChefId == id).ToList<Menu>();
+            List<Offer> offers = db.Offer.Where<Offer>(i => i.ChefId == id).ToList<Offer>();
+            MenuOfferViewModel ViewModel = new MenuOfferViewModel {
                 Menus = menus,
                 Offers = offers
             };
-
-            return View(MenuOffer);
+            return View(ViewModel);
         }
 
-        public IActionResult Details()
+        public IActionResult Details(int id)
         {
-            return View();
+            List<OrderLine> Dishs = db.OrderLine.Where<OrderLine>(i => i.OrderId == id).ToList<OrderLine>();
+            Orders Order = db.Orders.Where<Orders>(i => i.OrderId == id).FirstOrDefault();
+            Chef c = db.Chef.Where<Chef>(i => i.ChefId == Order.ChefId).FirstOrDefault();
+            
+            OrderDetailViewModel ViewModel = new OrderDetailViewModel
+            {
+                Dishis = Dishs,
+                Chef = c,
+                Order = Order
+            };
+
+            return View(ViewModel);
         }
 
         public IActionResult Success()
@@ -133,9 +50,11 @@ namespace FYPFinalKhanaGarKa.Controllers
             return View();
         }
 
-        public IActionResult History()
+        public IActionResult History(int id)
         {
-            return View();
+            List<Orders> orders = db.Orders.Where<Orders>(i => i.CustomerId == id).ToList<Orders>();
+
+            return View(orders);
         }
 
         public IActionResult Summary()
@@ -145,7 +64,7 @@ namespace FYPFinalKhanaGarKa.Controllers
 
         public IActionResult Process()
         {
-            return View(ds);
+                return View(ds);
         }
 
         [HttpPost]

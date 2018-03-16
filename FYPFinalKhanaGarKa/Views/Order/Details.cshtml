@@ -1,4 +1,4 @@
-﻿
+﻿@model FYPFinalKhanaGarKa.Models.ViewModels.OrderDetailViewModel
 @{
     ViewData["Title"] = "Details";
 }
@@ -32,18 +32,18 @@
                         <table class="table">
                             <tbody>
                                 <tr class="orderth-title">
-                                    <th>Restaurant name</th>
+                                    <th>Chef name</th>
                                     <th>Order date</th>
                                     <th>Order type</th>
                                     <th>Payment method</th>
-                                    <th>Payment status</th>
+                                    <th>Order status</th>
                                 </tr>
                                 <tr class="orderdata-title">
-                                    <td>Raymons restaurant</td>
-                                    <td>01/12/2015</td>
+                                    <td>@Model.Chef.FirstName @Model.Chef.LastName</td>
+                                    <td>@Model.Order.OrderDate</td>
                                     <td>Delivery</td>
                                     <td>Cash</td>
-                                    <td>Not confirmed</td>
+                                    <td>@Model.Order.OrderStatus</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -54,51 +54,24 @@
                                 <tbody>
                                     <tr class="orderh-title">
                                         <th>Dish name</th>
-                                        <th>Dish category name</th>
+                                        <th>Date</th>
                                         <th class="pay-th">Quantity</th>
-                                        <th class="pay-th">Dish price</th>
                                         <th class="file-th">Dish ordered price</th>
                                     </tr>
+                                    @foreach (var dishs in Model.Dishis)
+                                    {
                                     <tr class="orderdata-title">
-                                        <td>0112</td>
-                                        <td>02.02.16</td>
-                                        <td class="pay">9</td>
-                                        <td class="pay">9.25</td>
-                                        <td class="file-view">8.65</td>
+                                        <td>@dishs.Name</td>
+                                        <td>@Model.Order.OrderDate</td>
+                                        <td class="pay">@dishs.Quantity</td>
+                                        <td class="pay">@dishs.Price</td>
                                     </tr>
-                                    <tr class="orderdata-title">
-                                        <td>0112</td>
-                                        <td>02.02.16</td>
-                                        <td class="pay">1</td>
-                                        <td class="pay">0.28</td>
-                                        <td class="file-view">7.65</td>
-                                    </tr>
-                                    <tr class="orderdata-title">
-                                        <td>0112</td>
-                                        <td>02.02.16</td>
-                                        <td class="pay">8</td>
-                                        <td class="pay">1.2</td>
-                                        <td class="file-view">5.65</td>
-                                    </tr>
-                                    <tr class="orderdata-title">
-                                        <td>0112</td>
-                                        <td>02.02.16</td>
-                                        <td class="pay">3</td>
-                                        <td class="pay">2.6</td>
-                                        <td class="file-view">8.65</td>
-                                    </tr>
-                                    <tr class="orderdata-title">
-                                        <td>0112</td>
-                                        <td>02.02.16</td>
-                                        <td class="pay">3</td>
-                                        <td class="pay">2.3</td>
-                                        <td class="file-view">9.65</td>
-                                    </tr>
+                                    }
                                 </tbody>
                             </table>
                             <div class="clearfix"></div>
                             <div class="orderhistory-total clearfix">
-                                <h2><span class="total-title">Total</span> <span class="amount">&pound; 960</span></h2>
+                                <h2><span class="total-title">Total</span> <span class="amount">@Model.Dishis.Sum(i => i.Price)</span></h2>
                             </div>
                         </div>
                     </div>

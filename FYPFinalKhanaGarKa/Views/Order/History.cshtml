@@ -1,4 +1,4 @@
-﻿
+﻿@model IEnumerable<FYPFinalKhanaGarKa.Models.Orders>
 @{
     ViewData["Title"] = "History";
 }
@@ -40,47 +40,19 @@
                                         <th class="pay-th">Payment type</th>
                                         <th class="file-th">View</th>
                                     </tr>
+                                    @foreach (var orders in Model)
+                                    {
                                     <tr class="orderdata-title">
-                                        <td>0112</td>
-                                        <td>02.02.16</td>
-                                        <td>&pound; 189</td>
+                                        <td>@orders.OrderId</td>
+                                        <td>@orders.OrderDate</td>
+                                        <td>&pound;189</td>
                                         <td class="pay">Cash</td>
-                                        <td class="file-view"><a href="order-details.html"><i class="fa fa-file"></i></a></td>
+                                        <td class="file-view"><a asp-controller="Order" asp-action="Details"><i class="fa fa-file"></i></a></td>
                                     </tr>
-                                    <tr class="orderdata-title">
-                                        <td>0112</td>
-                                        <td>02.02.16</td>
-                                        <td>&pound; 189</td>
-                                        <td class="pay">Cash</td>
-                                        <td class="file-view"><a href="order-details.html"><i class="fa fa-file"></i></a></td>
-                                    </tr>
-                                    <tr class="orderdata-title">
-                                        <td>0112</td>
-                                        <td>02.02.16</td>
-                                        <td>&pound; 189</td>
-                                        <td class="pay">Cash</td>
-                                        <td class="file-view"><a href="order-details.html"><i class="fa fa-file"></i></a></td>
-                                    </tr>
-                                    <tr class="orderdata-title">
-                                        <td>0112</td>
-                                        <td>02.02.16</td>
-                                        <td>&pound; 189</td>
-                                        <td class="pay">Cash</td>
-                                        <td class="file-view"><a href="order-details.html"><i class="fa fa-file"></i></a></td>
-                                    </tr>
-                                    <tr class="orderdata-title">
-                                        <td>0112</td>
-                                        <td>02.02.16</td>
-                                        <td>&pound; 189</td>
-                                        <td class="pay">Cash</td>
-                                        <td class="file-view"><a href="order-details.html"><i class="fa fa-file"></i></a></td>
-                                    </tr>
+                                    }
                                 </tbody>
                             </table>
                             <div class="clearfix"></div>
-                            <div class="orderhistory-total clearfix">
-                                <h2><span class="total-title">Total</span> <span class="amount">&pound; 960</span></h2>
-                            </div>
                         </div>
                     </div>
                     <div class="clearfix"></div>
