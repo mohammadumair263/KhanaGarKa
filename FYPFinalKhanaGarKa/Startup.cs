@@ -29,6 +29,9 @@ namespace FYPFinalKhanaGarKa
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
+            services.AddDbContext<KhanaGarKaFinalContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("OurCs")));
+
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
