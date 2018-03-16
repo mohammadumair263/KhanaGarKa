@@ -1,0 +1,146 @@
+﻿@model FYPFinalKhanaGarKa.Models.Chef
+
+@section StyleLink{ 
+
+<link href="~/lib/jquery-ui/themes/base/datepicker.css" rel="stylesheet" />
+}
+
+<h2>RegisterChef</h2>
+
+<h4>Chef</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="RegisterChef" method="post" >
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="FirstName" class="control-label"></label>
+                <input asp-for="FirstName" class="form-control" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LastName" class="control-label"></label>
+                <input asp-for="LastName" class="form-control" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Gender" class="control-label"></label>
+                <select asp-for="Gender" class="form-control">
+                    <option value="Male">Male</option>
+                    <option value="FeMale">FeMale</option>
+                    
+                </select>
+                <span asp-validation-for="Gender" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Dob" class="control-label"></label>
+                <input asp-for="Dob" class="form-control" type="date" id="datepicker"/>
+                <span asp-validation-for="Dob" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Cnic" class="control-label"></label>
+                <input asp-for="Cnic" class="form-control" />
+                <span asp-validation-for="Cnic" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PhoneNo" class="control-label"></label>
+                <input asp-for="PhoneNo" class="form-control" />
+                <span asp-validation-for="PhoneNo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Password" class="control-label"></label>
+                <input asp-for="Password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="City" class="control-label"></label>
+                <select asp-for="City" class="form-control">
+                    <option value="sialkot">sialkot</option>
+                    
+                </select>
+                <span asp-validation-for="City" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Area" class="control-label"></label>
+                <select asp-for="Area" class="form-control">
+                    <option value="Daska Road">Daska Road</option>
+                    
+                </select>
+                <span asp-validation-for="Area" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Street" class="control-label"></label>
+                <input asp-for="Street" class="form-control" />
+                <span asp-validation-for="Street" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Category" class="control-label"></label>
+                <!--<input asp-for="Category" class="form-control" />-->
+
+                    <select asp-for="Category" class="form-control">
+                        <option value="***">***</option>
+                        <option value="*****">*****</option>
+                        <option value="*******">*******</option>
+                    </select>
+                
+                <span asp-validation-for="Category" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Role" class="control-label"></label>
+                <select asp-for="Role" class="form-control">
+                    <option value="Chef" selected>Chef</option>
+                    
+                </select>
+                <span asp-validation-for="Role" class="text-danger"></span>
+            </div>
+            <!-- <div class="form-group">
+        <label asp-for="Rating" class="control-label"></label>
+        <input asp-for="Rating" class="form-control" />
+        <span asp-validation-for="Rating" class="text-danger"></span>
+    </div>-->
+            <div class="form-group">
+                <label asp-for="Status" class="control-label"></label>
+                <select asp-for="Status" class="form-control">
+                    <option value="Active">Active</option>
+                    <option value="InActive">InActive</option>
+                    
+                </select>
+                <span asp-validation-for="Status" class="text-danger"></span>
+            </div>
+            <!--  <div class="form-group">
+          <label asp-for="CreatedDate" class="control-label"></label>
+          <input asp-for="CreatedDate" class="form-control" />
+          <span asp-validation-for="CreatedDate" class="text-danger"></span>
+      </div>
+      <div class="form-group">
+          <label asp-for="ModifiedDate" class="control-label"></label>
+          <input asp-for="ModifiedDate" class="form-control" />
+          <span asp-validation-for="ModifiedDate" class="text-danger"></span>
+      </div>
+      <div class="form-group">
+          <label asp-for="ImgUrl" class="control-label"></label>
+          <input asp-for="ImgUrl" class="form-control" />
+          <span asp-validation-for="ImgUrl" class="text-danger"></span>
+      </div>-->
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts
+{
+<script>
+     
+    $('#datepicker').datepicker();
+    
+</script>
+}
+

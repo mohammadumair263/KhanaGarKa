@@ -8,8 +8,15 @@ using FYPFinalKhanaGarKa.Models;
 
 namespace FYPFinalKhanaGarKa.Controllers
 {
+    
+    
     public class HomeController : Controller
     {
+        private KhanaGarKaFinalContext db = null;
+        public HomeController(KhanaGarKaFinalContext _db)
+        {
+            db = _db;
+        }
         public IActionResult Index()
         {
             return View();
@@ -32,10 +39,23 @@ namespace FYPFinalKhanaGarKa.Controllers
         {
             return View();
         }
+        [HttpGet]
         public IActionResult Register()
         {
             return View();
         }
+        [HttpPost]
+        public IActionResult Register(Customer c)
+        {
+            
+                db.Customer.Add(c);
+                db.SaveChanges();
+
+            
+            
+            return View();
+        }
+        
         public IActionResult ForgotPassword()
         {
             return View();

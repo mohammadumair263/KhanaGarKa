@@ -9,30 +9,69 @@ namespace FYPFinalKhanaGarKa.Controllers
 {
     public class ChefController : Controller
     {
-        private KhanaGarKaFinalContext db = null;
-
-        public ChefController(KhanaGarKaFinalContext db)
+        private KhanaGarKaFinalContext db;
+        public ChefController(KhanaGarKaFinalContext _db)
         {
-            this.db = db;
+            db=_db;
         }
-
-        [HttpPost]
-        public IActionResult Index(string City, string Area)
+        public IActionResult Index()
         {
-            List<Chef> chefs = db.Chef.Where<Chef>(i => i.City == City && i.Area == Area).ToList<Chef>();
+            List<Chef> chefs = new List<Chef>();
+            
 
             return View(chefs);
         }
-        public IActionResult ChefAcc(int id)
+        public IActionResult ChefAcc()
         {
-            List<Menu> menus = db.Menu.Where<Menu>(i => i.ChefId == id).ToList<Menu>();
-            List<Offer> offers = db.Offer.Where<Offer>(i => i.ChefId == id).ToList<Offer>();
-            MenuOfferViewModel ViewModel = new MenuOfferViewModel
+            List<Menu> menus = new List<Menu>();
+            List<Offer> offers = new List<Offer>();
+
+            ;
+
+            MenuOfferViewModel MenuOffer = new MenuOfferViewModel
             {
                 Menus = menus,
                 Offers = offers
             };
-            return View(ViewModel);
+            return View(MenuOffer);
+        }
+        [HttpGet]
+        public IActionResult searchChef()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult searchChef(string City, string Area)
+        {
+            List<Chef> chefs = new List<Chef>();
+            
+
+            IList<Chef> searchedchefs = chefs.Where(m => m.City.Contains(City) && m.Area.Contains(Area)).ToList<Chef>();
+
+            return View("searchedchefs",searchedchefs);
+        }
+        public IActionResult searchedchefs()
+        {
+            return View();
+        }
+        [HttpGet]
+        public IActionResult RegisterChef()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult RegisterChef(Chef c)
+        {
+            
+            
+                
+                    db.Chef.Add(c);
+                    db.SaveChanges();
+                    
+                
+                
+            
+            return View();
         }
     }
 }
