@@ -12,21 +12,22 @@ namespace FYPFinalKhanaGarKa.Controllers
         private KhanaGarKaFinalContext db;
         public ChefController(KhanaGarKaFinalContext _db)
         {
-            db=_db;
+            db = _db;
         }
-        public IActionResult Index()
+
+        [HttpPost]
+        public IActionResult Index(string City,string Area)
         {
-            List<Chef> chefs = new List<Chef>();
+            List<Chef> chefs = db.Chef.Where<Chef>(i => i.City.Contains(City) && i.Area.Contains(Area)).ToList<Chef>();
             
 
             return View(chefs);
         }
+
         public IActionResult ChefAcc()
         {
             List<Menu> menus = new List<Menu>();
             List<Offer> offers = new List<Offer>();
-
-            ;
 
             MenuOfferViewModel MenuOffer = new MenuOfferViewModel
             {
@@ -35,42 +36,22 @@ namespace FYPFinalKhanaGarKa.Controllers
             };
             return View(MenuOffer);
         }
-        [HttpGet]
-        public IActionResult searchChef()
-        {
-            return View();
-        }
-        [HttpPost]
-        public IActionResult searchChef(string City, string Area)
-        {
-            List<Chef> chefs = new List<Chef>();
-            
 
-            IList<Chef> searchedchefs = chefs.Where(m => m.City.Contains(City) && m.Area.Contains(Area)).ToList<Chef>();
-
-            return View("searchedchefs",searchedchefs);
-        }
-        public IActionResult searchedchefs()
-        {
-            return View();
-        }
         [HttpGet]
-        public IActionResult RegisterChef()
+        public IActionResult Register()
         {
             return View();
         }
+
         [HttpPost]
-        public IActionResult RegisterChef(Chef c)
+        public IActionResult Register(Chef c)
         {
-            
-            
-                
-                    db.Chef.Add(c);
-                    db.SaveChanges();
-                    
-                
-                
-            
+            c.Category = "3 star";
+            c.Role = "chef";
+            c.Status = "Active";
+            db.Chef.Add(c);
+            db.SaveChanges();
+
             return View();
         }
     }

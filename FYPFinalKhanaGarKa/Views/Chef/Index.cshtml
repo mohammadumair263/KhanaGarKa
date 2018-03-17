@@ -24,6 +24,7 @@
                     <div class="col-xs-12">
                         <div class="item-block">
                             <header>
+                                @*@if (chef.ImgUrl.Equals("") || chef.ImgUrl == null) { chef.ImgUrl = "img/avatar.png"; }*@
                                 <a href="#"><img src="@chef.ImgUrl" alt=""></a>
                                 <div class="hgroup">
                                     <h4><a href="#">@chef.FirstName @chef.LastName</a></h4>
