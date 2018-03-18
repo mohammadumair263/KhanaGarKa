@@ -39,22 +39,6 @@ namespace FYPFinalKhanaGarKa.Controllers
         {
             return View();
         }
-        [HttpGet]
-        public IActionResult Register()
-        {
-            return View();
-        }
-        [HttpPost]
-        public IActionResult Register(Customer c)
-        {
-            
-                db.Customer.Add(c);
-                db.SaveChanges();
-
-            
-            
-            return View();
-        }
         
         public IActionResult ForgotPassword()
         {

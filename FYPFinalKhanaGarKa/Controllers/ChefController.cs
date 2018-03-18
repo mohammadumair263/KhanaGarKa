@@ -4,15 +4,20 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using FYPFinalKhanaGarKa.Models;
+using System.IO;
+using Microsoft.AspNetCore.Hosting;
 
 namespace FYPFinalKhanaGarKa.Controllers
 {
     public class ChefController : Controller
     {
         private KhanaGarKaFinalContext db;
-        public ChefController(KhanaGarKaFinalContext _db)
+        private IHostingEnvironment env = null;
+
+        public ChefController(KhanaGarKaFinalContext _db,IHostingEnvironment _env)
         {
             db = _db;
+            env = _env;
         }
 
         [HttpPost]
@@ -49,8 +54,32 @@ namespace FYPFinalKhanaGarKa.Controllers
             c.Category = "3 star";
             c.Role = "chef";
             c.Status = "Active";
-            db.Chef.Add(c);
-            db.SaveChanges();
+            using (var tr = db.Database.BeginTransaction())
+            {
+                try
+                {
+                    string ourftp = env.WebRootPath + "/Chefs/";
+                    var directoryinfo = new DirectoryInfo(ourftp);
+                    if (!Directory.Exists(ourftp))
+                    {
+                        Directory.CreateDirectory(ourftp);
+
+                    }
+                    if (directoryinfo.Exists)
+                    {
+                        directoryinfo.CreateSubdirectory("" + c.Cnic);
+                    }
+
+                    db.Chef.Add(c);
+                    db.SaveChanges();
+
+                    tr.Commit();
+                }
+                catch
+                {
+                    tr.Rollback();
+                }
+            }
 
             return View();
         }

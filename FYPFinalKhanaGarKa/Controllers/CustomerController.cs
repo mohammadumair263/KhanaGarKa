@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using FYPFinalKhanaGarKa.Models;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FYPFinalKhanaGarKa.Controllers
@@ -10,9 +12,12 @@ namespace FYPFinalKhanaGarKa.Controllers
     public class CustomerController : Controller
     {
         private KhanaGarKaFinalContext db;
-        public CustomerController(KhanaGarKaFinalContext _db)
+        private IHostingEnvironment env = null;
+
+        public CustomerController(KhanaGarKaFinalContext _db,IHostingEnvironment _env)
         {
             db = _db;
+            env = _env;
         }
 
         public IActionResult Index()
@@ -31,8 +36,31 @@ namespace FYPFinalKhanaGarKa.Controllers
         {
             c.Status = "Active";
             c.Role = "Customer";
-            db.Customer.Add(c);
-            db.SaveChanges();
+            using (var tr = db.Database.BeginTransaction())
+            {
+                try
+                {
+                    string ourftp = env.WebRootPath + "/Customers/";
+                    var directoryinfo = new DirectoryInfo(ourftp);
+                    if (!Directory.Exists(ourftp))
+                    {
+                        Directory.CreateDirectory(ourftp);
+
+                    }
+                    if (directoryinfo.Exists)
+                    {
+                        directoryinfo.CreateSubdirectory("" + c.Cnic);
+                    }
+
+                    db.Customer.Add(c);
+                    db.SaveChanges();
+                    tr.Commit();
+                }
+                catch
+                {
+                    tr.Rollback();
+                }
+            }
             return View();
         }
     }

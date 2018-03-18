@@ -1,18 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using FYPFinalKhanaGarKa.Models;
+﻿using FYPFinalKhanaGarKa.Models;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using System.IO;
 
 namespace FYPFinalKhanaGarKa.Controllers
 {
     public class DeliveryBoyController : Controller
     {
         private KhanaGarKaFinalContext db;
-        public DeliveryBoyController(KhanaGarKaFinalContext _db)
+        private IHostingEnvironment env;
+
+        public DeliveryBoyController(KhanaGarKaFinalContext _db,IHostingEnvironment _env)
         {
             db = _db;
+            env = _env;
         }
 
         public IActionResult Index()
@@ -31,8 +32,31 @@ namespace FYPFinalKhanaGarKa.Controllers
         {
             d.Status = "Active";
             d.Role = "DBoy";
-            db.DeliveryBoy.Add(d);
-            db.SaveChanges();
+            using (var tr = db.Database.BeginTransaction())
+            {
+                string ourftp = env.WebRootPath + "/DBoy/";
+                var directoryinfo = new DirectoryInfo(ourftp);
+                if (!Directory.Exists(ourftp))
+                {
+                    Directory.CreateDirectory(ourftp);
+                }
+                if (directoryinfo.Exists)
+                {
+                    directoryinfo.CreateSubdirectory("" + d.Cnic);
+                }
+
+                try
+                {
+                    db.DeliveryBoy.Add(d);
+                    db.SaveChanges();
+                    tr.Commit();
+                }
+                catch
+                {
+                    tr.Rollback();
+
+                }
+            }
             return View();
         }
     }
