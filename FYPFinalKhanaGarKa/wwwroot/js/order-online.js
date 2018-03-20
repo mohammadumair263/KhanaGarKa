@@ -8,14 +8,6 @@ $(document).ready(function(){
     $(".sticky-content-left-side").sticky({topSpacing: 15});
     //$("#order-online-tab-nav").sticky({topSpacing: 10});
 
-	/*------------------------/
-     /* Adding Model to buton
-     /*-----------------------*/
-
-	 $(".add-dish-offer-btn").click(function(){
-        $("#addItemModel").modal({backdrop: "static"});
-		});
-
     /*------------------------/
      /* SMOOTH SCROLLING
      /*-----------------------*/

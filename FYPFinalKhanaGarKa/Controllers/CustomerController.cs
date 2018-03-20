@@ -20,11 +20,6 @@ namespace FYPFinalKhanaGarKa.Controllers
             env = _env;
         }
 
-        public IActionResult Index()
-        {
-            return View();
-        }
-
         [HttpGet]
         public IActionResult Register()
         {
@@ -34,6 +29,8 @@ namespace FYPFinalKhanaGarKa.Controllers
         [HttpPost]
         public IActionResult Register(Customer c)
         {
+            c.CreatedDate = DateTime.Now;
+            c.ModifiedDate = DateTime.Now;
             c.Status = "Active";
             c.Role = "Customer";
             using (var tr = db.Database.BeginTransaction())

@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using FYPFinalKhanaGarKa.Models;
-using System.IO;
+﻿using FYPFinalKhanaGarKa.Models;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 
 namespace FYPFinalKhanaGarKa.Controllers
 {
@@ -14,25 +13,26 @@ namespace FYPFinalKhanaGarKa.Controllers
         private KhanaGarKaFinalContext db;
         private IHostingEnvironment env = null;
 
-        public ChefController(KhanaGarKaFinalContext _db,IHostingEnvironment _env)
+        public ChefController(KhanaGarKaFinalContext _db, IHostingEnvironment _env)
         {
             db = _db;
             env = _env;
         }
 
         [HttpPost]
-        public IActionResult Index(string City,string Area)
+        public IActionResult Index(string City, string Area)
         {
             List<Chef> chefs = db.Chef.Where<Chef>(i => i.City.Contains(City) && i.Area.Contains(Area)).ToList<Chef>();
-            
+
 
             return View(chefs);
         }
 
-        public IActionResult ChefAcc()
+        [HttpGet]
+        public IActionResult ChefAcc(int id)
         {
-            List<Menu> menus = new List<Menu>();
-            List<Offer> offers = new List<Offer>();
+            List<Menu> menus = db.Menu.Where<Menu>(i => i.ChefId == id).ToList<Menu>();
+            List<Offer> offers = db.Offer.Where<Offer>(i => i.ChefId == id).ToList<Offer>();
 
             MenuOfferViewModel MenuOffer = new MenuOfferViewModel
             {
@@ -40,6 +40,67 @@ namespace FYPFinalKhanaGarKa.Controllers
                 Offers = offers
             };
             return View(MenuOffer);
+        }
+
+        [HttpGet]
+        public IActionResult ChefMenu()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult ChefMenu(Menu m)
+        {
+            m.Status = "Avalible";
+            m.CreatedDate = DateTime.Now;
+            m.ModifiedDate = DateTime.Now;
+            m.ChefId = 5;
+            using (var tr = db.Database.BeginTransaction())
+            {
+                try
+                {
+                    db.Menu.Add(m);
+                    db.SaveChanges();
+
+                    tr.Commit();
+                }
+                catch
+                {
+                    tr.Rollback();
+                }
+            }
+            return RedirectToAction("ChefAcc");
+        }
+
+        [HttpGet]
+        public IActionResult ChefOffer()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult ChefOffer(Offer o)
+        {
+            o.Status = "Avalible";
+            o.ChefId = 5;
+            o.CreatedDate = DateTime.Now;
+            o.ModifiedDate = DateTime.Now;
+            o.StartDate = DateTime.Now;
+            using (var tr = db.Database.BeginTransaction())
+            {
+                try
+                {
+                    db.Offer.Add(o);
+                    db.SaveChanges();
+
+                    tr.Commit();
+                }
+                catch
+                {
+                    tr.Rollback();
+                }
+            }
+            return RedirectToAction("ChefAcc");
         }
 
         [HttpGet]
@@ -51,6 +112,8 @@ namespace FYPFinalKhanaGarKa.Controllers
         [HttpPost]
         public IActionResult Register(Chef c)
         {
+            c.CreatedDate = DateTime.Now;
+            c.ModifiedDate = DateTime.Now;
             c.Category = "3 star";
             c.Role = "chef";
             c.Status = "Active";
@@ -82,6 +145,82 @@ namespace FYPFinalKhanaGarKa.Controllers
             }
 
             return View();
+        }
+
+        [HttpPost]
+        public IActionResult DeleteChefMenu(int Id)
+        {
+            using (var tr = db.Database.BeginTransaction())
+            {
+                try
+                {
+                    
+                    db.SaveChanges();
+
+                    tr.Commit();
+                }
+                catch
+                {
+                    tr.Rollback();
+                }
+            }
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult EditChefMenu(int Id)
+        {
+            return View(db.Menu.Where<Menu>(i => i.MenuId == Id).FirstOrDefault<Menu>());
+        }
+
+        [HttpPost]
+        public IActionResult EditChefMenu(Menu m)
+        {
+            m.ChefId = 5;
+            m.ModifiedDate = DateTime.Now;
+            using (var tr = db.Database.BeginTransaction())
+            {
+                try
+                {
+                    db.Menu.Update(m);
+                    db.SaveChanges();
+
+                    tr.Commit();
+                }
+                catch
+                {
+                    tr.Rollback();
+                }
+            }
+            return RedirectToAction("ChefAcc");
+        }
+
+        [HttpGet]
+        public IActionResult EditChefOffer(int id)
+        {
+            return View(db.Offer.Where<Offer>(i => i.OfferId == id).FirstOrDefault<Offer>());
+        }
+
+        [HttpPost]
+        public IActionResult EditChefOffer(Offer o)
+        {
+            o.ChefId = 5; // ya us chef ki id ho gi jo login ha 
+            o.ModifiedDate = DateTime.Now;
+            using (var tr = db.Database.BeginTransaction())
+            {
+                try
+                {
+                    db.Offer.Update(o);
+                    db.SaveChanges();
+
+                    tr.Commit();
+                }
+                catch
+                {
+                    tr.Rollback();
+                }
+            }
+            return RedirectToAction("ChefAcc");
         }
     }
 }

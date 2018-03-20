@@ -1,6 +1,7 @@
 ﻿using FYPFinalKhanaGarKa.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.IO;
 
 namespace FYPFinalKhanaGarKa.Controllers
@@ -16,11 +17,6 @@ namespace FYPFinalKhanaGarKa.Controllers
             env = _env;
         }
 
-        public IActionResult Index()
-        {
-            return View();
-        }
-
         [HttpGet]
         public IActionResult Register()
         {
@@ -30,6 +26,8 @@ namespace FYPFinalKhanaGarKa.Controllers
         [HttpPost]
         public IActionResult Register(DeliveryBoy d)
         {
+            d.CreatedDate = DateTime.Now;
+            d.ModifiedDate = DateTime.Now;
             d.Status = "Active";
             d.Role = "DBoy";
             using (var tr = db.Database.BeginTransaction())
