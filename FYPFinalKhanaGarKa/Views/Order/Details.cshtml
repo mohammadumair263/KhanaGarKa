@@ -19,7 +19,6 @@
                     <div class="cfoaccount">
                         <ul class="list-unstyled">
                             <li><a href="myaccount.html"><i class="fa fa-home" aria-hidden="true"></i> My Account</a></li>
-                            <li><a href="myaccount.html"><i class="fa fa-user" aria-hidden="true"></i> My Profile</a></li>
                             <li><a href="order-history.html"><i class="fa fa-history" aria-hidden="true"></i> Order History</a></li>
                         </ul>
                     </div>
@@ -41,7 +40,7 @@
                                 <tr class="orderdata-title">
                                     <td>@Model.Chef.FirstName @Model.Chef.LastName</td>
                                     <td>@Model.Order.OrderDate</td>
-                                    <td>Delivery</td>
+                                    <td>@Model.Order.OrderType</td>
                                     <td>Cash</td>
                                     <td>@Model.Order.OrderStatus</td>
                                 </tr>

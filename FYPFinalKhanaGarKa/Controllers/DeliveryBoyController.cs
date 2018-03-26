@@ -1,8 +1,10 @@
 ﻿using FYPFinalKhanaGarKa.Models;
+using FYPFinalKhanaGarKa.Models.ViewModels;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.IO;
+using System.Linq;
 
 namespace FYPFinalKhanaGarKa.Controllers
 {
@@ -55,6 +57,32 @@ namespace FYPFinalKhanaGarKa.Controllers
 
                 }
             }
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Login(DeliveryBoy d)
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult ForgotPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult ForgotPassword(ForgotPasswordViewModel c)
+        {
+            var chef = db.DeliveryBoy.Where(i => i.PhoneNo == c.Choice || i.Email == c.Choice).FirstOrDefault();
+
             return View();
         }
     }

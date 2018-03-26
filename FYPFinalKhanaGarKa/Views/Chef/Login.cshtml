@@ -1,0 +1,45 @@
+﻿@model FYPFinalKhanaGarKa.Models.Chef
+@{
+    ViewData["Title"] = "Login";
+}
+
+@Html.Partial("_PageTitlePartial", ViewData["Title"])
+<!-- Content Start -->
+<main class="main-content">
+    <div class="login-block">
+        <img src="~/img/logo_gray.png" alt="">
+        <h1>Log into your account</h1>
+        <form method="post" asp-action="Login" asp-controller="Chef">
+            <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="ti-email"></i></span>
+                    <input asp-for="Cnic" class="form-control" placeholder="Your CNIC">
+                    <span asp-validation-for="Cnic"></span>
+                </div>
+            </div>
+            <hr class="hr-xs">
+            <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class=" ti-unlock"></i></span>
+                    <input asp-for="Password" type="password" class="form-control" placeholder="Password">
+                    <span asp-validation-for="Password"></span>
+                </div>
+            </div>
+            <button class="btn btn-primary btn-block" type="submit">Login</button>
+
+        </form>
+    </div>
+    <div class="login-links">
+        <a class="pull-left" asp-controller="Customer" asp-action="Login">Login as Customer</a>
+        <a class="pull-right" asp-controller="Chef" asp-action="ForgotPassword">Forgot Password?</a>
+        <a class="pull-left" asp-controller="DeliveryBoy" asp-action="Login">&nbsp; Or DeliveryBoy</a>
+    </div>
+</main>
+<!-- Main container end -->
+<!-- Content End -->
+@section Scripts
+    {
+    <script>
+        $('body').addClass("login-page");
+    </script>
+}

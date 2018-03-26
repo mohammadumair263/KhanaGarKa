@@ -1,4 +1,5 @@
 ﻿using FYPFinalKhanaGarKa.Models;
+using FYPFinalKhanaGarKa.Models.ViewModels;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -69,7 +70,8 @@ namespace FYPFinalKhanaGarKa.Controllers
                     tr.Rollback();
                 }
             }
-            return RedirectToAction("ChefAcc");
+            //return RedirectToAction("ChefAcc");
+            return Redirect("ChefAcc/" + m.ChefId);
         }
 
         [HttpGet]
@@ -145,6 +147,60 @@ namespace FYPFinalKhanaGarKa.Controllers
             }
 
             return View();
+        }
+
+        [HttpGet]
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Login(Chef c)
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult ForgotPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult ForgotPassword(ForgotPasswordViewModel c)
+        {
+
+             var chef = db.Chef.Where(i => i.PhoneNo == c.Choice || i.Email == c.Choice).FirstOrDefault();
+
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult ModifyDetails(int id)
+        {
+            return View(db.Chef.Where(i => i.ChefId == id).FirstOrDefault());
+        }
+
+        [HttpPost]
+        public IActionResult ModifyDetails(Chef c)
+        {
+            c.ModifiedDate = DateTime.Now;
+            c.Role = "Chef";
+            using (var tr = db.Database.BeginTransaction())
+            {
+                try
+                {
+                    db.Chef.Add(c);
+                    db.SaveChanges();
+                    tr.Commit();
+                }
+                catch
+                {
+                    tr.Rollback();
+                }
+            }
+            return RedirectToAction("ModifyDetails");
         }
 
         [HttpPost]

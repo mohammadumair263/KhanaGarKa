@@ -1,6 +1,24 @@
-﻿@model IEnumerable<FYPFinalKhanaGarKa.Models.Orders>
+﻿@model FYPFinalKhanaGarKa.Models.ViewModels.OrderHistoryViewModel
 @{
     ViewData["Title"] = "History";
+
+    string url = "#" ;
+
+    if (Model.Role.Equals("chef"))
+    {
+        url =Url.Action("ModifyDetails", "Chef", new { id = Model.Orders.FirstOrDefault().ChefId });
+
+    }
+    else if(Model.Role.Equals("customer"))
+    {
+        url = Url.Action("ModifyDetails", "Customer", new { id = Model.Orders.FirstOrDefault().CustomerId });
+
+    }
+    else if (Model.Role.Equals("deliveryboy"))
+    {
+        url = Url.Action("ModifyDetails", "DeliveryBoy", new { id = Model.Orders.FirstOrDefault().DeliveryBoy });
+
+    }
 }
 
 @section StyleLink
@@ -19,9 +37,10 @@
                 <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 account-cfoinfo clearfix">
                     <div class="cfoaccount">
                         <ul class="list-unstyled">
-                            <li><a href="myaccount.html"><i class="fa fa-home" aria-hidden="true"></i> My Account</a></li>
-                            <li><a href="myaccount.html"><i class="fa fa-user" aria-hidden="true"></i> My Profile</a></li>
-                            <li><a href="orderhistory.html"><i class="fa fa-history" aria-hidden="true"></i> Order History</a></li>
+                            <li>
+                                <a href="@url"><i class="fa fa-home" aria-hidden="true"></i>My Account</a>
+                            </li>
+                            <li><a href="#"><i class="fa fa-history" aria-hidden="true"></i> Order History</a></li>
                         </ul>
                     </div>
                     <!-- END OF Myaccount menu  -->
@@ -40,16 +59,16 @@
                                         <th class="pay-th">Payment type</th>
                                         <th class="file-th">View</th>
                                     </tr>
-                                    @foreach (var orders in Model)
-                                    {
-                                    <tr class="orderdata-title">
-                                        <td>@orders.OrderId</td>
-                                        <td>@orders.OrderDate</td>
-                                        <td>&pound;189</td>
-                                        <td class="pay">Cash</td>
-                                        <td class="file-view"><a asp-controller="Order" asp-action="Details"><i class="fa fa-file"></i></a></td>
-                                    </tr>
-                                    }
+                                    @foreach (var orders in Model.Orders)
+                {
+                    <tr class="orderdata-title">
+                        <td>@orders.OrderId</td>
+                        <td>@orders.OrderDate</td>
+                        <td>&pound;189</td>
+                        <td class="pay">Cash</td>
+                        <td class="file-view"><a asp-controller="Order" asp-action="Details" asp-route-id="@orders.OrderId"><i class="fa fa-file"></i></a></td>
+                    </tr>
+}
                                 </tbody>
                             </table>
                             <div class="clearfix"></div>

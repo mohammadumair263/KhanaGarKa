@@ -16,7 +16,10 @@ namespace FYPFinalKhanaGarKa.Models
         public virtual DbSet<OrderLine> OrderLine { get; set; }
         public virtual DbSet<Orders> Orders { get; set; }
 
-        public KhanaGarKaFinalContext(DbContextOptions<KhanaGarKaFinalContext> options) : base(options) { }
+        public KhanaGarKaFinalContext(DbContextOptions<KhanaGarKaFinalContext> options) : base(options) 
+        {
+
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -56,6 +59,10 @@ namespace FYPFinalKhanaGarKa.Models
 
             modelBuilder.Entity<Chef>(entity =>
             {
+                entity.HasIndex(e => e.Cnic)
+                    .HasName("UQ__Chef__AA570FD432E23F43")
+                    .IsUnique();
+
                 entity.Property(e => e.ChefId).HasColumnName("ChefID");
 
                 entity.Property(e => e.Area)
@@ -122,6 +129,10 @@ namespace FYPFinalKhanaGarKa.Models
 
             modelBuilder.Entity<Customer>(entity =>
             {
+                entity.HasIndex(e => e.Cnic)
+                    .HasName("UQ__Customer__AA570FD4A03A8474")
+                    .IsUnique();
+
                 entity.Property(e => e.CustomerId).HasColumnName("CustomerID");
 
                 entity.Property(e => e.Area)
@@ -184,6 +195,10 @@ namespace FYPFinalKhanaGarKa.Models
 
             modelBuilder.Entity<DeliveryBoy>(entity =>
             {
+                entity.HasIndex(e => e.Cnic)
+                    .HasName("UQ__Delivery__AA570FD4C56636F2")
+                    .IsUnique();
+
                 entity.Property(e => e.DeliveryBoyId).HasColumnName("DeliveryBoyID");
 
                 entity.Property(e => e.Area)
@@ -351,6 +366,10 @@ namespace FYPFinalKhanaGarKa.Models
                 entity.Property(e => e.OrderStatus)
                     .IsRequired()
                     .HasColumnType("nchar(10)");
+
+                entity.Property(e => e.OrderType)
+                    .IsRequired()
+                    .HasMaxLength(15);
 
                 entity.HasOne(d => d.Chef)
                     .WithMany(p => p.Orders)

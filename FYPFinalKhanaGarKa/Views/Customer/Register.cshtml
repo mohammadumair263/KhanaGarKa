@@ -24,6 +24,12 @@
         margin-bottom: 40px;
         margin-top: 20px;
     }
+
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
 </style>
 }
 @Html.Partial("_PageTitlePartial", ViewData["Title"])
@@ -47,7 +53,7 @@
                                                     <label asp-for="Cnic">CNIC *</label>
                                                 </div>
                                                 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                                                    <input asp-for="Cnic" class="form-control" placeholder="CNIC" />
+                                                    <input asp-for="Cnic" type="number" class="form-control" placeholder="CNIC" />
                                                     <span asp-validation-for="Cnic" class="text-danger"></span>
                                                 </div>
                                             </div>
@@ -93,19 +99,10 @@
                                             </div>
                                             <div class="form-group">
                                                 <div class="col-lg-offset-1 col-md-offset-1 col-lg-3 col-md-3 col-sm-12 col-xs-12">
-                                                    <label asp-for="Password">Password *</label>
-                                                </div>
-                                                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                                                    <input asp-for="Password" type="password" class="form-control" placeholder="Password">
-                                                    <span asp-validation-for="Password" class="text-danger"></span>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <div class="col-lg-offset-1 col-md-offset-1 col-lg-3 col-md-3 col-sm-12 col-xs-12">
                                                     <label asp-for="PhoneNo">Mobile No *</label>
                                                 </div>
                                                 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                                                    <input asp-for="PhoneNo" class="form-control" placeholder="Mobile No">
+                                                    <input asp-for="PhoneNo" type="number" class="form-control" placeholder="Mobile No">
                                                     <span asp-validation-for="PhoneNo" class="text-danger"></span>
                                                 </div>
                                             </div>

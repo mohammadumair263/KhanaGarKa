@@ -1,4 +1,4 @@
-﻿@model FYPFinalKhanaGarKa.Models.Chef
+﻿@model FYPFinalKhanaGarKa.Models.ViewModels.RegisterViewModel
 
 @{
     ViewData["Title"] = "Register";
@@ -41,20 +41,23 @@
                     <div class="contact-details myaccount-contact">
                         <center>
                             <img src="~/img/logo_gray.png" alt="" id="logo">
-                            <h1>Join KhanaGarKa.com as Chef</h1>
+                            <h1>Join KhanaGarKa.com</h1>
                         </center>
                         <div class="row">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <div class="address-form">
                                     <div class="row">
-                                        <form asp-action="Register" asp-controller="Chef" method="post" class="clearfix">
+                                        <form asp-action="Register" asp-controller="Home" method="post" class="clearfix">
                                             <div class="form-group">
                                                 <div class="col-lg-offset-1 col-md-offset-1 col-lg-3 col-md-3 col-sm-12 col-xs-12">
-                                                    <label asp-for="Cnic">CNIC *</label>
+                                                    <label asp-for="Role">Role *</label>
                                                 </div>
                                                 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                                                    <input asp-for="Cnic" class="form-control" type="number" placeholder="CNIC" />
-                                                    <span asp-validation-for="Cnic" class="text-danger"></span>
+                                                    <select class="form-control" asp-for="Role">
+                                                        <option value="customer" selected>Customer</option>
+                                                        <option value="chef">Chef</option>
+                                                        <option value="deliveryboy">DeliveryBoy</option>
+                                                    </select>
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -68,6 +71,15 @@
                                                     <input type="file" style="margin-top:30px;" />
                                                 </div>
                                                 <span class="clearfix"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="col-lg-offset-1 col-md-offset-1 col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                                    <label asp-for="Cnic">CNIC *</label>
+                                                </div>
+                                                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                                    <input asp-for="Cnic" class="form-control" type="number" placeholder="CNIC" />
+                                                    <span asp-validation-for="Cnic" class="text-danger"></span>
+                                                </div>
                                             </div>
                                             <div class="form-group">
                                                 <div class="col-lg-offset-1 col-md-offset-1 col-lg-3 col-md-3 col-sm-12 col-xs-12">
@@ -87,7 +99,7 @@
                                                     <span asp-validation-for="LastName" class="text-danger"></span>
                                                 </div>
                                             </div>
-                                            
+
                                             <div class="form-group">
                                                 <div class="col-lg-offset-1 col-md-offset-1 col-lg-3 col-md-3 col-sm-12 col-xs-12">
                                                     <label asp-for="Email">Email Address *</label>
@@ -219,17 +231,17 @@
                                                 <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12 select-field-wrap pull-left">
                                                     <input asp-for="Street" class="form-control" placeholder="Street" />
                                                 </div>
-                                                </div>
+                                            </div>
 
-                                                <div class="form-group">
-                                                    <div class="col-lg-offset-1 col-md-offset-1 col-lg-3 col-md-3 col-sm-12 col-xs-12">
-                                                        <label></label>
-                                                    </div>
-                                                    <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                                                        <button type="submit" id="sign-up" name="kkk" class="btn btn-primary btn-block custom-checkout">Sign Up</button>
-                                                    </div>
+                                            <div class="form-group">
+                                                <div class="col-lg-offset-1 col-md-offset-1 col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                                    <label></label>
                                                 </div>
-                                            </form>
+                                                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                                    <button type="submit" id="sign-up" name="kkk" class="btn btn-primary btn-block custom-checkout">Sign Up</button>
+                                                </div>
+                                            </div>
+                                        </form>
                                     </div>
                                 </div>
                             </div>

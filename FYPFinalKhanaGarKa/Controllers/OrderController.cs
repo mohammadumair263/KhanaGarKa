@@ -50,11 +50,36 @@ namespace FYPFinalKhanaGarKa.Controllers
             return View();
         }
 
-        public IActionResult History(int id)
+        [Route("Order/History/{role?}/{id?}")]
+        public IActionResult History(string type,int id)
         {
-            List<Orders> orders = db.Orders.Where<Orders>(i => i.CustomerId == id).ToList<Orders>();
 
-            return View(orders);
+            if(string.Equals(type, "chef", StringComparison.OrdinalIgnoreCase))
+            {
+                return View(new OrderHistoryViewModel
+                {
+                    Orders = db.Orders.Where<Orders>(i => i.ChefId == id).ToList<Orders>(),
+                    Role = "chef"
+                });
+            }
+            else if (string.Equals(type, "customer", StringComparison.OrdinalIgnoreCase))
+            {
+                return View(new OrderHistoryViewModel
+                {
+                    Orders = db.Orders.Where<Orders>(i => i.CustomerId == id).ToList<Orders>(),
+                    Role = "customer"
+                });
+            }
+            else if (string.Equals(type, "deliveryboy", StringComparison.OrdinalIgnoreCase))
+            {
+                return View(new OrderHistoryViewModel
+                {
+                    Orders = db.Orders.Where<Orders>(i => i.DeliveryBoyId == id).ToList<Orders>(),
+                    Role = "deliveryboy"
+                });
+            }
+
+            return View();
         }
 
         public IActionResult Summary()

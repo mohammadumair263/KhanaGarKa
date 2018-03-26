@@ -1,18 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace FYPFinalKhanaGarKa.Models
+namespace FYPFinalKhanaGarKa.Models.ViewModels
 {
-    public partial class Customer
+    public class RegisterViewModel
     {
-        public Customer()
-        {
-            Orders = new HashSet<Orders>();
-        }
-
-        public int CustomerId { get; set; }
-
         [Required(ErrorMessage = "Your FirstName is Required")]
         [MaxLength(20, ErrorMessage = "Maximum length of your FirstName should not be more than 20 charaters")]
         [RegularExpression("[a-zA-z]+", ErrorMessage = "Your FirstName can only contain letters")]
@@ -47,16 +42,10 @@ namespace FYPFinalKhanaGarKa.Models
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
-
         public string City { get; set; }
         public string Area { get; set; }
         public string Street { get; set; }
         public string Role { get; set; }
         public string Status { get; set; }
-        public DateTime? CreatedDate { get; set; }
-        public DateTime? ModifiedDate { get; set; }
-        public string ImgUrl { get; set; }
-
-        public ICollection<Orders> Orders { get; set; }
     }
 }

@@ -17,6 +17,7 @@ namespace FYPFinalKhanaGarKa.Models
         public int ChefId { get; set; }
         public int DeliveryBoyId { get; set; }
         public int CustomerId { get; set; }
+        public string OrderType { get; set; }
 
         public Chef Chef { get; set; }
         public Customer Customer { get; set; }

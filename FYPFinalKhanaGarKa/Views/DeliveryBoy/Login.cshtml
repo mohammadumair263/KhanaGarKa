@@ -1,4 +1,4 @@
-﻿
+﻿@model FYPFinalKhanaGarKa.Models.DeliveryBoy
 @{
     ViewData["Title"] = "Login";
 }
@@ -9,29 +9,20 @@
     <div class="login-block">
         <img src="~/img/logo_gray.png" alt="">
         <h1>Log into your account</h1>
-        <form action="#">
+        <form method="post" asp-action="Login" asp-controller="DeliveryBoy">
             <div class="form-group">
                 <div class="input-group">
                     <span class="input-group-addon"><i class="ti-email"></i></span>
-                    <input type="text" class="form-control" placeholder="Email or Mobile No.">
+                    <input asp-for="Cnic" class="form-control" placeholder="Your CNIC">
+                    <span asp-validation-for="Cnic"></span>
                 </div>
             </div>
             <hr class="hr-xs">
             <div class="form-group">
                 <div class="input-group">
                     <span class="input-group-addon"><i class=" ti-unlock"></i></span>
-                    <input type="password" class="form-control" placeholder="Password">
-                </div>
-            </div>
-            <hr class="hr-xs">
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon"><i class=" ti-unlock"></i></span>
-                    <select class="form-control" name="ff" id="ff">
-                        <option value="" selected>Customer</option>
-                        <option value="">Chef</option>
-                        <option value="">Delivery boy</option>
-                    </select>
+                    <input asp-for="Password" type="password" class="form-control" placeholder="Password">
+                    <span asp-validation-for="Password"></span>
                 </div>
             </div>
             <button class="btn btn-primary btn-block" type="submit">Login</button>
@@ -39,8 +30,10 @@
         </form>
     </div>
     <div class="login-links">
-        <a class="pull-left" asp-controller="Home" asp-action="ForgotPassword">Forget Password?</a>
-        <a class="pull-right" asp-controller="Home" asp-action="Register">Register an account</a>
+        <a class="pull-left" asp-controller="Chef" asp-action="Login">Login as Chef</a>
+        <a class="pull-right" asp-controller="DeliveryBoy" asp-action="ForgotPassword">Forgot Password?</a>
+        <a class="pull-left" asp-controller="Customer" asp-action="Login">&nbsp; Or Customer</a>
+
     </div>
 </main>
 <!-- Main container end -->
