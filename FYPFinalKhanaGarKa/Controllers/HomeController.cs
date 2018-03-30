@@ -23,8 +23,37 @@ namespace FYPFinalKhanaGarKa.Controllers
             db = _db;
             env = _env;
         }
+
         public IActionResult Index()
         {
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Login(LoginViewModel vm)
+        {
+            if (string.Equals(vm.Role, "chef", StringComparison.OrdinalIgnoreCase))
+            {
+                Chef c = db.Chef.Where(i => i.Cnic == vm.Cnic && i.Password == vm.Password).FirstOrDefault();
+                // do somthing
+
+            }
+            else if(string.Equals(vm.Role, "customer", StringComparison.OrdinalIgnoreCase))
+            {
+                Customer c = db.Customer.Where(i => i.Cnic == vm.Cnic && i.Password == vm.Password).FirstOrDefault();
+                //do somthing
+            }
+            else if (string.Equals(vm.Role, "deliveryboy", StringComparison.OrdinalIgnoreCase))
+            {
+                DeliveryBoy c = db.DeliveryBoy.Where(i => i.Cnic == vm.Cnic && i.Password == vm.Password).FirstOrDefault();
+                // do somthing 
+            }
             return View();
         }
 
@@ -86,6 +115,53 @@ namespace FYPFinalKhanaGarKa.Controllers
                     }
                 }
             }
+            else if (string.Equals(vm.Role, "DBoy", StringComparison.OrdinalIgnoreCase))
+            {
+                DeliveryBoy d = new DeliveryBoy
+                {
+                    CreatedDate = DateTime.Now,
+                    ModifiedDate = DateTime.Now,
+                    Status = "Active",
+                    Role = "DBoy",
+                    FirstName = vm.FirstName,
+                    LastName = vm.LastName,
+                    Gender = vm.Gender,
+                    Dob = vm.Dob,
+                    Email = vm.Email,
+                    Password = vm.Password,
+                    PhoneNo = vm.PhoneNo,
+                    City = vm.City,
+                    Area = vm.Area,
+                    Street = vm.Street,
+                    Cnic = vm.Cnic
+                };
+
+                using (var tr = db.Database.BeginTransaction())
+                {
+                    string ourftp = env.WebRootPath + "/DBoy/";
+                    var directoryinfo = new DirectoryInfo(ourftp);
+                    if (!Directory.Exists(ourftp))
+                    {
+                        Directory.CreateDirectory(ourftp);
+                    }
+                    if (directoryinfo.Exists)
+                    {
+                        directoryinfo.CreateSubdirectory("" + d.Cnic);
+                    }
+
+                    try
+                    {
+                        db.DeliveryBoy.Add(d);
+                        db.SaveChanges();
+
+                        tr.Commit();
+                    }
+                    catch
+                    {
+                        tr.Rollback();
+                    }
+                }
+            }
             else if (string.Equals(vm.Role, "customer", StringComparison.OrdinalIgnoreCase))
             {
                 Customer cu = new Customer
@@ -134,55 +210,8 @@ namespace FYPFinalKhanaGarKa.Controllers
                     }
                 }
             }
-            else if (string.Equals(vm.Role, "deliveryboy", StringComparison.OrdinalIgnoreCase))
-            {
-                DeliveryBoy d = new DeliveryBoy
-                {
-                    CreatedDate = DateTime.Now,
-                    ModifiedDate = DateTime.Now,
-                    Role = vm.Role,
-                    Status = "Active",
-                    FirstName = vm.FirstName,
-                    LastName = vm.LastName,
-                    Gender = vm.Gender,
-                    Dob = vm.Dob,
-                    Email = vm.Email,
-                    Password = vm.Password,
-                    PhoneNo = vm.PhoneNo,
-                    City = vm.City,
-                    Area = vm.Area,
-                    Street = vm.Street,
-                    Cnic = vm.Cnic
-                };
-
-                using (var tr = db.Database.BeginTransaction())
-                {
-                    string ourftp = env.WebRootPath + "/DBoy/";
-                    var directoryinfo = new DirectoryInfo(ourftp);
-                    if (!Directory.Exists(ourftp))
-                    {
-                        Directory.CreateDirectory(ourftp);
-                    }
-                    if (directoryinfo.Exists)
-                    {
-                        directoryinfo.CreateSubdirectory("" + d.Cnic);
-                    }
-
-                    try
-                    {
-                        db.DeliveryBoy.Add(d);
-                        db.SaveChanges();
-                        tr.Commit();
-                    }
-                    catch
-                    {
-                        tr.Rollback();
-                        RedirectToAction("Error");
-                    }
-                }
-            }
-
-                return View();
+            
+            return View();
         }
 
         
@@ -193,6 +222,7 @@ namespace FYPFinalKhanaGarKa.Controllers
             {
                 Chef c = db.Chef.Where(i => i.ChefId == id).FirstOrDefault();
                 return View(new RegisterViewModel {
+                    Id = c.ChefId,
                     Role = c.Role,
                     Status = c.Status,
                     FirstName = c.FirstName,
@@ -213,6 +243,7 @@ namespace FYPFinalKhanaGarKa.Controllers
                 Customer c = db.Customer.Where(i => i.CustomerId == id).FirstOrDefault();
                 return View(new RegisterViewModel
                 {
+                    Id = c.CustomerId,
                     Role = c.Role,
                     Status = c.Status,
                     FirstName = c.FirstName,
@@ -233,6 +264,7 @@ namespace FYPFinalKhanaGarKa.Controllers
                 DeliveryBoy d = db.DeliveryBoy.Where(i => i.DeliveryBoyId == id).FirstOrDefault();
                 return View(new RegisterViewModel
                 {
+                    Id = d.DeliveryBoyId,
                     Role = d.Role,
                     Status = d.Status,
                     FirstName = d.FirstName,
@@ -254,24 +286,22 @@ namespace FYPFinalKhanaGarKa.Controllers
         }
 
         [HttpPost]
-        public IActionResult ModifyDetails(RegisterViewModel vm)
+        public IActionResult Update(RegisterViewModel vm)
         {
-            if (string.Equals(vm.Role, "chef", StringComparison.OrdinalIgnoreCase))
+            if (string.Equals(vm.Role.Replace(" ",string.Empty), "chef", StringComparison.OrdinalIgnoreCase))
             {
-                Chef c = new Chef
-                {
-                    ModifiedDate = DateTime.Now,
-                    Status = vm.Status,
-                    FirstName = vm.FirstName,
-                    LastName = vm.LastName,
-                    Gender = vm.Gender,
-                    Dob = vm.Dob,
-                    Email = vm.Email,
-                    PhoneNo = vm.PhoneNo,
-                    City = vm.City,
-                    Area = vm.Area,
-                    Street = vm.Street
-                };
+                Chef c = db.Chef.Where(i => i.ChefId == vm.Id).FirstOrDefault();
+                c.FirstName = vm.FirstName;
+                c.LastName = vm.LastName;
+                c.Gender = vm.Gender;
+                c.Dob = vm.Dob;
+                c.Email = vm.Email;
+                c.ModifiedDate = DateTime.Now;
+                c.PhoneNo = vm.PhoneNo;
+                c.City = vm.City;
+                c.Area = vm.Area;
+                c.Status = vm.Street;
+                c.Status = vm.Status;
 
                 using (var tr = db.Database.BeginTransaction())
                 {
@@ -288,28 +318,26 @@ namespace FYPFinalKhanaGarKa.Controllers
                     }
                 }
             }
-            else if (string.Equals(vm.Role, "customer", StringComparison.OrdinalIgnoreCase))
+            else if (string.Equals(vm.Role.Replace(" ", string.Empty), "customer", StringComparison.OrdinalIgnoreCase))
             {
-                Customer cu = new Customer
-                {
-                    ModifiedDate = DateTime.Now,
-                    Status = vm.Status,
-                    FirstName = vm.FirstName,
-                    LastName = vm.LastName,
-                    Gender = vm.Gender,
-                    Dob = vm.Dob,
-                    Email = vm.Email,
-                    PhoneNo = vm.PhoneNo,
-                    City = vm.City,
-                    Area = vm.Area,
-                    Street = vm.Street
-                };
+                Customer c = db.Customer.Where(i => i.CustomerId == vm.Id).FirstOrDefault();
+                c.FirstName = vm.FirstName;
+                c.LastName = vm.LastName;
+                c.Gender = vm.Gender;
+                c.Dob = vm.Dob;
+                c.Email = vm.Email;
+                c.ModifiedDate = DateTime.Now;
+                c.PhoneNo = vm.PhoneNo;
+                c.City = vm.City;
+                c.Area = vm.Area;
+                c.Status = vm.Street;
+                c.Status = vm.Status;
 
                 using (var tr = db.Database.BeginTransaction())
                 {
                     try
                     {
-                        db.Customer.Update(cu);
+                        db.Customer.Update(c);
                         db.SaveChanges();
 
                         tr.Commit();
@@ -318,40 +346,84 @@ namespace FYPFinalKhanaGarKa.Controllers
                     {
                         tr.Rollback();
                     }
+                }
+            }
+            else if (string.Equals(vm.Role.Replace(" ", string.Empty), "DBoy", StringComparison.OrdinalIgnoreCase))
+            {
+                DeliveryBoy c = db.DeliveryBoy.Where(i => i.DeliveryBoyId == vm.Id).FirstOrDefault();
+                c.FirstName = vm.FirstName;
+                c.LastName = vm.LastName;
+                c.Gender = vm.Gender;
+                c.Dob = vm.Dob;
+                c.Email = vm.Email;
+                c.ModifiedDate = DateTime.Now;
+                c.PhoneNo = vm.PhoneNo;
+                c.City = vm.City;
+                c.Area = vm.Area;
+                c.Status = vm.Street;
+                c.Status = vm.Status;
+
+                using (var tr = db.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        db.DeliveryBoy.Update(c);
+                        db.SaveChanges();
+                        tr.Commit();
+                    }
+                    catch
+                    {
+                        tr.Rollback();
+                    }
+                }
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public IActionResult ForgotPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult ForgotPassword(ForgotPasswordViewModel vm)
+        {
+            if (string.Equals(vm.Role, "chef", StringComparison.OrdinalIgnoreCase))
+            {
+                if (string.Equals(vm.Choice, "Phone", StringComparison.OrdinalIgnoreCase))
+                {
+
+                }
+                else if(string.Equals(vm.Choice, "Email", StringComparison.OrdinalIgnoreCase))
+                {
+
+                }
+
+            }
+            else if (string.Equals(vm.Role, "customer", StringComparison.OrdinalIgnoreCase))
+            {
+                if (string.Equals(vm.Choice, "Phone", StringComparison.OrdinalIgnoreCase))
+                {
+
+                }
+                else if (string.Equals(vm.Choice, "Email", StringComparison.OrdinalIgnoreCase))
+                {
+
                 }
             }
             else if (string.Equals(vm.Role, "deliveryboy", StringComparison.OrdinalIgnoreCase))
             {
-                DeliveryBoy d = new DeliveryBoy
+                if (string.Equals(vm.Choice, "Phone", StringComparison.OrdinalIgnoreCase))
                 {
-                    ModifiedDate = DateTime.Now,
-                    Status = vm.Status,
-                    FirstName = vm.FirstName,
-                    LastName = vm.LastName,
-                    Gender = vm.Gender,
-                    Dob = vm.Dob,
-                    Email = vm.Email,
-                    PhoneNo = vm.PhoneNo,
-                    City = vm.City,
-                    Area = vm.Area,
-                    Street = vm.Street
-                };
 
-                using (var tr = db.Database.BeginTransaction())
+                }
+                else if (string.Equals(vm.Choice, "Email", StringComparison.OrdinalIgnoreCase))
                 {
-                    try
-                    {
-                        db.DeliveryBoy.Update(d);
-                        db.SaveChanges();
-                        tr.Commit();
-                    }
-                    catch
-                    {
-                        tr.Rollback();
-                    }
+
                 }
             }
-
             return View();
         }
 
@@ -364,14 +436,12 @@ namespace FYPFinalKhanaGarKa.Controllers
         {
             return View();
         }
+
         public IActionResult ComingSoon()
         {
             return View();
         }
-        public IActionResult Login()
-        {
-            return View();
-        }
+        
         public IActionResult Privacy_Policy()
         {
             return View();

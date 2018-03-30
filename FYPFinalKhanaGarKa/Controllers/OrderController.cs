@@ -29,7 +29,8 @@ namespace FYPFinalKhanaGarKa.Controllers
             return View(ViewModel);
         }
 
-        public IActionResult Details(int id)
+        [Route("Order/Details/{role?}/{id?}")]
+        public IActionResult Details(string role,int id)
         {
             List<OrderLine> Dishs = db.OrderLine.Where<OrderLine>(i => i.OrderId == id).ToList<OrderLine>();
             Orders Order = db.Orders.Where<Orders>(i => i.OrderId == id).FirstOrDefault();
@@ -39,7 +40,8 @@ namespace FYPFinalKhanaGarKa.Controllers
             {
                 Dishis = Dishs,
                 Chef = c,
-                Order = Order
+                Order = Order,
+                Role = role
             };
 
             return View(ViewModel);
@@ -51,10 +53,10 @@ namespace FYPFinalKhanaGarKa.Controllers
         }
 
         [Route("Order/History/{role?}/{id?}")]
-        public IActionResult History(string type,int id)
+        public IActionResult History(string role,int id)
         {
 
-            if(string.Equals(type, "chef", StringComparison.OrdinalIgnoreCase))
+            if(string.Equals(role, "chef", StringComparison.OrdinalIgnoreCase))
             {
                 return View(new OrderHistoryViewModel
                 {
@@ -62,7 +64,7 @@ namespace FYPFinalKhanaGarKa.Controllers
                     Role = "chef"
                 });
             }
-            else if (string.Equals(type, "customer", StringComparison.OrdinalIgnoreCase))
+            else if (string.Equals(role, "customer", StringComparison.OrdinalIgnoreCase))
             {
                 return View(new OrderHistoryViewModel
                 {
@@ -70,7 +72,7 @@ namespace FYPFinalKhanaGarKa.Controllers
                     Role = "customer"
                 });
             }
-            else if (string.Equals(type, "deliveryboy", StringComparison.OrdinalIgnoreCase))
+            else if (string.Equals(role, "deliveryboy", StringComparison.OrdinalIgnoreCase))
             {
                 return View(new OrderHistoryViewModel
                 {

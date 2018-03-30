@@ -8,6 +8,8 @@ namespace FYPFinalKhanaGarKa.Models.ViewModels
 {
     public class RegisterViewModel
     {
+        public int Id { get; set; }
+
         [Required(ErrorMessage = "Your FirstName is Required")]
         [MaxLength(20, ErrorMessage = "Maximum length of your FirstName should not be more than 20 charaters")]
         [RegularExpression("[a-zA-z]+", ErrorMessage = "Your FirstName can only contain letters")]

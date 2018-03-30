@@ -1,6 +1,7 @@
 ﻿@model FYPFinalKhanaGarKa.Models.ViewModels.RegisterViewModel
 @{
     ViewData["Title"] = "Modify Details";
+    string url = "/Order/History/" + Model.Role + "/" + Model.Id;
 }
 
 @section StyleLink{
@@ -16,8 +17,8 @@
                     <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 account-cfoinfo clearfix">
                         <div class="cfoaccount">
                             <ul class="list-unstyled">
-                                <li><a href="myaccount.html"><i class="fa fa-home" aria-hidden="true"></i> My Account</a></li>
-                                <li><a href="orderhistory.html"><i class="fa fa-history" aria-hidden="true"></i> Order History</a></li>
+                                <li><a href="#"><i class="fa fa-home" aria-hidden="true"></i> My Account</a></li>
+                                <li><a href="@url.Replace(" ", string.Empty)"><i class="fa fa-history" aria-hidden="true"></i> Order History</a></li>
                             </ul>
                         </div>
                         <!-- END OF Myaccount menu  -->
@@ -41,7 +42,7 @@
                                         <tr>
                                             <td class="commonname-td"></td>
                                             <td class="nameshow-td">
-                                                <a href="" data-toggle="modal" data-target="#modifypassword">Modify my password</a>
+                                                <a asp-controller="Home" asp-action="ForgotPassword" data-toggle="modal" data-target="#modifypassword">Modify my password</a>
                                             </td>
                                         </tr>
 
@@ -57,13 +58,14 @@
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <div class="address-form">
                                         <div class="row">
-                                            <form asp-action="ModifyDetails" asp-controller="Home" method="post" class="clearfix">
+                                            <form asp-action="Update" asp-controller="Home" method="post" class="clearfix">
+                                                
                                                 <div class="form-group">
                                                     <div class="col-lg-offset-1 col-md-offset-1 col-lg-3 col-md-3 col-sm-12 col-xs-12">
                                                         <label asp-for="Cnic">CNIC *</label>
                                                     </div>
                                                     <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                                                        <input class="form-control" value="@Model.Cnic" disabled />
+                                                        <input asp-for="Cnic" class="form-control" value="@Model.Cnic" readonly />
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
@@ -71,7 +73,7 @@
                                                         <label asp-for="Role">Role *</label>
                                                     </div>
                                                     <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                                                        <input class="form-control" value="@Model.Role" disabled />
+                                                        <input asp-for="Role" class="form-control" value="@Model.Role" readonly />
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
@@ -245,7 +247,7 @@
                                                         <label></label>
                                                     </div>
                                                     <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                                                        <button type="submit" id="sign-up" name="kkk" class="btn btn-primary btn-block custom-checkout">SAVE INFORMATION</button>
+                                                        <button type="submit" id="sign-up" class="btn btn-primary btn-block custom-checkout">SAVE INFORMATION</button>
                                                     </div>
                                                 </div>
                                             </form>
