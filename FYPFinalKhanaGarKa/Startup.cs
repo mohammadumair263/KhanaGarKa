@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using FYPFinalKhanaGarKa.Data;
 using FYPFinalKhanaGarKa.Models;
 using FYPFinalKhanaGarKa.Services;
+using Microsoft.AspNetCore.Http;
 
 namespace FYPFinalKhanaGarKa
 {
@@ -40,6 +41,15 @@ namespace FYPFinalKhanaGarKa
             services.AddTransient<IEmailSender, EmailSender>();
 
             services.AddMvc();
+
+            services.AddDistributedMemoryCache();
+            services.AddSession(options =>
+            {
+                options.Cookie.HttpOnly = true;
+                options.Cookie.Name = ".KhanaGarKa.Session";
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                options.IdleTimeout = TimeSpan.FromMinutes(30);
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -59,6 +69,8 @@ namespace FYPFinalKhanaGarKa
             app.UseStaticFiles();
 
             app.UseAuthentication();
+
+            app.UseSession();
 
             app.UseMvc(routes =>
             {

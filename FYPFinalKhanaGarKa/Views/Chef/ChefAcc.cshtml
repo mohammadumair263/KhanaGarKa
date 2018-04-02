@@ -46,7 +46,16 @@
                                 <div class="orderonline-menu row">
                                     <!-- start category inner content all -->
                                     <div class="col-md-12 col-sm-12">
-                                        <a href="@Url.Action("ModifyDetails", "Home", new {role = "chef", id = Model.Menus.FirstOrDefault().ChefId })" class="btn btn-success btn-xs pull-right add-dish-offer-btn">Edit Account</a>
+                                        @if (Model.Menus.Count() > 0 && Model.Menus != null)
+    {
+                                        <a href="@Url.Action("ModifyDetails", "Home", new { role = "chef", id = Model.Menus.FirstOrDefault().ChefId })" class="btn btn-success btn-xs pull-right add-dish-offer-btn">Edit Account</a>
+}
+else
+{
+                                        <a href="#" class="btn btn-success btn-xs pull-right add-dish-offer-btn">Edit Account</a>
+                                            
+
+}
                                         <a asp-controller="Chef" asp-action="ChefMenu" class="btn btn-success btn-xs pull-right add-dish-offer-btn">Add Dish</a>
                                         <span class="clearfix"></span>
                                         <!-- start category single content -->
@@ -54,8 +63,10 @@
 
                                             <div class="row">
                                                 <div class="clearfix"></div>
-                                                @foreach (var menus in Model.Menus)
-                                            {
+                                                @if (Model.Menus.Count() > 0 && Model.Menus != null)
+            {
+                                    @foreach (var menus in Model.Menus)
+{
                                     <div class="col-md-12">
                                         <div class="dish-content" data-name="@menus.DishName" data-price="@menus.Price">
                                             <div class="row" style="transition: all 0.50s ease-in-out">
@@ -82,7 +93,7 @@
                                     </div>
                                     <!-- /.col-md-12 -->
 }
-
+}
                                             </div>
 
                                         </div>
@@ -95,15 +106,23 @@
                                 <div class="orderonline-offer row">
                                     <!-- start category inner content all -->
                                     <div class="col-md-12 col-sm-12">
-                                        <a href="@Url.Action("ModifyDetails", "Home", new {role = "chef", id = Model.Offers.FirstOrDefault().ChefId })" class="btn btn-success btn-xs pull-right add-dish-offer-btn">Edit Account</a>
-                                        <a asp-controller="Chef" asp-action="ChefOffer" class="btn btn-success btn-xs pull-right add-dish-offer-btn">Add Offer</a>
+                                        @if (Model.Offers.Count() > 0 && Model.Offers != null)
+                                        {
+                                            <a href="@Url.Action("ModifyDetails", "Home", new { role = "chef", id = Model.Offers.FirstOrDefault().ChefId })" class="btn btn-success btn-xs pull-right add-dish-offer-btn">Edit Account</a>
+                                        }
+                                        else
+                                        {
+                                            <a asp-controller="Chef" asp-action="ChefOffer" class="btn btn-success btn-xs pull-right add-dish-offer-btn">Add Offer</a>
+                                        }
                                         <span class="clearfix"></span>
                                         <!-- start category single content -->
                                         <div class="category-dish-content">
                                             <div class="row">
                                                 <div class="clearfix"></div>
-                                                @foreach (var offers in Model.Offers)
+                                                @if (Model.Offers.Count() > 0 && Model.Offers != null)
             {
+                                    @foreach (var offers in Model.Offers)
+{
                                     <div class="col-md-12">
                                         <div class="dish-content" data-name="@offers.OfferName" data-price="@offers.Price">
                                             <div class="row" style="transition: all 0.50s ease-in-out">
@@ -129,6 +148,7 @@
                                         <!-- /.dish-content -->
                                     </div>
                                     <!-- /.col-md-12 -->
+}
 }
                                             </div>
                                         </div>

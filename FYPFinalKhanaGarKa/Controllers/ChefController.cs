@@ -1,6 +1,7 @@
 ﻿using FYPFinalKhanaGarKa.Models;
 using FYPFinalKhanaGarKa.Models.ViewModels;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,9 @@ namespace FYPFinalKhanaGarKa.Controllers
     {
         private KhanaGarKaFinalContext db;
         private IHostingEnvironment env = null;
+        const string SessionCNIC = "_UserC";
+        const string SessionRole = "_UserR";
+        const string SessionId = "_UserI";
 
         public ChefController(KhanaGarKaFinalContext _db, IHostingEnvironment _env)
         {
@@ -23,30 +27,75 @@ namespace FYPFinalKhanaGarKa.Controllers
         [HttpPost]
         public IActionResult Index(string City, string Area)
         {
-            List<Chef> chefs = db.Chef.Where<Chef>(i => i.City.Contains(City) && i.Area.Contains(Area)).ToList<Chef>();
-
-
-            return View(chefs);
+            if (HttpContext.Session.GetString(SessionCNIC) != null &&
+            HttpContext.Session.GetString(SessionRole) != null)
+            {
+                if (string.Equals(HttpContext.Session.GetString(SessionRole).Trim(), "customer", StringComparison.OrdinalIgnoreCase))
+                
+                {
+                    List<Chef> chefs = db.Chef.Where<Chef>(i => i.City.Contains(City) && i.Area.Contains(Area)).ToList<Chef>();
+                    return View(chefs);
+                }
+                else
+                {
+                    return RedirectToAction("Page404", "Home");
+                }
+            }
+            else
+            {
+                return RedirectToAction("Login", "Home");
+            }
+            
         }
 
         [HttpGet]
         public IActionResult ChefAcc(int id)
         {
-            List<Menu> menus = db.Menu.Where<Menu>(i => i.ChefId == id).ToList<Menu>();
-            List<Offer> offers = db.Offer.Where<Offer>(i => i.ChefId == id).ToList<Offer>();
-
-            MenuOfferViewModel MenuOffer = new MenuOfferViewModel
+            if (HttpContext.Session.GetString(SessionCNIC) != null &&
+            HttpContext.Session.GetString(SessionRole) != null)
             {
-                Menus = menus,
-                Offers = offers
-            };
-            return View(MenuOffer);
+                if (string.Equals(HttpContext.Session.GetString(SessionRole).Trim(), "chef", StringComparison.OrdinalIgnoreCase))
+                {
+                    List<Menu> menus = db.Menu.Where<Menu>(i => i.ChefId == id).ToList<Menu>();
+                    List<Offer> offers = db.Offer.Where<Offer>(i => i.ChefId == id).ToList<Offer>();
+
+                    MenuOfferViewModel MenuOffer = new MenuOfferViewModel
+                    {
+                        Menus = menus,
+                        Offers = offers
+                    };
+                    return View(MenuOffer);
+                }
+                else
+                {
+                    return RedirectToAction("Page404", "Home");
+                }
+            }
+            else
+            {
+                return RedirectToAction("Login", "Home");
+            }
         }
 
         [HttpGet]
         public IActionResult ChefMenu()
         {
-            return View();
+            if (HttpContext.Session.GetString(SessionCNIC) != null &&
+            HttpContext.Session.GetString(SessionRole) != null)
+            {
+                if (string.Equals(HttpContext.Session.GetString(SessionRole).Trim(), "chef", StringComparison.OrdinalIgnoreCase))
+                {
+                    return View();
+                }
+                else
+                {
+                    return RedirectToAction("Page404", "Home");
+                }
+            }
+            else
+            {
+                return RedirectToAction("Login", "Home");
+            }
         }
 
         [HttpPost]
@@ -55,7 +104,6 @@ namespace FYPFinalKhanaGarKa.Controllers
             m.Status = "Avalible";
             m.CreatedDate = DateTime.Now;
             m.ModifiedDate = DateTime.Now;
-            m.ChefId = 5;
             using (var tr = db.Database.BeginTransaction())
             {
                 try
@@ -70,14 +118,28 @@ namespace FYPFinalKhanaGarKa.Controllers
                     tr.Rollback();
                 }
             }
-            //return RedirectToAction("ChefAcc");
             return Redirect("ChefAcc/" + m.ChefId);
         }
 
         [HttpGet]
         public IActionResult ChefOffer()
         {
-            return View();
+            if (HttpContext.Session.GetString(SessionCNIC) != null &&
+            HttpContext.Session.GetString(SessionRole) != null)
+            {
+                if (string.Equals(HttpContext.Session.GetString(SessionRole).Trim(), "chef", StringComparison.OrdinalIgnoreCase))
+                {
+                    return View();
+                }
+                else
+                {
+                    return RedirectToAction("Page404", "Home");
+                }
+            }
+            else
+            {
+                return RedirectToAction("Login", "Home");
+            }
         }
 
         [HttpPost]
@@ -105,104 +167,6 @@ namespace FYPFinalKhanaGarKa.Controllers
             return RedirectToAction("ChefAcc");
         }
 
-        [HttpGet]
-        public IActionResult Register()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public IActionResult Register(Chef c)
-        {
-            c.CreatedDate = DateTime.Now;
-            c.ModifiedDate = DateTime.Now;
-            c.Category = "3 star";
-            c.Role = "chef";
-            c.Status = "Active";
-            using (var tr = db.Database.BeginTransaction())
-            {
-                try
-                {
-                    string ourftp = env.WebRootPath + "/Chefs/";
-                    var directoryinfo = new DirectoryInfo(ourftp);
-                    if (!Directory.Exists(ourftp))
-                    {
-                        Directory.CreateDirectory(ourftp);
-
-                    }
-                    if (directoryinfo.Exists)
-                    {
-                        directoryinfo.CreateSubdirectory("" + c.Cnic);
-                    }
-
-                    db.Chef.Add(c);
-                    db.SaveChanges();
-
-                    tr.Commit();
-                }
-                catch
-                {
-                    tr.Rollback();
-                }
-            }
-
-            return View();
-        }
-
-        [HttpGet]
-        public IActionResult Login()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public IActionResult Login(Chef c)
-        {
-            return View();
-        }
-
-        [HttpGet]
-        public IActionResult ForgotPassword()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public IActionResult ForgotPassword(ForgotPasswordViewModel c)
-        {
-
-             var chef = db.Chef.Where(i => i.PhoneNo == c.Choice || i.Email == c.Choice).FirstOrDefault();
-
-            return View();
-        }
-
-        [HttpGet]
-        public IActionResult ModifyDetails(int id)
-        {
-            return View(db.Chef.Where(i => i.ChefId == id).FirstOrDefault());
-        }
-
-        [HttpPost]
-        public IActionResult ModifyDetails(Chef c)
-        {
-            c.ModifiedDate = DateTime.Now;
-            c.Role = "Chef";
-            using (var tr = db.Database.BeginTransaction())
-            {
-                try
-                {
-                    db.Chef.Add(c);
-                    db.SaveChanges();
-                    tr.Commit();
-                }
-                catch
-                {
-                    tr.Rollback();
-                }
-            }
-            return RedirectToAction("ModifyDetails");
-        }
-
         [HttpPost]
         public IActionResult DeleteChefMenu(int Id)
         {
@@ -226,7 +190,23 @@ namespace FYPFinalKhanaGarKa.Controllers
         [HttpGet]
         public IActionResult EditChefMenu(int Id)
         {
-            return View(db.Menu.Where<Menu>(i => i.MenuId == Id).FirstOrDefault<Menu>());
+            if (HttpContext.Session.GetString(SessionCNIC) != null &&
+               HttpContext.Session.GetString(SessionRole) != null)
+            {
+                if (string.Equals(HttpContext.Session.GetString(SessionRole).Trim(), "chef", StringComparison.OrdinalIgnoreCase))
+                {
+                    return View(db.Menu.Where<Menu>(i => i.MenuId == Id).FirstOrDefault<Menu>());
+                }
+                else
+                {
+                    return RedirectToAction("Page404", "Home");
+                }
+            }
+            else
+            {
+                return RedirectToAction("Login", "Home");
+            }
+            
         }
 
         [HttpPost]
@@ -254,7 +234,23 @@ namespace FYPFinalKhanaGarKa.Controllers
         [HttpGet]
         public IActionResult EditChefOffer(int id)
         {
-            return View(db.Offer.Where<Offer>(i => i.OfferId == id).FirstOrDefault<Offer>());
+            if (HttpContext.Session.GetString(SessionCNIC) != null &&
+               HttpContext.Session.GetString(SessionRole) != null)
+            {
+                if (string.Equals(HttpContext.Session.GetString(SessionRole).Trim(), "chef", StringComparison.OrdinalIgnoreCase))
+                {
+                    return View(db.Offer.Where<Offer>(i => i.OfferId == id).FirstOrDefault<Offer>());
+                }
+                else
+                {
+                    return RedirectToAction("Page404", "Home");
+                }
+            }
+            else
+            {
+                return RedirectToAction("Login", "Home");
+            }
+            
         }
 
         [HttpPost]

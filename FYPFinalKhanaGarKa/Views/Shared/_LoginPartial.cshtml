@@ -1,26 +1,30 @@
-@using Microsoft.AspNetCore.Identity
-@using FYPFinalKhanaGarKa.Models
+@using Microsoft.AspNetCore.Http
 
-@inject SignInManager<ApplicationUser> SignInManager
-@inject UserManager<ApplicationUser> UserManager
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
 
-@if (SignInManager.IsSignedIn(User))
+@if (HttpContextAccessor.HttpContext.Session.GetString("_UserC") != null &&
+                    HttpContextAccessor.HttpContext.Session.GetString("_UserR") != null)
 {
-    <form asp-area="" asp-controller="Account" asp-action="Logout" method="post" id="logoutForm" class="navbar-right">
-        <ul class="nav navbar-nav navbar-right">
-            <li>
-                <a asp-area="" asp-controller="Manage" asp-action="Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
-            </li>
-            <li>
-                <button type="submit" class="btn btn-link navbar-btn navbar-link">Log out</button>
-            </li>
-        </ul>
-    </form>
+
+    @*<form asp-area="" asp-controller="Account" asp-action="Logout" method="post" id="logoutForm" class="navbar-right">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a asp-area="" asp-controller="Manage" asp-action="Index" title="Manage">Hello</a>
+                </li>
+                <li>
+                    <a asp-controller="Home" asp-action="Logout" class="btn btn-sm btn-primary">Log out</a>
+                </li>
+            </ul>
+        </form>*@
+<div class="pull-right user-login">
+    <a class="btn btn-sm btn-primary" href="/Home/ModifyDetails/@HttpContextAccessor.HttpContext.Session.GetString("_UserR").Trim()/@HttpContextAccessor.HttpContext.Session.GetInt32("_UserI")">Edit</a> &nbsp;
+    <a class="btn btn-sm btn-primary" asp-controller="Home" asp-action="Logout">Logout</a>
+</div>
 }
 else
 {
-    <ul class="nav navbar-nav navbar-right">
-        <li><a asp-area="" asp-controller="Account" asp-action="Register">Register</a></li>
-        <li><a asp-area="" asp-controller="Account" asp-action="Login">Log in</a></li>
-    </ul>
+    <div class="pull-right user-login">
+        <a class="btn btn-sm btn-primary" asp-controller="Home" asp-action="Login">Login</a> or &nbsp;
+        <a class="user-register-btn btn btn-sm btn-primary" asp-controller="Home" asp-action="Register">Register</a>
+    </div>
 }

@@ -8,6 +8,7 @@ using FYPFinalKhanaGarKa.Models;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using FYPFinalKhanaGarKa.Models.ViewModels;
+using Microsoft.AspNetCore.Http;
 
 namespace FYPFinalKhanaGarKa.Controllers
 {
@@ -15,6 +16,9 @@ namespace FYPFinalKhanaGarKa.Controllers
     
     public class HomeController : Controller
     {
+        const string SessionCNIC = "_UserC";
+        const string SessionRole = "_UserR";
+        const string SessionId = "_UserI";
         private KhanaGarKaFinalContext db;
         private IHostingEnvironment env = null;
 
@@ -38,23 +42,51 @@ namespace FYPFinalKhanaGarKa.Controllers
         [HttpPost]
         public IActionResult Login(LoginViewModel vm)
         {
-            if (string.Equals(vm.Role, "chef", StringComparison.OrdinalIgnoreCase))
+            if (ModelState.IsValid)
             {
-                Chef c = db.Chef.Where(i => i.Cnic == vm.Cnic && i.Password == vm.Password).FirstOrDefault();
-                // do somthing
+                if (string.Equals(vm.Role, "chef", StringComparison.OrdinalIgnoreCase))
+                {
+                    Chef c = db.Chef.Where(i => i.Cnic == vm.Cnic && i.Password == vm.Password).FirstOrDefault();
+                    if(c != null)
+                    {
+                        HttpContext.Session.SetString(SessionCNIC,c.Cnic);
+                        HttpContext.Session.SetString(SessionRole,c.Role);
+                        HttpContext.Session.SetInt32(SessionId, c.ChefId);
+                        return Redirect("/Chef/ChefAcc/"+c.ChefId);
+                    }
 
-            }
-            else if(string.Equals(vm.Role, "customer", StringComparison.OrdinalIgnoreCase))
-            {
-                Customer c = db.Customer.Where(i => i.Cnic == vm.Cnic && i.Password == vm.Password).FirstOrDefault();
-                //do somthing
-            }
-            else if (string.Equals(vm.Role, "deliveryboy", StringComparison.OrdinalIgnoreCase))
-            {
-                DeliveryBoy c = db.DeliveryBoy.Where(i => i.Cnic == vm.Cnic && i.Password == vm.Password).FirstOrDefault();
-                // do somthing 
+                }
+                else if (string.Equals(vm.Role, "customer", StringComparison.OrdinalIgnoreCase))
+                {
+                    Customer c = db.Customer.Where(i => i.Cnic == vm.Cnic && i.Password == vm.Password).FirstOrDefault();
+                    if (c != null)
+                    {
+                        HttpContext.Session.SetString(SessionCNIC, c.Cnic);
+                        HttpContext.Session.SetString(SessionRole, c.Role);
+                        HttpContext.Session.SetInt32(SessionId, c.CustomerId);
+                        return Redirect("/Home/Index");
+                    }
+                }
+                else if (string.Equals(vm.Role, "DBoy", StringComparison.OrdinalIgnoreCase))
+                {
+                    DeliveryBoy c = db.DeliveryBoy.Where(i => i.Cnic == vm.Cnic && i.Password == vm.Password).FirstOrDefault();
+                    if (c != null)
+                    {
+                        HttpContext.Session.SetString(SessionCNIC, c.Cnic);
+                        HttpContext.Session.SetString(SessionRole, c.Role);
+                        HttpContext.Session.SetInt32(SessionId, c.DeliveryBoyId);
+                        return Redirect("/Home/Index");
+                    }
+                }
             }
             return View();
+        }
+
+        [HttpGet]
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear();
+            return RedirectToAction("Index");
         }
 
         [HttpGet]
@@ -66,151 +98,153 @@ namespace FYPFinalKhanaGarKa.Controllers
         [HttpPost]
         public IActionResult Register(RegisterViewModel vm)
         {
-            if (string.Equals(vm.Role, "chef", StringComparison.OrdinalIgnoreCase))
+            if (ModelState.IsValid)
             {
-                Chef c = new Chef
+                if (string.Equals(vm.Role.Trim(), "chef", StringComparison.OrdinalIgnoreCase))
                 {
-                    CreatedDate = DateTime.Now,
-                    ModifiedDate = DateTime.Now,
-                    Category = "3 star",
-                    Role = vm.Role,
-                    Status = "Active",
-                    FirstName = vm.FirstName,
-                    LastName = vm.LastName,
-                    Gender = vm.Gender,
-                    Dob = vm.Dob,
-                    Email = vm.Email,
-                    Password = vm.Password,
-                    PhoneNo = vm.PhoneNo,
-                    City = vm.City,
-                    Area = vm.Area,
-                    Street = vm.Street,
-                    Cnic = vm.Cnic
-                };
-
-                using (var tr = db.Database.BeginTransaction())
-                {
-                    try
+                    Chef c = new Chef
                     {
-                        string ourftp = env.WebRootPath + "/Chefs/";
+                        CreatedDate = DateTime.Now,
+                        ModifiedDate = DateTime.Now,
+                        Category = "3 star",
+                        Role = vm.Role,
+                        Status = "Active",
+                        FirstName = vm.FirstName,
+                        LastName = vm.LastName,
+                        Gender = vm.Gender,
+                        Dob = vm.Dob,
+                        Email = vm.Email,
+                        Password = vm.Password,
+                        PhoneNo = vm.PhoneNo,
+                        City = vm.City,
+                        Area = vm.Area,
+                        Street = vm.Street,
+                        Cnic = vm.Cnic
+                    };
+
+                    using (var tr = db.Database.BeginTransaction())
+                    {
+                        try
+                        {
+                            string ourftp = env.WebRootPath + "/Chefs/";
+                            var directoryinfo = new DirectoryInfo(ourftp);
+                            if (!Directory.Exists(ourftp))
+                            {
+                                Directory.CreateDirectory(ourftp);
+
+                            }
+                            if (directoryinfo.Exists)
+                            {
+                                directoryinfo.CreateSubdirectory("" + c.Cnic);
+                            }
+
+                            db.Chef.Add(c);
+                            db.SaveChanges();
+
+                            tr.Commit();
+                        }
+                        catch
+                        {
+                            tr.Rollback();
+                        }
+                    }
+                }
+                else if (string.Equals(vm.Role.Trim(), "DBoy", StringComparison.OrdinalIgnoreCase))
+                {
+                    DeliveryBoy d = new DeliveryBoy
+                    {
+                        CreatedDate = DateTime.Now,
+                        ModifiedDate = DateTime.Now,
+                        Status = "Active",
+                        Role = "DBoy",
+                        FirstName = vm.FirstName,
+                        LastName = vm.LastName,
+                        Gender = vm.Gender,
+                        Dob = vm.Dob,
+                        Email = vm.Email,
+                        Password = vm.Password,
+                        PhoneNo = vm.PhoneNo,
+                        City = vm.City,
+                        Area = vm.Area,
+                        Street = vm.Street,
+                        Cnic = vm.Cnic
+                    };
+
+                    using (var tr = db.Database.BeginTransaction())
+                    {
+                        string ourftp = env.WebRootPath + "/DBoy/";
                         var directoryinfo = new DirectoryInfo(ourftp);
                         if (!Directory.Exists(ourftp))
                         {
                             Directory.CreateDirectory(ourftp);
-
                         }
                         if (directoryinfo.Exists)
                         {
-                            directoryinfo.CreateSubdirectory("" + c.Cnic);
+                            directoryinfo.CreateSubdirectory("" + d.Cnic);
                         }
 
-                        db.Chef.Add(c);
-                        db.SaveChanges();
-
-                        tr.Commit();
-                    }
-                    catch
-                    {
-                        tr.Rollback();
-                    }
-                }
-            }
-            else if (string.Equals(vm.Role, "DBoy", StringComparison.OrdinalIgnoreCase))
-            {
-                DeliveryBoy d = new DeliveryBoy
-                {
-                    CreatedDate = DateTime.Now,
-                    ModifiedDate = DateTime.Now,
-                    Status = "Active",
-                    Role = "DBoy",
-                    FirstName = vm.FirstName,
-                    LastName = vm.LastName,
-                    Gender = vm.Gender,
-                    Dob = vm.Dob,
-                    Email = vm.Email,
-                    Password = vm.Password,
-                    PhoneNo = vm.PhoneNo,
-                    City = vm.City,
-                    Area = vm.Area,
-                    Street = vm.Street,
-                    Cnic = vm.Cnic
-                };
-
-                using (var tr = db.Database.BeginTransaction())
-                {
-                    string ourftp = env.WebRootPath + "/DBoy/";
-                    var directoryinfo = new DirectoryInfo(ourftp);
-                    if (!Directory.Exists(ourftp))
-                    {
-                        Directory.CreateDirectory(ourftp);
-                    }
-                    if (directoryinfo.Exists)
-                    {
-                        directoryinfo.CreateSubdirectory("" + d.Cnic);
-                    }
-
-                    try
-                    {
-                        db.DeliveryBoy.Add(d);
-                        db.SaveChanges();
-
-                        tr.Commit();
-                    }
-                    catch
-                    {
-                        tr.Rollback();
-                    }
-                }
-            }
-            else if (string.Equals(vm.Role, "customer", StringComparison.OrdinalIgnoreCase))
-            {
-                Customer cu = new Customer
-                {
-                    CreatedDate = DateTime.Now,
-                    ModifiedDate = DateTime.Now,
-                    Role = vm.Role,
-                    Status = "Active",
-                    FirstName = vm.FirstName,
-                    LastName = vm.LastName,
-                    Gender = vm.Gender,
-                    Dob = vm.Dob,
-                    Email = vm.Email,
-                    Password = vm.Password,
-                    PhoneNo = vm.PhoneNo,
-                    City = vm.City,
-                    Area = vm.Area,
-                    Street = vm.Street,
-                    Cnic = vm.Cnic
-                };
-
-                using (var tr = db.Database.BeginTransaction())
-                {
-                    try
-                    {
-                        string ourftp = env.WebRootPath + "/Customerss/";
-                        var directoryinfo = new DirectoryInfo(ourftp);
-                        if (!Directory.Exists(ourftp))
+                        try
                         {
-                            Directory.CreateDirectory(ourftp);
+                            db.DeliveryBoy.Add(d);
+                            db.SaveChanges();
 
+                            tr.Commit();
                         }
-                        if (directoryinfo.Exists)
+                        catch
                         {
-                            directoryinfo.CreateSubdirectory("" + cu.Cnic);
+                            tr.Rollback();
                         }
-
-                        db.Customer.Add(cu);
-                        db.SaveChanges();
-
-                        tr.Commit();
                     }
-                    catch
+                }
+                else if (string.Equals(vm.Role.Trim(), "customer", StringComparison.OrdinalIgnoreCase))
+                {
+                    Customer cu = new Customer
                     {
-                        tr.Rollback();
+                        CreatedDate = DateTime.Now,
+                        ModifiedDate = DateTime.Now,
+                        Role = vm.Role,
+                        Status = "Active",
+                        FirstName = vm.FirstName,
+                        LastName = vm.LastName,
+                        Gender = vm.Gender,
+                        Dob = vm.Dob,
+                        Email = vm.Email,
+                        Password = vm.Password,
+                        PhoneNo = vm.PhoneNo,
+                        City = vm.City,
+                        Area = vm.Area,
+                        Street = vm.Street,
+                        Cnic = vm.Cnic
+                    };
+
+                    using (var tr = db.Database.BeginTransaction())
+                    {
+                        try
+                        {
+                            string ourftp = env.WebRootPath + "/Customerss/";
+                            var directoryinfo = new DirectoryInfo(ourftp);
+                            if (!Directory.Exists(ourftp))
+                            {
+                                Directory.CreateDirectory(ourftp);
+
+                            }
+                            if (directoryinfo.Exists)
+                            {
+                                directoryinfo.CreateSubdirectory("" + cu.Cnic);
+                            }
+
+                            db.Customer.Add(cu);
+                            db.SaveChanges();
+
+                            tr.Commit();
+                        }
+                        catch
+                        {
+                            tr.Rollback();
+                        }
                     }
                 }
             }
-            
             return View();
         }
 
@@ -218,167 +252,176 @@ namespace FYPFinalKhanaGarKa.Controllers
         [Route("Home/ModifyDetails/{role?}/{id?}")]
         public IActionResult ModifyDetails(string role,int id)
         {
-            if (string.Equals(role, "chef", StringComparison.OrdinalIgnoreCase))
+            if (HttpContext.Session.GetString(SessionCNIC) != null &&
+            HttpContext.Session.GetString(SessionRole) != null)
             {
-                Chef c = db.Chef.Where(i => i.ChefId == id).FirstOrDefault();
-                return View(new RegisterViewModel {
-                    Id = c.ChefId,
-                    Role = c.Role,
-                    Status = c.Status,
-                    FirstName = c.FirstName,
-                    LastName = c.LastName,
-                    Gender = c.Gender,
-                    Dob = c.Dob,
-                    Email = c.Email,
-                    Password = c.Password,
-                    PhoneNo = c.PhoneNo,
-                    City = c.City,
-                    Area = c.Area,
-                    Street = c.Street,
-                    Cnic = c.Cnic
-                });
-            }
-            else if (string.Equals(role, "customer", StringComparison.OrdinalIgnoreCase))
-            {
-                Customer c = db.Customer.Where(i => i.CustomerId == id).FirstOrDefault();
-                return View(new RegisterViewModel
+                if (string.Equals(role.Trim(), "chef", StringComparison.OrdinalIgnoreCase))
                 {
-                    Id = c.CustomerId,
-                    Role = c.Role,
-                    Status = c.Status,
-                    FirstName = c.FirstName,
-                    LastName = c.LastName,
-                    Gender = c.Gender,
-                    Dob = c.Dob,
-                    Email = c.Email,
-                    Password = c.Password,
-                    PhoneNo = c.PhoneNo,
-                    City = c.City,
-                    Area = c.Area,
-                    Street = c.Street,
-                    Cnic = c.Cnic
-                });
-            }
-            else if (string.Equals(role, "deliveryboy", StringComparison.OrdinalIgnoreCase))
-            {
-                DeliveryBoy d = db.DeliveryBoy.Where(i => i.DeliveryBoyId == id).FirstOrDefault();
-                return View(new RegisterViewModel
+                    Chef c = db.Chef.Where(i => i.ChefId == id).FirstOrDefault();
+                    return View(new RegisterViewModel
+                    {
+                        Id = c.ChefId,
+                        Role = c.Role,
+                        Status = c.Status,
+                        FirstName = c.FirstName,
+                        LastName = c.LastName,
+                        Gender = c.Gender,
+                        Dob = c.Dob,
+                        Email = c.Email,
+                        Password = c.Password,
+                        PhoneNo = c.PhoneNo,
+                        City = c.City,
+                        Area = c.Area,
+                        Street = c.Street,
+                        Cnic = c.Cnic
+                    });
+                }
+                else if (string.Equals(role.Trim(), "customer", StringComparison.OrdinalIgnoreCase))
                 {
-                    Id = d.DeliveryBoyId,
-                    Role = d.Role,
-                    Status = d.Status,
-                    FirstName = d.FirstName,
-                    LastName = d.LastName,
-                    Gender = d.Gender,
-                    Dob = d.Dob,
-                    Email = d.Email,
-                    Password = d.Password,
-                    PhoneNo = d.PhoneNo,
-                    City = d.City,
-                    Area = d.Area,
-                    Street = d.Street,
-                    Cnic = d.Cnic
-                });
+                    Customer c = db.Customer.Where(i => i.CustomerId == id).FirstOrDefault();
+                    return View(new RegisterViewModel
+                    {
+                        Id = c.CustomerId,
+                        Role = c.Role,
+                        Status = c.Status,
+                        FirstName = c.FirstName,
+                        LastName = c.LastName,
+                        Gender = c.Gender,
+                        Dob = c.Dob,
+                        Email = c.Email,
+                        Password = c.Password,
+                        PhoneNo = c.PhoneNo,
+                        City = c.City,
+                        Area = c.Area,
+                        Street = c.Street,
+                        Cnic = c.Cnic
+                    });
+                }
+                else if (string.Equals(role.Trim(), "DBoy", StringComparison.OrdinalIgnoreCase))
+                {
+                    DeliveryBoy d = db.DeliveryBoy.Where(i => i.DeliveryBoyId == id).FirstOrDefault();
+                    return View(new RegisterViewModel
+                    {
+                        Id = d.DeliveryBoyId,
+                        Role = d.Role,
+                        Status = d.Status,
+                        FirstName = d.FirstName,
+                        LastName = d.LastName,
+                        Gender = d.Gender,
+                        Dob = d.Dob,
+                        Email = d.Email,
+                        Password = d.Password,
+                        PhoneNo = d.PhoneNo,
+                        City = d.City,
+                        Area = d.Area,
+                        Street = d.Street,
+                        Cnic = d.Cnic
+                    });
+                }
+                return View();
             }
-
-
-            return View();
+            else
+            {
+                return RedirectToAction("Login");
+            }
+            
         }
 
         [HttpPost]
         public IActionResult Update(RegisterViewModel vm)
         {
-            if (string.Equals(vm.Role.Replace(" ",string.Empty), "chef", StringComparison.OrdinalIgnoreCase))
-            {
-                Chef c = db.Chef.Where(i => i.ChefId == vm.Id).FirstOrDefault();
-                c.FirstName = vm.FirstName;
-                c.LastName = vm.LastName;
-                c.Gender = vm.Gender;
-                c.Dob = vm.Dob;
-                c.Email = vm.Email;
-                c.ModifiedDate = DateTime.Now;
-                c.PhoneNo = vm.PhoneNo;
-                c.City = vm.City;
-                c.Area = vm.Area;
-                c.Status = vm.Street;
-                c.Status = vm.Status;
-
-                using (var tr = db.Database.BeginTransaction())
+            //if (ModelState.IsValid)
+           // {
+                if (string.Equals(vm.Role.Trim(), "chef", StringComparison.OrdinalIgnoreCase))
                 {
-                    try
-                    {
-                        db.Chef.Update(c);
-                        db.SaveChanges();
+                    Chef c = db.Chef.Where(i => i.ChefId == vm.Id).FirstOrDefault();
+                    c.FirstName = vm.FirstName;
+                    c.LastName = vm.LastName;
+                    c.Gender = vm.Gender;
+                    c.Dob = vm.Dob;
+                    c.Email = vm.Email;
+                    c.ModifiedDate = DateTime.Now;
+                    c.PhoneNo = vm.PhoneNo;
+                    c.City = vm.City;
+                    c.Area = vm.Area;
+                    c.Status = vm.Street;
+                    c.Status = vm.Status;
 
-                        tr.Commit();
-                    }
-                    catch
+                    using (var tr = db.Database.BeginTransaction())
                     {
-                        tr.Rollback();
+                        try
+                        {
+                            db.Chef.Update(c);
+                            db.SaveChanges();
+                            tr.Commit();
+                        }
+                        catch
+                        {
+                            tr.Rollback();
+                        }
                     }
                 }
-            }
-            else if (string.Equals(vm.Role.Replace(" ", string.Empty), "customer", StringComparison.OrdinalIgnoreCase))
-            {
-                Customer c = db.Customer.Where(i => i.CustomerId == vm.Id).FirstOrDefault();
-                c.FirstName = vm.FirstName;
-                c.LastName = vm.LastName;
-                c.Gender = vm.Gender;
-                c.Dob = vm.Dob;
-                c.Email = vm.Email;
-                c.ModifiedDate = DateTime.Now;
-                c.PhoneNo = vm.PhoneNo;
-                c.City = vm.City;
-                c.Area = vm.Area;
-                c.Status = vm.Street;
-                c.Status = vm.Status;
-
-                using (var tr = db.Database.BeginTransaction())
+                else if (string.Equals(vm.Role.Trim(), "customer", StringComparison.OrdinalIgnoreCase))
                 {
-                    try
-                    {
-                        db.Customer.Update(c);
-                        db.SaveChanges();
+                    Customer c = db.Customer.Where(i => i.CustomerId == vm.Id).FirstOrDefault();
+                    c.FirstName = vm.FirstName;
+                    c.LastName = vm.LastName;
+                    c.Gender = vm.Gender;
+                    c.Dob = vm.Dob;
+                    c.Email = vm.Email;
+                    c.ModifiedDate = DateTime.Now;
+                    c.PhoneNo = vm.PhoneNo;
+                    c.City = vm.City;
+                    c.Area = vm.Area;
+                    c.Status = vm.Street;
+                    c.Status = vm.Status;
 
-                        tr.Commit();
-                    }
-                    catch
+                    using (var tr = db.Database.BeginTransaction())
                     {
-                        tr.Rollback();
+                        try
+                        {
+                            db.Customer.Update(c);
+                            db.SaveChanges();
+
+                            tr.Commit();
+                        }
+                        catch
+                        {
+                            tr.Rollback();
+                        }
                     }
                 }
-            }
-            else if (string.Equals(vm.Role.Replace(" ", string.Empty), "DBoy", StringComparison.OrdinalIgnoreCase))
-            {
-                DeliveryBoy c = db.DeliveryBoy.Where(i => i.DeliveryBoyId == vm.Id).FirstOrDefault();
-                c.FirstName = vm.FirstName;
-                c.LastName = vm.LastName;
-                c.Gender = vm.Gender;
-                c.Dob = vm.Dob;
-                c.Email = vm.Email;
-                c.ModifiedDate = DateTime.Now;
-                c.PhoneNo = vm.PhoneNo;
-                c.City = vm.City;
-                c.Area = vm.Area;
-                c.Status = vm.Street;
-                c.Status = vm.Status;
-
-                using (var tr = db.Database.BeginTransaction())
+                else if (string.Equals(vm.Role.Trim(), "DBoy", StringComparison.OrdinalIgnoreCase))
                 {
-                    try
+                    DeliveryBoy c = db.DeliveryBoy.Where(i => i.DeliveryBoyId == vm.Id).FirstOrDefault();
+                    c.FirstName = vm.FirstName;
+                    c.LastName = vm.LastName;
+                    c.Gender = vm.Gender;
+                    c.Dob = vm.Dob;
+                    c.Email = vm.Email;
+                    c.ModifiedDate = DateTime.Now;
+                    c.PhoneNo = vm.PhoneNo;
+                    c.City = vm.City;
+                    c.Area = vm.Area;
+                    c.Status = vm.Street;
+                    c.Status = vm.Status;
+
+                    using (var tr = db.Database.BeginTransaction())
                     {
-                        db.DeliveryBoy.Update(c);
-                        db.SaveChanges();
-                        tr.Commit();
-                    }
-                    catch
-                    {
-                        tr.Rollback();
+                        try
+                        {
+                            db.DeliveryBoy.Update(c);
+                            db.SaveChanges();
+                            tr.Commit();
+                        }
+                        catch
+                        {
+                            tr.Rollback();
+                        }
                     }
                 }
-            }
-
-            return RedirectToAction("Index");
+           // }
+            return RedirectToAction("index");
         }
 
         [HttpGet]
@@ -390,36 +433,36 @@ namespace FYPFinalKhanaGarKa.Controllers
         [HttpPost]
         public IActionResult ForgotPassword(ForgotPasswordViewModel vm)
         {
-            if (string.Equals(vm.Role, "chef", StringComparison.OrdinalIgnoreCase))
+            if (string.Equals(vm.Role.Trim(), "chef", StringComparison.OrdinalIgnoreCase))
             {
-                if (string.Equals(vm.Choice, "Phone", StringComparison.OrdinalIgnoreCase))
+                if (string.Equals(vm.Choice.Trim(), "Phone", StringComparison.OrdinalIgnoreCase))
                 {
 
                 }
-                else if(string.Equals(vm.Choice, "Email", StringComparison.OrdinalIgnoreCase))
+                else if(string.Equals(vm.Choice.Trim(), "Email", StringComparison.OrdinalIgnoreCase))
                 {
 
                 }
 
             }
-            else if (string.Equals(vm.Role, "customer", StringComparison.OrdinalIgnoreCase))
+            else if (string.Equals(vm.Role.Trim(), "customer", StringComparison.OrdinalIgnoreCase))
             {
-                if (string.Equals(vm.Choice, "Phone", StringComparison.OrdinalIgnoreCase))
+                if (string.Equals(vm.Choice.Trim(), "Phone", StringComparison.OrdinalIgnoreCase))
                 {
 
                 }
-                else if (string.Equals(vm.Choice, "Email", StringComparison.OrdinalIgnoreCase))
+                else if (string.Equals(vm.Choice.Trim(), "Email", StringComparison.OrdinalIgnoreCase))
                 {
 
                 }
             }
-            else if (string.Equals(vm.Role, "deliveryboy", StringComparison.OrdinalIgnoreCase))
+            else if (string.Equals(vm.Role.Trim(), "deliveryboy", StringComparison.OrdinalIgnoreCase))
             {
-                if (string.Equals(vm.Choice, "Phone", StringComparison.OrdinalIgnoreCase))
+                if (string.Equals(vm.Choice.Trim(), "Phone", StringComparison.OrdinalIgnoreCase))
                 {
 
                 }
-                else if (string.Equals(vm.Choice, "Email", StringComparison.OrdinalIgnoreCase))
+                else if (string.Equals(vm.Choice.Trim(), "Email", StringComparison.OrdinalIgnoreCase))
                 {
 
                 }
@@ -443,6 +486,11 @@ namespace FYPFinalKhanaGarKa.Controllers
         }
         
         public IActionResult Privacy_Policy()
+        {
+            return View();
+        }
+
+        public IActionResult Page404()
         {
             return View();
         }
