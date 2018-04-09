@@ -52,7 +52,7 @@
                                         <div class="category-dish-content">
                                             <div class="row">
                                                 <div class="clearfix"></div>
-                                                @if(Model != null){
+                                                @if(Model.Menus != null && Model.Menus.Count() > 0){
                                                     @foreach (var menus in Model.Menus)
                                                     {
                                                         <div class="col-md-12">
@@ -100,7 +100,7 @@
 
                                             <div class="row">
                                                 <div class="clearfix"></div>
-                                                @if (Model != null)
+                                                @if (Model.Offers != null && Model.Offers.Count() > 0)
                                                 {
                                                     @foreach (var offers in Model.Offers)
                                                     {
@@ -150,10 +150,10 @@
                             <div class="ui-order-policy">
                                 <ul class="list-inline">
                                     <li>
-                                        <input class="custom-radio-big" type="radio" name="order-policy" id="delivery" checked> <label for="delivery">Delivery</label>
+                                        <input class="custom-radio-big" type="radio" name="order-policy" data-value="delivery" id="delivery" checked> <label for="delivery">Delivery</label>
                                     </li>
                                     <li>
-                                        <input class="custom-radio-big" type="radio" name="order-policy" id="collection"> <label for="collection">Collection</label>
+                                        <input class="custom-radio-big" type="radio" name="order-policy" data-value="collection" id="collection"> <label for="collection">Collection</label>
                                     </li>
                                 </ul>
                             </div>
@@ -271,6 +271,7 @@
         $('#pro').click(function () {
             var prices = Detail.get_prices();
             var quantities = Detail.get_quantities();
+            var type = Detail.get_orderType();
             var names = Detail.get_names();
             //loop to update values in prices array
             for (var i = 0; i < prices.length; i++) {
@@ -290,6 +291,7 @@
             var sendJsonData = {
                 Subtotal: Detail.get_subtotal(),
                 Total: Detail.get_total(),
+                OrderType: type,
                 Items: CartItems
             };
             console.log(sendJsonData);

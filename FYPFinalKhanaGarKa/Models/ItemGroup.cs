@@ -11,6 +11,8 @@ namespace FYPFinalKhanaGarKa.Models
 
         public int Total { get; set; }
 
+        public string OrderType { get; set; }
+
         public IList<CartItems> Items { get; set; }
     }
 }

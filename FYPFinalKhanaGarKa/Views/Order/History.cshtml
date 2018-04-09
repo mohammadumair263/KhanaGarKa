@@ -7,17 +7,17 @@
     {
         if (Model.Role.Equals("chef"))
         {
-            //url = Url.Action("ModifyDetails", "Home", new { role = "chef", id = Model.Orders.FirstOrDefault().ChefId });
+            url = Url.Action("ModifyDetails", "Home", new { role = "chef", id = Model.Orders.FirstOrDefault().ChefId });
            // url = "/Home/ModifyDetails/chef/" + Model.Orders.FirstOrDefault().ChefId;
         }
         else if (Model.Role.Equals("customer"))
         {
-            //url = Url.Action("ModifyDetails", "Home", new { role = "customer", id = Model.Orders.FirstOrDefault().CustomerId });
+            url = Url.Action("ModifyDetails", "Home", new { role = "customer", id = Model.Orders.FirstOrDefault().CustomerId });
            // url = "/Home/ModifyDetails/customer/" + Model.Orders.FirstOrDefault().CustomerId;
         }
         else if (Model.Role.Equals("deliveryboy"))
         {
-            //url = Url.Action("ModifyDetails", "Home", new { role = "deliveryboy", id = Model.Orders.FirstOrDefault().DeliveryBoyId });
+            url = Url.Action("ModifyDetails", "Home", new { role = "deliveryboy", id = Model.Orders.FirstOrDefault().DeliveryBoyId });
            // url = "/Home/ModifyDetails/deliveryboy/" + Model.Orders.FirstOrDefault().DeliveryBoyId;
         }
     }
@@ -61,7 +61,7 @@
                                         <th class="pay-th">Payment type</th>
                                         <th class="file-th">View</th>
                                     </tr>
-                                    @if (Model != null)
+                                    @if (Model.Orders != null && Model.Orders.Count() > 0)
                                     {
                                         @foreach (var orders in Model.Orders)
                                         {

@@ -49,6 +49,7 @@
                             <div class="address-form">
                                 <div class="row">
                                     <form asp-action="EditChefMenu" asp-controller="Chef" method="post" class="clearfix">
+                                        <input type="hidden" asp-for="MenuId" />
                                         <div class="form-group">
                                             <div class="col-lg-offset-1 col-md-offset-1 col-lg-3 col-md-3 col-sm-12 col-xs-12">
                                                 <label asp-for="DishName">DishName *</label>

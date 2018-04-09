@@ -126,6 +126,9 @@
     });
 
     Detail = {
+        get_orderType: function () {
+            return $('input[name=name_of_your_radiobutton]:checked').data("value");
+        },
         get_subtotal: function () {
             return subtotal_price;
         },

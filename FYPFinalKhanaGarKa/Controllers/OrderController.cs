@@ -27,7 +27,7 @@ namespace FYPFinalKhanaGarKa.Controllers
             if (HttpContext.Session.GetString(SessionCNIC) != null &&
             HttpContext.Session.GetString(SessionRole) != null)
             {
-                if (string.Equals(HttpContext.Session.GetString(SessionRole).Replace(" ",string.Empty), "customer", StringComparison.OrdinalIgnoreCase))
+                if (string.Equals(HttpContext.Session.GetString(SessionRole).Trim(), "customer", StringComparison.OrdinalIgnoreCase))
                 {
                 List<Menu> menus = db.Menu.Where<Menu>(i => i.ChefId == id).ToList<Menu>();
                     List<Offer> offers = db.Offer.Where<Offer>(i => i.ChefId == id).ToList<Offer>();
@@ -81,6 +81,38 @@ namespace FYPFinalKhanaGarKa.Controllers
             if (HttpContext.Session.GetString(SessionCNIC) != null &&
             HttpContext.Session.GetString(SessionRole) != null)
             {
+                if(ds != null)
+                {
+                    Orders o = new Orders
+                    {
+                        OrderDate = DateTime.Now,
+                        OrderStatus = "pending",
+                        OrderType = ds.OrderType
+                    };
+                    foreach (var orli in ds.Items)
+                    {
+                        OrderLine ol = new OrderLine
+                        {
+
+                        };
+                    }
+
+                    using (var tr = db.Database.BeginTransaction())
+                    {
+                        try
+                        {
+                            db.Orders.Add(o);
+                            db.SaveChanges();
+
+                            tr.Commit();
+                        }
+                        catch
+                        {
+                            tr.Rollback();
+                        }
+                    }
+                }
+
                 return View();
             }
             else
@@ -147,7 +179,14 @@ namespace FYPFinalKhanaGarKa.Controllers
             if (HttpContext.Session.GetString(SessionCNIC) != null &&
             HttpContext.Session.GetString(SessionRole) != null)
             {
-                return View(ds);
+                if (ds != null)
+                {
+                    return View(ds);
+                }
+                else
+                {
+                    return RedirectToAction("Page404", "Home");
+                }
             }
             else
             {

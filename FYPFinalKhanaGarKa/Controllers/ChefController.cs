@@ -104,6 +104,7 @@ namespace FYPFinalKhanaGarKa.Controllers
             m.Status = "Avalible";
             m.CreatedDate = DateTime.Now;
             m.ModifiedDate = DateTime.Now;
+            m.ChefId = (int)HttpContext.Session.GetInt32(SessionId);
             using (var tr = db.Database.BeginTransaction())
             {
                 try
@@ -146,7 +147,7 @@ namespace FYPFinalKhanaGarKa.Controllers
         public IActionResult ChefOffer(Offer o)
         {
             o.Status = "Avalible";
-            o.ChefId = 5;
+            o.ChefId = (int)HttpContext.Session.GetInt32(SessionId);
             o.CreatedDate = DateTime.Now;
             o.ModifiedDate = DateTime.Now;
             o.StartDate = DateTime.Now;
@@ -164,7 +165,7 @@ namespace FYPFinalKhanaGarKa.Controllers
                     tr.Rollback();
                 }
             }
-            return RedirectToAction("ChefAcc");
+            return Redirect("ChefAcc/" + o.ChefId);
         }
 
         [HttpPost]
@@ -212,7 +213,7 @@ namespace FYPFinalKhanaGarKa.Controllers
         [HttpPost]
         public IActionResult EditChefMenu(Menu m)
         {
-            m.ChefId = 5;
+            m.ChefId = (int)HttpContext.Session.GetInt32(SessionId);
             m.ModifiedDate = DateTime.Now;
             using (var tr = db.Database.BeginTransaction())
             {
@@ -228,7 +229,7 @@ namespace FYPFinalKhanaGarKa.Controllers
                     tr.Rollback();
                 }
             }
-            return RedirectToAction("ChefAcc");
+            return Redirect("ChefAcc/" + m.ChefId);
         }
 
         [HttpGet]
@@ -256,7 +257,7 @@ namespace FYPFinalKhanaGarKa.Controllers
         [HttpPost]
         public IActionResult EditChefOffer(Offer o)
         {
-            o.ChefId = 5; // ya us chef ki id ho gi jo login ha 
+            o.ChefId = (int)HttpContext.Session.GetInt32(SessionId);
             o.ModifiedDate = DateTime.Now;
             using (var tr = db.Database.BeginTransaction())
             {
@@ -272,7 +273,7 @@ namespace FYPFinalKhanaGarKa.Controllers
                     tr.Rollback();
                 }
             }
-            return RedirectToAction("ChefAcc");
+            return Redirect("ChefAcc/" + o.ChefId);
         }
     }
 }
