@@ -100,6 +100,8 @@ namespace FYPFinalKhanaGarKa.Controllers
         {
             if (ModelState.IsValid)
             {
+                FileStream fs = null;
+                var files = HttpContext.Request.Form.Files;
                 if (string.Equals(vm.Role.Trim(), "chef", StringComparison.OrdinalIgnoreCase))
                 {
                     Chef c = new Chef
@@ -131,11 +133,51 @@ namespace FYPFinalKhanaGarKa.Controllers
                             if (!Directory.Exists(ourftp))
                             {
                                 Directory.CreateDirectory(ourftp);
+                                foreach (var image in files)
+                                    if (image != null && image.Length > 0)
+                                    {
+                                        var file = image;
+                                        if (file.Length < 1000000)
+                                        {
+                                            string name = file.Name;
+                                            string filename = file.FileName;
 
+                                            string ext = Path.GetExtension(filename);
+                                            string NWE = Path.GetFileNameWithoutExtension(filename);
+                                            //string ourdummyname = DateTime.Today.ToString("ddMMyyyhhsstt");
+                                            string dummy = DateTime.Now.ToString("yyyyMMddHHmmss");
+                                            using (fs = new FileStream(ourftp + dummy + ext, FileMode.Create))
+                                            {
+                                                file.CopyTo(fs);
+                                            }
+
+                                        }
+                                    }
                             }
-                            if (directoryinfo.Exists)
+
+
+                            else
                             {
-                                directoryinfo.CreateSubdirectory("" + c.Cnic);
+                                foreach (var image in files)
+                                    if (image != null && image.Length > 0)
+                                    {
+                                        var file = image;
+                                        if (file.Length < 1000000)
+                                        {
+                                            string name = file.Name;
+                                            string filename = file.FileName;
+
+                                            string ext = Path.GetExtension(filename);
+                                            string NWE = Path.GetFileNameWithoutExtension(filename);
+                                            //string ourdummyname = DateTime.Today.ToString("ddMMyyyhhsstt");
+                                            string dummy = DateTime.Now.ToString("yyyyMMddHHmmss");
+                                            using (fs = new FileStream(ourftp + dummy + ext, FileMode.Create))
+                                            {
+                                                file.CopyTo(fs);
+                                            }
+
+                                        }
+                                    }
                             }
 
                             db.Chef.Add(c);
@@ -143,6 +185,7 @@ namespace FYPFinalKhanaGarKa.Controllers
 
                             tr.Commit();
                         }
+
                         catch
                         {
                             tr.Rollback();
@@ -173,14 +216,56 @@ namespace FYPFinalKhanaGarKa.Controllers
                     using (var tr = db.Database.BeginTransaction())
                     {
                         string ourftp = env.WebRootPath + "/DBoy/";
+                        
                         var directoryinfo = new DirectoryInfo(ourftp);
                         if (!Directory.Exists(ourftp))
                         {
                             Directory.CreateDirectory(ourftp);
+                            foreach (var image in files)
+                                if (image != null && image.Length > 0)
+                                {
+                                    var file = image;
+                                    if (file.Length < 1000000)
+                                    {
+                                        string name = file.Name;
+                                        string filename = file.FileName;
+
+                                        string ext = Path.GetExtension(filename);
+                                        string NWE = Path.GetFileNameWithoutExtension(filename);
+                                        //string ourdummyname = DateTime.Today.ToString("ddMMyyyhhsstt");
+                                        string dummy = DateTime.Now.ToString("yyyyMMddHHmmss");
+                                        using (fs = new FileStream(ourftp + dummy + ext, FileMode.Create))
+                                        {
+                                            file.CopyTo(fs);
+                                        }
+
+                                    }
+                                }
                         }
-                        if (directoryinfo.Exists)
+
+
+                        else
                         {
-                            directoryinfo.CreateSubdirectory("" + d.Cnic);
+                            foreach (var image in files)
+                                if (image != null && image.Length > 0)
+                                {
+                                    var file = image;
+                                    if (file.Length < 1000000)
+                                    {
+                                        string name = file.Name;
+                                        string filename = file.FileName;
+
+                                        string ext = Path.GetExtension(filename);
+                                        string NWE = Path.GetFileNameWithoutExtension(filename);
+                                        //string ourdummyname = DateTime.Today.ToString("ddMMyyyhhsstt");
+                                        string dummy = DateTime.Now.ToString("yyyyMMddHHmmss");
+                                        using (fs = new FileStream(ourftp + dummy + ext, FileMode.Create))
+                                        {
+                                            file.CopyTo(fs);
+                                        }
+
+                                    }
+                                }
                         }
 
                         try
@@ -221,16 +306,57 @@ namespace FYPFinalKhanaGarKa.Controllers
                     {
                         try
                         {
-                            string ourftp = env.WebRootPath + "/Customerss/";
+                            string ourftp = env.WebRootPath + "/Customers/";
+                            
                             var directoryinfo = new DirectoryInfo(ourftp);
                             if (!Directory.Exists(ourftp))
                             {
                                 Directory.CreateDirectory(ourftp);
+                                foreach (var image in files)
+                                    if (image != null && image.Length > 0)
+                                    {
+                                        var file = image;
+                                        if (file.Length < 1000000)
+                                        {
+                                            string name = file.Name;
+                                            string filename = file.FileName;
 
+                                            string ext = Path.GetExtension(filename);
+                                            string NWE = Path.GetFileNameWithoutExtension(filename);
+                                            //string ourdummyname = DateTime.Today.ToString("ddMMyyyhhsstt");
+                                            string dummy = DateTime.Now.ToString("yyyyMMddHHmmss");
+                                            using (fs = new FileStream(ourftp + dummy + ext, FileMode.Create))
+                                            {
+                                                file.CopyTo(fs);
+                                            }
+
+                                        }
+                                    }
                             }
-                            if (directoryinfo.Exists)
+
+
+                            else
                             {
-                                directoryinfo.CreateSubdirectory("" + cu.Cnic);
+                                foreach (var image in files)
+                                    if (image != null && image.Length > 0)
+                                    {
+                                        var file = image;
+                                        if (file.Length < 1000000)
+                                        {
+                                            string name = file.Name;
+                                            string filename = file.FileName;
+
+                                            string ext = Path.GetExtension(filename);
+                                            string NWE = Path.GetFileNameWithoutExtension(filename);
+                                            //string ourdummyname = DateTime.Today.ToString("ddMMyyyhhsstt");
+                                            string dummy = DateTime.Now.ToString("yyyyMMddHHmmss");
+                                            using (fs = new FileStream(ourftp + dummy + ext, FileMode.Create))
+                                            {
+                                                file.CopyTo(fs);
+                                            }
+
+                                        }
+                                    }
                             }
 
                             db.Customer.Add(cu);
@@ -249,6 +375,7 @@ namespace FYPFinalKhanaGarKa.Controllers
         }
 
         
+
         [Route("Home/ModifyDetails/{role?}/{id?}")]
         public IActionResult ModifyDetails(string role,int id)
         {
@@ -501,3 +628,4 @@ namespace FYPFinalKhanaGarKa.Controllers
         }
     }
 }
+
