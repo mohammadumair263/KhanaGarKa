@@ -9,6 +9,7 @@ using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using FYPFinalKhanaGarKa.Models.ViewModels;
 using Microsoft.AspNetCore.Http;
+using System.Net.Mail;
 
 namespace FYPFinalKhanaGarKa.Controllers
 {
@@ -181,6 +182,7 @@ namespace FYPFinalKhanaGarKa.Controllers
                             }
 
                             db.Chef.Add(c);
+                            GreetingsEmail(c.Email, c.FirstName, c.LastName);
                             db.SaveChanges();
 
                             tr.Commit();
@@ -271,6 +273,7 @@ namespace FYPFinalKhanaGarKa.Controllers
                         try
                         {
                             db.DeliveryBoy.Add(d);
+                            GreetingsEmail(d.Email, d.FirstName, d.LastName);
                             db.SaveChanges();
 
                             tr.Commit();
@@ -360,6 +363,7 @@ namespace FYPFinalKhanaGarKa.Controllers
                             }
 
                             db.Customer.Add(cu);
+                            GreetingsEmail(cu.Email, cu.FirstName, cu.LastName);
                             db.SaveChanges();
 
                             tr.Commit();
@@ -374,7 +378,21 @@ namespace FYPFinalKhanaGarKa.Controllers
             return View();
         }
 
-        
+        public void GreetingsEmail(string mailid, string Fname, string Lname)
+        {
+            MailMessage MM = new MailMessage();
+            MM.From = new MailAddress("khanagarka@gmail.com");
+            MM.To.Add(mailid);
+            MM.Subject = ("Welcome to KhanGarKa.com");
+            MM.Body = "<h1>Dear " + Fname + " " + Lname + "</h1><br>Thanks for registering on our website.<br><br>----<br>Regards,<br> KhanaGarKa Team";
+            MM.IsBodyHtml = true;
+
+            SmtpClient sc = new SmtpClient("smtp.gmail.com", 587);
+            sc.Credentials = new System.Net.NetworkCredential("khanagarka@gmail.com", "stm-7063");
+            sc.EnableSsl = true;
+
+            sc.Send(MM);
+        }
 
         [Route("Home/ModifyDetails/{role?}/{id?}")]
         public IActionResult ModifyDetails(string role,int id)
