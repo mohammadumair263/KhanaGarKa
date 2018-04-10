@@ -10,11 +10,12 @@
         <img src="~/img/logo_gray.png" alt="">
         <h1>Log into your account</h1>
         <form method="post" asp-action="Login" asp-controller="Home">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <div class="input-group">
                     <span class="input-group-addon"><i class="ti-email"></i></span>
-                    <input asp-for="Cnic" class="form-control" placeholder="Your CNIC">
-                    <span asp-validation-for="Cnic"></span>
+                    <input asp-for="Email" type="email" class="form-control" placeholder="Your Email">
+                    <span asp-validation-for="Email" class="text-danger"></span>
                 </div>
             </div>
             <hr class="hr-xs">
@@ -22,7 +23,7 @@
                 <div class="input-group">
                     <span class="input-group-addon"><i class=" ti-unlock"></i></span>
                     <input asp-for="Password" type="password" class="form-control" placeholder="Password">
-                    <span asp-validation-for="Password"></span>
+                    <span asp-validation-for="Password" class="text-danger"></span>
                 </div>
             </div>
             <hr class="hr-xs">

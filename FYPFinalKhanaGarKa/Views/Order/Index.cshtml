@@ -296,7 +296,7 @@
             };
             console.log(sendJsonData);
             $.ajax({
-                url: '@Url.Action("PostJson", "Order")',
+                url: '@Url.Action("JsonC", "Order")',
                 type: "POST",
                 contentType: "application/json",
                 data: JSON.stringify(sendJsonData),

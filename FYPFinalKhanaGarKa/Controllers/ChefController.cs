@@ -169,15 +169,14 @@ namespace FYPFinalKhanaGarKa.Controllers
         }
 
         [HttpPost]
-        public IActionResult DeleteChefMenu(int Id)
+        public IActionResult DeleteChefMenu(Menu m)
         {
             using (var tr = db.Database.BeginTransaction())
             {
                 try
                 {
-                    
+                    db.Menu.Remove(m);
                     db.SaveChanges();
-
                     tr.Commit();
                 }
                 catch
@@ -185,7 +184,26 @@ namespace FYPFinalKhanaGarKa.Controllers
                     tr.Rollback();
                 }
             }
-            return View();
+            return RedirectToAction("ChefAcc/"+ (int)HttpContext.Session.GetInt32(SessionId));
+        }
+
+        [HttpPost]
+        public IActionResult DeleteChefOffer(Offer o)
+        {
+            using (var tr = db.Database.BeginTransaction())
+            {
+                try
+                {
+                    db.Offer.Remove(o);
+                    db.SaveChanges();
+                    tr.Commit();
+                }
+                catch
+                {
+                    tr.Rollback();
+                }
+            }
+            return RedirectToAction("ChefAcc/" + (int)HttpContext.Session.GetInt32(SessionId));
         }
 
         [HttpGet]
@@ -213,13 +231,18 @@ namespace FYPFinalKhanaGarKa.Controllers
         [HttpPost]
         public IActionResult EditChefMenu(Menu m)
         {
-            m.ChefId = (int)HttpContext.Session.GetInt32(SessionId);
-            m.ModifiedDate = DateTime.Now;
+            Menu menu = db.Menu.Where(i => i.MenuId == m.MenuId).FirstOrDefault();
+            //m.ChefId = (int)HttpContext.Session.GetInt32(SessionId);
+            menu.ModifiedDate = DateTime.Now;
+            menu.DishName = m.DishName;
+            menu.Price = m.Price;
+            menu.Status = m.Status;
+            menu.Description = m.Description;
             using (var tr = db.Database.BeginTransaction())
             {
                 try
                 {
-                    db.Menu.Update(m);
+                    db.Menu.Update(menu);
                     db.SaveChanges();
 
                     tr.Commit();
@@ -257,6 +280,7 @@ namespace FYPFinalKhanaGarKa.Controllers
         [HttpPost]
         public IActionResult EditChefOffer(Offer o)
         {
+
             o.ChefId = (int)HttpContext.Session.GetInt32(SessionId);
             o.ModifiedDate = DateTime.Now;
             using (var tr = db.Database.BeginTransaction())

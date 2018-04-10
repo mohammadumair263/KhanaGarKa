@@ -86,7 +86,7 @@ namespace FYPFinalKhanaGarKa.Controllers
                     Orders o = new Orders
                     {
                         OrderDate = DateTime.Now,
-                        OrderStatus = "pending",
+                        OrderStatus = "Pending",
                         OrderType = ds.OrderType
                     };
                     foreach (var orli in ds.Items)
@@ -103,7 +103,7 @@ namespace FYPFinalKhanaGarKa.Controllers
                         {
                             db.Orders.Add(o);
                             db.SaveChanges();
-
+                            int id = o.OrderId;
                             tr.Commit();
                         }
                         catch
@@ -174,14 +174,14 @@ namespace FYPFinalKhanaGarKa.Controllers
             }
         }
 
-        public IActionResult Process()
+        public IActionResult Process(ItemGroup d)
         {
             if (HttpContext.Session.GetString(SessionCNIC) != null &&
             HttpContext.Session.GetString(SessionRole) != null)
             {
-                if (ds != null)
+                if (d != null)
                 {
-                    return View(ds);
+                    return View(d);
                 }
                 else
                 {
@@ -195,11 +195,17 @@ namespace FYPFinalKhanaGarKa.Controllers
         }
 
         [HttpPost]
+        public IActionResult JsonC([FromBody]ItemGroup d)
+        {
+            return Process(d);
+        }
+
+        [HttpPost]
         public JsonResult PostJson([FromBody]ItemGroup data)
         {
             if (data != null)
             {
-                ds = data;
+                 ds = data;
             }
 
             return Json(new

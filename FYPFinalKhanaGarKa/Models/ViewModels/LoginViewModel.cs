@@ -11,11 +11,9 @@ namespace FYPFinalKhanaGarKa.Models.ViewModels
 
         public string Role { get; set; }
 
-        [Required(ErrorMessage = "Please Enter CNIC")]
-        [MaxLength(13, ErrorMessage = "Enter CNIC like XXXXXXXXXXXXX")]
-        [MinLength(13, ErrorMessage = "Enter CNIC like XXXXXXXXXXXXX")]
-        [RegularExpression("[0-9]+", ErrorMessage = "Your CNIC can only contain numbers")]
-        public string Cnic { get; set; }
+        [Required(ErrorMessage = "Please Enter Email")]
+        [EmailAddress]
+        public string Email { get; set; }
 
         [Required(ErrorMessage = "Please Enter Password")]
         [DataType(DataType.Password)]

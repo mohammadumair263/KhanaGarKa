@@ -46,7 +46,7 @@ namespace FYPFinalKhanaGarKa.Controllers
             {
                 if (string.Equals(vm.Role, "chef", StringComparison.OrdinalIgnoreCase))
                 {
-                    Chef c = db.Chef.Where(i => i.Cnic == vm.Cnic && i.Password == vm.Password).FirstOrDefault();
+                    Chef c = db.Chef.Where(i => i.Email == vm.Email && i.Password == vm.Password).FirstOrDefault();
                     if(c != null)
                     {
                         HttpContext.Session.SetString(SessionCNIC,c.Cnic);
@@ -54,11 +54,15 @@ namespace FYPFinalKhanaGarKa.Controllers
                         HttpContext.Session.SetInt32(SessionId, c.ChefId);
                         return Redirect("/Chef/ChefAcc/"+c.ChefId);
                     }
+                    else
+                    {
+                        ModelState.AddModelError("", "Your Password Or Email is wrong !");
+                    }
 
                 }
                 else if (string.Equals(vm.Role, "customer", StringComparison.OrdinalIgnoreCase))
                 {
-                    Customer c = db.Customer.Where(i => i.Cnic == vm.Cnic && i.Password == vm.Password).FirstOrDefault();
+                    Customer c = db.Customer.Where(i => i.Email == vm.Email && i.Password == vm.Password).FirstOrDefault();
                     if (c != null)
                     {
                         HttpContext.Session.SetString(SessionCNIC, c.Cnic);
@@ -66,10 +70,14 @@ namespace FYPFinalKhanaGarKa.Controllers
                         HttpContext.Session.SetInt32(SessionId, c.CustomerId);
                         return Redirect("/Home/Index");
                     }
+                    else
+                    {
+                        ModelState.AddModelError("", "Your Password Or Email is wrong !");
+                    }
                 }
                 else if (string.Equals(vm.Role, "DBoy", StringComparison.OrdinalIgnoreCase))
                 {
-                    DeliveryBoy c = db.DeliveryBoy.Where(i => i.Cnic == vm.Cnic && i.Password == vm.Password).FirstOrDefault();
+                    DeliveryBoy c = db.DeliveryBoy.Where(i => i.Email == vm.Email && i.Password == vm.Password).FirstOrDefault();
                     if (c != null)
                     {
                         HttpContext.Session.SetString(SessionCNIC, c.Cnic);
@@ -77,9 +85,13 @@ namespace FYPFinalKhanaGarKa.Controllers
                         HttpContext.Session.SetInt32(SessionId, c.DeliveryBoyId);
                         return Redirect("/Home/Index");
                     }
+                    else
+                    {
+                        ModelState.AddModelError("", "Your Password Or Email is wrong !");
+                    }
                 }
             }
-            return View();
+            return View(vm);
         }
 
         [HttpGet]
@@ -145,6 +157,7 @@ namespace FYPFinalKhanaGarKa.Controllers
                         }
                         catch
                         {
+                            ModelState.AddModelError("", "Cannot add your details at this moment");
                             tr.Rollback();
                         }
                     }
@@ -192,6 +205,7 @@ namespace FYPFinalKhanaGarKa.Controllers
                         }
                         catch
                         {
+                            ModelState.AddModelError("", "Cannot add your details at this moment");
                             tr.Rollback();
                         }
                     }
@@ -240,6 +254,7 @@ namespace FYPFinalKhanaGarKa.Controllers
                         }
                         catch
                         {
+                            ModelState.AddModelError("", "Cannot add your details at this moment");
                             tr.Rollback();
                         }
                     }
