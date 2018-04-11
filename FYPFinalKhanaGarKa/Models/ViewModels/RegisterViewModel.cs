@@ -43,7 +43,7 @@ namespace FYPFinalKhanaGarKa.Models.ViewModels
         [Required(ErrorMessage = "Password is Required")]
         [DataType(DataType.Password)]
         public string Password { get; set; }
-
+        public string ImgUrl { get; set; }
         public string City { get; set; }
         public string Area { get; set; }
         public string Street { get; set; }

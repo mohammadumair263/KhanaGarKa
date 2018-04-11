@@ -9,7 +9,7 @@ using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using FYPFinalKhanaGarKa.Models.ViewModels;
 using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
+using System.Net.Mail;
 
 namespace FYPFinalKhanaGarKa.Controllers
 {
@@ -47,7 +47,7 @@ namespace FYPFinalKhanaGarKa.Controllers
             {
                 if (string.Equals(vm.Role, "chef", StringComparison.OrdinalIgnoreCase))
                 {
-                    Chef c = db.Chef.Where(i => i.Email == vm.Email && i.Password == vm.Password).FirstOrDefault();
+                    Chef c = db.Chef.Where(i => i.Cnic == vm.Cnic && i.Password == vm.Password).FirstOrDefault();
                     if(c != null)
                     {
                         HttpContext.Session.SetString(SessionCNIC,c.Cnic);
@@ -55,15 +55,11 @@ namespace FYPFinalKhanaGarKa.Controllers
                         HttpContext.Session.SetInt32(SessionId, c.ChefId);
                         return Redirect("/Chef/ChefAcc/"+c.ChefId);
                     }
-                    else
-                    {
-                        ModelState.AddModelError("", "Your Password Or Email is wrong !");
-                    }
 
                 }
                 else if (string.Equals(vm.Role, "customer", StringComparison.OrdinalIgnoreCase))
                 {
-                    Customer c = db.Customer.Where(i => i.Email == vm.Email && i.Password == vm.Password).FirstOrDefault();
+                    Customer c = db.Customer.Where(i => i.Cnic == vm.Cnic && i.Password == vm.Password).FirstOrDefault();
                     if (c != null)
                     {
                         HttpContext.Session.SetString(SessionCNIC, c.Cnic);
@@ -71,14 +67,10 @@ namespace FYPFinalKhanaGarKa.Controllers
                         HttpContext.Session.SetInt32(SessionId, c.CustomerId);
                         return Redirect("/Home/Index");
                     }
-                    else
-                    {
-                        ModelState.AddModelError("", "Your Password Or Email is wrong !");
-                    }
                 }
                 else if (string.Equals(vm.Role, "DBoy", StringComparison.OrdinalIgnoreCase))
                 {
-                    DeliveryBoy c = db.DeliveryBoy.Where(i => i.Email == vm.Email && i.Password == vm.Password).FirstOrDefault();
+                    DeliveryBoy c = db.DeliveryBoy.Where(i => i.Cnic == vm.Cnic && i.Password == vm.Password).FirstOrDefault();
                     if (c != null)
                     {
                         HttpContext.Session.SetString(SessionCNIC, c.Cnic);
@@ -86,13 +78,9 @@ namespace FYPFinalKhanaGarKa.Controllers
                         HttpContext.Session.SetInt32(SessionId, c.DeliveryBoyId);
                         return Redirect("/Home/Index");
                     }
-                    else
-                    {
-                        ModelState.AddModelError("", "Your Password Or Email is wrong !");
-                    }
                 }
             }
-            return View(vm);
+            return View();
         }
 
         [HttpGet]
@@ -113,6 +101,8 @@ namespace FYPFinalKhanaGarKa.Controllers
         {
             if (ModelState.IsValid)
             {
+                FileStream fs = null;
+                var files = HttpContext.Request.Form.Files;
                 if (string.Equals(vm.Role.Trim(), "chef", StringComparison.OrdinalIgnoreCase))
                 {
                     Chef c = new Chef
@@ -144,25 +134,65 @@ namespace FYPFinalKhanaGarKa.Controllers
                             if (!Directory.Exists(ourftp))
                             {
                                 Directory.CreateDirectory(ourftp);
+                                foreach (var image in files)
+                                    if (image != null && image.Length > 0)
+                                    {
+                                        var file = image;
+                                        if (file.Length < 1000000)
+                                        {
+                                            string name = file.Name;
+                                            string filename = file.FileName;
 
+                                            string ext = Path.GetExtension(filename);
+                                            string NWE = Path.GetFileNameWithoutExtension(filename);
+                                            //string ourdummyname = DateTime.Today.ToString("ddMMyyyhhsstt");
+                                            string dummy = DateTime.Now.ToString("yyyyMMddHHmmss");
+                                            using (fs = new FileStream(ourftp + dummy + ext, FileMode.Create))
+                                            {
+                                                file.CopyTo(fs);
+                                            }
+
+                                        }
+                                    }
                             }
-                            if (directoryinfo.Exists)
+
+
+                            else
                             {
-                                directoryinfo.CreateSubdirectory("" + c.Cnic);
+                                foreach (var image in files)
+                                    if (image != null && image.Length > 0)
+                                    {
+                                        var file = image;
+                                        if (file.Length < 1000000)
+                                        {
+                                            string name = file.Name;
+                                            string filename = file.FileName;
+
+                                            string ext = Path.GetExtension(filename);
+                                            string NWE = Path.GetFileNameWithoutExtension(filename);
+                                            //string ourdummyname = DateTime.Today.ToString("ddMMyyyhhsstt");
+                                            string dummy = DateTime.Now.ToString("yyyyMMddHHmmss");
+                                            using (fs = new FileStream(ourftp + dummy + ext, FileMode.Create))
+                                            {
+                                                file.CopyTo(fs);
+                                            }
+
+                                        }
+                                    }
                             }
 
                             db.Chef.Add(c);
+                            GreetingsEmail(c.Email, c.FirstName, c.LastName);
                             db.SaveChanges();
 
                             tr.Commit();
                         }
+
                         catch
                         {
-                            ModelState.AddModelError("", "Cannot add your details at this moment");
                             tr.Rollback();
                         }
                     }
-                    return RedirectToAction("Login","Home");
                 }
                 else if (string.Equals(vm.Role.Trim(), "DBoy", StringComparison.OrdinalIgnoreCase))
                 {
@@ -188,30 +218,71 @@ namespace FYPFinalKhanaGarKa.Controllers
                     using (var tr = db.Database.BeginTransaction())
                     {
                         string ourftp = env.WebRootPath + "/DBoy/";
+                        
                         var directoryinfo = new DirectoryInfo(ourftp);
                         if (!Directory.Exists(ourftp))
                         {
                             Directory.CreateDirectory(ourftp);
+                            foreach (var image in files)
+                                if (image != null && image.Length > 0)
+                                {
+                                    var file = image;
+                                    if (file.Length < 1000000)
+                                    {
+                                        string name = file.Name;
+                                        string filename = file.FileName;
+
+                                        string ext = Path.GetExtension(filename);
+                                        string NWE = Path.GetFileNameWithoutExtension(filename);
+                                        //string ourdummyname = DateTime.Today.ToString("ddMMyyyhhsstt");
+                                        string dummy = DateTime.Now.ToString("yyyyMMddHHmmss");
+                                        using (fs = new FileStream(ourftp + dummy + ext, FileMode.Create))
+                                        {
+                                            file.CopyTo(fs);
+                                        }
+
+                                    }
+                                }
                         }
-                        if (directoryinfo.Exists)
+
+
+                        else
                         {
-                            directoryinfo.CreateSubdirectory("" + d.Cnic);
+                            foreach (var image in files)
+                                if (image != null && image.Length > 0)
+                                {
+                                    var file = image;
+                                    if (file.Length < 1000000)
+                                    {
+                                        string name = file.Name;
+                                        string filename = file.FileName;
+
+                                        string ext = Path.GetExtension(filename);
+                                        string NWE = Path.GetFileNameWithoutExtension(filename);
+                                        //string ourdummyname = DateTime.Today.ToString("ddMMyyyhhsstt");
+                                        string dummy = DateTime.Now.ToString("yyyyMMddHHmmss");
+                                        using (fs = new FileStream(ourftp + dummy + ext, FileMode.Create))
+                                        {
+                                            file.CopyTo(fs);
+                                        }
+
+                                    }
+                                }
                         }
 
                         try
                         {
                             db.DeliveryBoy.Add(d);
+                            GreetingsEmail(d.Email, d.FirstName, d.LastName);
                             db.SaveChanges();
 
                             tr.Commit();
                         }
                         catch
                         {
-                            ModelState.AddModelError("", "Cannot add your details at this moment");
                             tr.Rollback();
                         }
                     }
-                    return RedirectToAction("Login", "Home");
                 }
                 else if (string.Equals(vm.Role.Trim(), "customer", StringComparison.OrdinalIgnoreCase))
                 {
@@ -238,36 +309,91 @@ namespace FYPFinalKhanaGarKa.Controllers
                     {
                         try
                         {
-                            string ourftp = env.WebRootPath + "/Customerss/";
+                            string ourftp = env.WebRootPath + "/Customers/";
+                            
                             var directoryinfo = new DirectoryInfo(ourftp);
                             if (!Directory.Exists(ourftp))
                             {
                                 Directory.CreateDirectory(ourftp);
+                                foreach (var image in files)
+                                    if (image != null && image.Length > 0)
+                                    {
+                                        var file = image;
+                                        if (file.Length < 1000000)
+                                        {
+                                            string name = file.Name;
+                                            string filename = file.FileName;
 
+                                            string ext = Path.GetExtension(filename);
+                                            string NWE = Path.GetFileNameWithoutExtension(filename);
+                                            //string ourdummyname = DateTime.Today.ToString("ddMMyyyhhsstt");
+                                            string dummy = DateTime.Now.ToString("yyyyMMddHHmmss");
+                                            using (fs = new FileStream(ourftp + dummy + ext, FileMode.Create))
+                                            {
+                                                file.CopyTo(fs);
+                                            }
+
+                                        }
+                                    }
                             }
-                            if (directoryinfo.Exists)
+
+
+                            else
                             {
-                                directoryinfo.CreateSubdirectory("" + cu.Cnic);
+                                foreach (var image in files)
+                                    if (image != null && image.Length > 0)
+                                    {
+                                        var file = image;
+                                        if (file.Length < 1000000)
+                                        {
+                                            string name = file.Name;
+                                            string filename = file.FileName;
+
+                                            string ext = Path.GetExtension(filename);
+                                            string NWE = Path.GetFileNameWithoutExtension(filename);
+                                            //string ourdummyname = DateTime.Today.ToString("ddMMyyyhhsstt");
+                                            string dummy = DateTime.Now.ToString("yyyyMMddHHmmss");
+                                            using (fs = new FileStream(ourftp + dummy + ext, FileMode.Create))
+                                            {
+                                                file.CopyTo(fs);
+                                            }
+
+                                        }
+                                    }
                             }
 
                             db.Customer.Add(cu);
+                            GreetingsEmail(cu.Email, cu.FirstName, cu.LastName);
                             db.SaveChanges();
 
                             tr.Commit();
                         }
                         catch
                         {
-                            ModelState.AddModelError("", "Cannot add your details at this moment");
                             tr.Rollback();
                         }
                     }
                 }
-                return RedirectToAction("Login", "Home");
             }
-            return View(vm);
+            return View();
         }
 
-        
+        public void GreetingsEmail(string mailid, string Fname, string Lname)
+        {
+            MailMessage MM = new MailMessage();
+            MM.From = new MailAddress("khanagarka@gmail.com");
+            MM.To.Add(mailid);
+            MM.Subject = ("Welcome to KhanGarKa.com");
+            MM.Body = "<h1>Dear " + Fname + " " + Lname + "</h1><br>Thanks for registering on our website.<br><br>----<br>Regards,<br> KhanaGarKa Team";
+            MM.IsBodyHtml = true;
+
+            SmtpClient sc = new SmtpClient("smtp.gmail.com", 587);
+            sc.Credentials = new System.Net.NetworkCredential("khanagarka@gmail.com", "stm-7063");
+            sc.EnableSsl = true;
+
+            sc.Send(MM);
+        }
+
         [Route("Home/ModifyDetails/{role?}/{id?}")]
         public IActionResult ModifyDetails(string role,int id)
         {
@@ -350,66 +476,35 @@ namespace FYPFinalKhanaGarKa.Controllers
         public IActionResult Update(RegisterViewModel vm)
         {
             //if (ModelState.IsValid)
-            //{
+           // {
                 if (string.Equals(vm.Role.Trim(), "chef", StringComparison.OrdinalIgnoreCase))
                 {
-                    //Chef c = db.Chef.Where(i => i.ChefId == vm.Id).FirstOrDefault();
-                    //c.FirstName = vm.FirstName;
-                    //c.LastName = vm.LastName;
-                    //c.Gender = vm.Gender;
-                    //c.Dob = vm.Dob;
-                    //c.Email = vm.Email;
-                    //c.ModifiedDate = DateTime.Now;
-                    //c.PhoneNo = vm.PhoneNo;
-                    //c.City = vm.City;
-                    //c.Area = vm.Area;
-                    //c.Street = vm.Street;
-                    //c.Status = vm.Status;
-                    Chef c = new Chef {
-                        ChefId = vm.Id,
-                        FirstName = vm.FirstName,
-                        LastName = vm.LastName,
-                        Gender = vm.Gender,
-                        Dob = vm.Dob,
-                        Email = vm.Email,
-                        ModifiedDate = DateTime.Now,
-                        PhoneNo = vm.PhoneNo,
-                        City = vm.City,
-                        Area = vm.Area,
-                        Status = vm.Status,
-                        Street = vm.Street
-                    };
+                    Chef c = db.Chef.Where(i => i.ChefId == vm.Id).FirstOrDefault();
+                    c.FirstName = vm.FirstName;
+                    c.LastName = vm.LastName;
+                    c.Gender = vm.Gender;
+                    c.Dob = vm.Dob;
+                    c.Email = vm.Email;
+                    c.ModifiedDate = DateTime.Now;
+                    c.PhoneNo = vm.PhoneNo;
+                    c.City = vm.City;
+                    c.Area = vm.Area;
+                    c.Status = vm.Street;
+                    c.Status = vm.Status;
 
-
-                    //using (var tr = db.Database.BeginTransaction())
-                    //{
-                    //    try
-                    //    {
-                    //db.Chef.Update(c);
-                    //db.SaveChanges();
-                    //tr.Commit();
-                    //if (ModelState.IsValid)
-                    //{
-                        db.Entry(c).State = EntityState.Modified;
-                        db.Entry(c).Property(x => x.CreatedDate).IsModified = false; //Add fields which you don't want to modify
-                        db.Entry(c).Property(x => x.Cnic).IsModified = false;
-                        db.Entry(c).Property(x => x.Role).IsModified = false;
-                        db.Entry(c).Property(x => x.Category).IsModified = false;
-                        db.Entry(c).Property(x => x.Rating).IsModified = false;
-                    db.Entry(c).Property(x => x.Password).IsModified = false;
-                    db.SaveChanges();
-                   // }
-                            //db.Chef.Attach(c);
-                            //var entry = db.Entry(c);
-                            //entry.State = EntityState.Modified;
-                            //db.SaveChanges();
-                            //tr.Commit();
-                    //    }
-                    //    catch
-                    //    {
-                    //        tr.Rollback();
-                    //    }
-                    //}
+                    using (var tr = db.Database.BeginTransaction())
+                    {
+                        try
+                        {
+                            db.Chef.Update(c);
+                            db.SaveChanges();
+                            tr.Commit();
+                        }
+                        catch
+                        {
+                            tr.Rollback();
+                        }
+                    }
                 }
                 else if (string.Equals(vm.Role.Trim(), "customer", StringComparison.OrdinalIgnoreCase))
                 {
@@ -469,8 +564,8 @@ namespace FYPFinalKhanaGarKa.Controllers
                             tr.Rollback();
                         }
                     }
-                //}
-            }
+                }
+           // }
             return RedirectToAction("index");
         }
 
@@ -551,3 +646,4 @@ namespace FYPFinalKhanaGarKa.Controllers
         }
     }
 }
+
