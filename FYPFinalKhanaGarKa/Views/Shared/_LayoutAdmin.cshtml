@@ -12,7 +12,7 @@
 
     <environment include="Development">
         <!-- Bootstrap css -->
-        <link href="~/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+        <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css">
         <!-- reset CSS -->
         <link href="~/css/sb-admin.css" rel="stylesheet">
         <!-- icon CSS -->
@@ -36,7 +36,7 @@
 
 </head>
 <body class="fixed-nav sticky-footer bg-dark" id="page-top">
-    @*<div id="wrapper">
+    <div id="wrapper">
         <!-- Navigation -->
         <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
             <!-- Brand and toggle get grouped for better mobile display -->
@@ -171,11 +171,11 @@
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
-        </nav>*@
+        </nav>
 
         @RenderBody()
 
-        @*</div>*@
+        </div>
 
         <environment include="Development">
             <!--Jquery-->

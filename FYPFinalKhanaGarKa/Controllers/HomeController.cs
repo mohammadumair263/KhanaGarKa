@@ -9,6 +9,7 @@ using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using FYPFinalKhanaGarKa.Models.ViewModels;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 
 namespace FYPFinalKhanaGarKa.Controllers
 {
@@ -161,6 +162,7 @@ namespace FYPFinalKhanaGarKa.Controllers
                             tr.Rollback();
                         }
                     }
+                    return RedirectToAction("Login","Home");
                 }
                 else if (string.Equals(vm.Role.Trim(), "DBoy", StringComparison.OrdinalIgnoreCase))
                 {
@@ -209,6 +211,7 @@ namespace FYPFinalKhanaGarKa.Controllers
                             tr.Rollback();
                         }
                     }
+                    return RedirectToAction("Login", "Home");
                 }
                 else if (string.Equals(vm.Role.Trim(), "customer", StringComparison.OrdinalIgnoreCase))
                 {
@@ -259,8 +262,9 @@ namespace FYPFinalKhanaGarKa.Controllers
                         }
                     }
                 }
+                return RedirectToAction("Login", "Home");
             }
-            return View();
+            return View(vm);
         }
 
         
@@ -346,35 +350,66 @@ namespace FYPFinalKhanaGarKa.Controllers
         public IActionResult Update(RegisterViewModel vm)
         {
             //if (ModelState.IsValid)
-           // {
+            //{
                 if (string.Equals(vm.Role.Trim(), "chef", StringComparison.OrdinalIgnoreCase))
                 {
-                    Chef c = db.Chef.Where(i => i.ChefId == vm.Id).FirstOrDefault();
-                    c.FirstName = vm.FirstName;
-                    c.LastName = vm.LastName;
-                    c.Gender = vm.Gender;
-                    c.Dob = vm.Dob;
-                    c.Email = vm.Email;
-                    c.ModifiedDate = DateTime.Now;
-                    c.PhoneNo = vm.PhoneNo;
-                    c.City = vm.City;
-                    c.Area = vm.Area;
-                    c.Status = vm.Street;
-                    c.Status = vm.Status;
+                    //Chef c = db.Chef.Where(i => i.ChefId == vm.Id).FirstOrDefault();
+                    //c.FirstName = vm.FirstName;
+                    //c.LastName = vm.LastName;
+                    //c.Gender = vm.Gender;
+                    //c.Dob = vm.Dob;
+                    //c.Email = vm.Email;
+                    //c.ModifiedDate = DateTime.Now;
+                    //c.PhoneNo = vm.PhoneNo;
+                    //c.City = vm.City;
+                    //c.Area = vm.Area;
+                    //c.Street = vm.Street;
+                    //c.Status = vm.Status;
+                    Chef c = new Chef {
+                        ChefId = vm.Id,
+                        FirstName = vm.FirstName,
+                        LastName = vm.LastName,
+                        Gender = vm.Gender,
+                        Dob = vm.Dob,
+                        Email = vm.Email,
+                        ModifiedDate = DateTime.Now,
+                        PhoneNo = vm.PhoneNo,
+                        City = vm.City,
+                        Area = vm.Area,
+                        Status = vm.Status,
+                        Street = vm.Street
+                    };
 
-                    using (var tr = db.Database.BeginTransaction())
-                    {
-                        try
-                        {
-                            db.Chef.Update(c);
-                            db.SaveChanges();
-                            tr.Commit();
-                        }
-                        catch
-                        {
-                            tr.Rollback();
-                        }
-                    }
+
+                    //using (var tr = db.Database.BeginTransaction())
+                    //{
+                    //    try
+                    //    {
+                    //db.Chef.Update(c);
+                    //db.SaveChanges();
+                    //tr.Commit();
+                    //if (ModelState.IsValid)
+                    //{
+                        db.Entry(c).State = EntityState.Modified;
+                        db.Entry(c).Property(x => x.CreatedDate).IsModified = false; //Add fields which you don't want to modify
+                        db.Entry(c).Property(x => x.Cnic).IsModified = false;
+                        db.Entry(c).Property(x => x.Role).IsModified = false;
+                        db.Entry(c).Property(x => x.Category).IsModified = false;
+                        db.Entry(c).Property(x => x.Rating).IsModified = false;
+                    db.Entry(c).Property(x => x.Password).IsModified = false;
+                    db.SaveChanges();
+                   // }
+                            //db.Chef.Attach(c);
+                            //var entry = db.Entry(c);
+                            //entry.State = EntityState.Modified;
+                            //db.SaveChanges();
+                            //tr.Commit();
+                    //    }
+                    //    catch
+                    //    {
+                    //        tr.Rollback();
+                    //    }
+                    //}
                 }
                 else if (string.Equals(vm.Role.Trim(), "customer", StringComparison.OrdinalIgnoreCase))
                 {
@@ -434,8 +469,8 @@ namespace FYPFinalKhanaGarKa.Controllers
                             tr.Rollback();
                         }
                     }
-                }
-           // }
+                //}
+            }
             return RedirectToAction("index");
         }
 
