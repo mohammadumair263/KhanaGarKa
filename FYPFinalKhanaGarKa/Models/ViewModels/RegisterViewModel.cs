@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -49,5 +50,6 @@ namespace FYPFinalKhanaGarKa.Models.ViewModels
         public string Street { get; set; }
         public string Role { get; set; }
         public string Status { get; set; }
+        public IFormFile Image { get; set; }
     }
 }

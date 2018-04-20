@@ -6,6 +6,7 @@ using FYPFinalKhanaGarKa.Models;
 using FYPFinalKhanaGarKa.Models.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace FYPFinalKhanaGarKa.Controllers
 {
@@ -55,6 +56,7 @@ namespace FYPFinalKhanaGarKa.Controllers
             if (HttpContext.Session.GetString(SessionCNIC) != null &&
             HttpContext.Session.GetString(SessionRole) != null)
             {
+                //if(HttpContext.Session.GetString(SessionRole))
 
                 List<OrderLine> Dishs = db.OrderLine.Where<OrderLine>(i => i.OrderId == id).ToList<OrderLine>();
                 Orders Order = db.Orders.Where<Orders>(i => i.OrderId == id).FirstOrDefault();
@@ -81,22 +83,15 @@ namespace FYPFinalKhanaGarKa.Controllers
             if (HttpContext.Session.GetString(SessionCNIC) != null &&
             HttpContext.Session.GetString(SessionRole) != null)
             {
-                if(ds != null)
+                ItemGroup i = HttpContext.Session.Get<ItemGroup>("CartData");
+                if (i != null)
                 {
                     Orders o = new Orders
                     {
                         OrderDate = DateTime.Now,
                         OrderStatus = "Pending",
-                        OrderType = ds.OrderType
+                        OrderType = i.OrderType
                     };
-                    foreach (var orli in ds.Items)
-                    {
-                        OrderLine ol = new OrderLine
-                        {
-
-                        };
-                    }
-
                     using (var tr = db.Database.BeginTransaction())
                     {
                         try
@@ -104,6 +99,16 @@ namespace FYPFinalKhanaGarKa.Controllers
                             db.Orders.Add(o);
                             db.SaveChanges();
                             int id = o.OrderId;
+                            foreach (var orli in i.Items)
+                            {
+                                db.OrderLine.Add(new OrderLine {
+                                    Name = orli.Name,
+                                    Price = orli.Price,
+                                    Quantity = orli.Quantity,
+                                    OrderId = id
+                                });
+                            }
+                            db.SaveChanges();
                             tr.Commit();
                         }
                         catch
@@ -174,19 +179,12 @@ namespace FYPFinalKhanaGarKa.Controllers
             }
         }
 
-        public IActionResult Process(ItemGroup d)
+        public IActionResult Process()
         {
             if (HttpContext.Session.GetString(SessionCNIC) != null &&
             HttpContext.Session.GetString(SessionRole) != null)
             {
-                if (d != null)
-                {
-                    return View(d);
-                }
-                else
-                {
-                    return RedirectToAction("Page404", "Home");
-                }
+                return View(HttpContext.Session.Get<ItemGroup>("CartData"));
             }
             else
             {
@@ -195,17 +193,12 @@ namespace FYPFinalKhanaGarKa.Controllers
         }
 
         [HttpPost]
-        public IActionResult JsonC([FromBody]ItemGroup d)
-        {
-            return Process(d);
-        }
-
-        [HttpPost]
         public JsonResult PostJson([FromBody]ItemGroup data)
         {
             if (data != null)
             {
-                 ds = data;
+                //ds = data;
+                HttpContext.Session.Set<ItemGroup>("CartData", data);
             }
 
             return Json(new
@@ -214,5 +207,7 @@ namespace FYPFinalKhanaGarKa.Controllers
                 msg = string.Empty
             });
         }
+
+        
     }
 }

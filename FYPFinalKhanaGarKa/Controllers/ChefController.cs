@@ -14,9 +14,9 @@ namespace FYPFinalKhanaGarKa.Controllers
     {
         private KhanaGarKaFinalContext db;
         private IHostingEnvironment env = null;
-        const string SessionCNIC = "_UserC";
-        const string SessionRole = "_UserR";
-        const string SessionId = "_UserI";
+        private const string SessionCNIC = "_UserC";
+        private const string SessionRole = "_UserR";
+        private const string SessionId = "_UserI";
 
         public ChefController(KhanaGarKaFinalContext _db, IHostingEnvironment _env)
         {
@@ -99,16 +99,58 @@ namespace FYPFinalKhanaGarKa.Controllers
         }
 
         [HttpPost]
-        public IActionResult ChefMenu(Menu m)
+        public IActionResult ChefMenu(MenuViewModel vm)
         {
-            m.Status = "Avalible";
-            m.CreatedDate = DateTime.Now;
-            m.ModifiedDate = DateTime.Now;
-            m.ChefId = (int)HttpContext.Session.GetInt32(SessionId);
+            Menu m = new Menu {
+                DishName = vm.DishName,
+                Price = vm.Price,
+                Description = vm.Description,
+                Status = "Active",
+                CreatedDate = DateTime.Now,
+                ModifiedDate = DateTime.Now,
+                ChefId = (int)HttpContext.Session.GetInt32(SessionId)
+        };
             using (var tr = db.Database.BeginTransaction())
             {
                 try
                 {
+                    if (vm.Image != null && vm.Image.Length > 0)
+                    {
+                        string menudir = env.WebRootPath + "/Uploads/Chefs/" +
+                        HttpContext.Session.GetString(SessionCNIC).Replace(" ", string.Empty) + "/Menu";
+
+                        if (!Directory.Exists(menudir))
+                        {
+                            Directory.CreateDirectory(menudir.Replace(" ", string.Empty));
+
+                            bool isUploaded = UploadImage(vm.Image, menudir);
+                            if (isUploaded == true)
+                            {
+                                m.ImgUrl = "/Uploads/Chefs/" +
+                                HttpContext.Session.GetString(SessionCNIC).Replace(" ", string.Empty) + "/Menu/"+
+                                GetUniqueName(vm.Image.FileName);
+                            }
+                            else {
+                                // image not uploaded
+                                // do somthing 
+                            }
+                        }
+                        else
+                        {
+                            bool isUploaded = UploadImage(vm.Image, menudir);
+                            if (isUploaded == true)
+                            {
+                                m.ImgUrl = "/Uploads/Chefs/" +
+                                HttpContext.Session.GetString(SessionCNIC).Replace(" ", string.Empty) + "/Menu/" +
+                                GetUniqueName(vm.Image.FileName);
+                            }
+                            else {
+                                // image not uploaded
+                                // do somthing
+                            }
+                        }
+                    }
+
                     db.Menu.Add(m);
                     db.SaveChanges();
 
@@ -144,17 +186,63 @@ namespace FYPFinalKhanaGarKa.Controllers
         }
 
         [HttpPost]
-        public IActionResult ChefOffer(Offer o)
+        public IActionResult ChefOffer(OfferViewModel vm)
         {
-            o.Status = "Avalible";
-            o.ChefId = (int)HttpContext.Session.GetInt32(SessionId);
-            o.CreatedDate = DateTime.Now;
-            o.ModifiedDate = DateTime.Now;
-            o.StartDate = DateTime.Now;
+            Offer o = new Offer
+            {
+                OfferName = vm.OfferName,
+                Price = vm.Price,
+                Description = vm.Description,
+                EndDate = vm.EndDate,
+                Percentage = vm.Percentage,
+                Status = "Avalible",
+                ChefId = (int)HttpContext.Session.GetInt32(SessionId),
+                CreatedDate = DateTime.Now,
+                ModifiedDate = DateTime.Now,
+                StartDate = DateTime.Now
+            };
             using (var tr = db.Database.BeginTransaction())
             {
                 try
                 {
+                    if (vm.Image != null && vm.Image.Length > 0)
+                    {
+                        string offerdir = env.WebRootPath + "/Uploads/Chefs/" +
+                        HttpContext.Session.GetString(SessionCNIC).Replace(" ", string.Empty) + "/Offer";
+
+                        if (!Directory.Exists(offerdir))
+                        {
+                            Directory.CreateDirectory(offerdir.Replace(" ", string.Empty));
+
+                            bool isUploaded = UploadImage(vm.Image, offerdir);
+                            if (isUploaded == true)
+                            {
+                                o.ImgUrl = "/Uploads/Chefs/" +
+                                HttpContext.Session.GetString(SessionCNIC).Replace(" ", string.Empty) + "/Offer/" +
+                                GetUniqueName(vm.Image.FileName);
+                            }
+                            else
+                            {
+                                // image not uploaded
+                                // do somthing 
+                            }
+                        }
+                        else
+                        {
+                            bool isUploaded = UploadImage(vm.Image, offerdir);
+                            if (isUploaded == true)
+                            {
+                                o.ImgUrl = "/Uploads/Chefs/" +
+                                HttpContext.Session.GetString(SessionCNIC).Replace(" ", string.Empty) + "/Offer/" +
+                                GetUniqueName(vm.Image.FileName);
+                            }
+                            else
+                            {
+                                // image not uploaded
+                                // do somthing
+                            }
+                        }
+                    }
                     db.Offer.Add(o);
                     db.SaveChanges();
 
@@ -169,13 +257,14 @@ namespace FYPFinalKhanaGarKa.Controllers
         }
 
         [HttpPost]
-        public IActionResult DeleteChefMenu(Menu m)
+        public IActionResult DeleteChefMenu(MenuViewModel vm)
         {
             using (var tr = db.Database.BeginTransaction())
             {
                 try
                 {
-                    db.Menu.Remove(m);
+                    DeleteImage(env.WebRootPath+vm.ImgUrl);
+                    //db.Menu.Remove(m);
                     db.SaveChanges();
                     tr.Commit();
                 }
@@ -188,13 +277,14 @@ namespace FYPFinalKhanaGarKa.Controllers
         }
 
         [HttpPost]
-        public IActionResult DeleteChefOffer(Offer o)
+        public IActionResult DeleteChefOffer(OfferViewModel vm)
         {
             using (var tr = db.Database.BeginTransaction())
             {
                 try
                 {
-                    db.Offer.Remove(o);
+                    DeleteImage(env.WebRootPath + vm.ImgUrl);
+                    //db.Offer.Remove(o);
                     db.SaveChanges();
                     tr.Commit();
                 }
@@ -214,7 +304,15 @@ namespace FYPFinalKhanaGarKa.Controllers
             {
                 if (string.Equals(HttpContext.Session.GetString(SessionRole).Trim(), "chef", StringComparison.OrdinalIgnoreCase))
                 {
-                    return View(db.Menu.Where<Menu>(i => i.MenuId == Id).FirstOrDefault<Menu>());
+                    Menu m = db.Menu.Where<Menu>(i => i.MenuId == Id).FirstOrDefault<Menu>();
+                    return View(new MenuViewModel {
+                        MenuId = m.MenuId,
+                        DishName = m.DishName,
+                        Description = m.Description,
+                        ImgUrl = m.ImgUrl,
+                        Status = m.Status,
+                        Price = m.Price
+                    });
                 }
                 else
                 {
@@ -229,19 +327,72 @@ namespace FYPFinalKhanaGarKa.Controllers
         }
 
         [HttpPost]
-        public IActionResult EditChefMenu(Menu m)
+        public IActionResult EditChefMenu(MenuViewModel vm)
         {
-            Menu menu = db.Menu.Where(i => i.MenuId == m.MenuId).FirstOrDefault();
+            Menu menu = db.Menu.Where(i => i.MenuId == vm.MenuId).FirstOrDefault();
             //m.ChefId = (int)HttpContext.Session.GetInt32(SessionId);
             menu.ModifiedDate = DateTime.Now;
-            menu.DishName = m.DishName;
-            menu.Price = m.Price;
-            menu.Status = m.Status;
-            menu.Description = m.Description;
+            menu.DishName = vm.DishName;
+            menu.Price = vm.Price;
+            menu.Status = vm.Status;
+            menu.Description = vm.Description;
             using (var tr = db.Database.BeginTransaction())
             {
                 try
                 {
+                    if (vm.Image != null && vm.Image.Length > 0)
+                    {
+                        string menudir = env.WebRootPath + "/Uploads/Chefs/" +
+                        HttpContext.Session.GetString(SessionCNIC).Replace(" ", string.Empty) + "/Menu";
+
+                        if (!Directory.Exists(menudir))
+                        {
+                            Directory.CreateDirectory(menudir.Replace(" ", string.Empty));
+                            bool isDeleted = DeleteImage(env.WebRootPath + vm.ImgUrl);
+                            if (isDeleted)
+                            {
+                                bool isUploaded = UploadImage(vm.Image, menudir);
+                                if (isUploaded == true)
+                                {
+                                    menu.ImgUrl = "/Uploads/Chefs/" +
+                                    HttpContext.Session.GetString(SessionCNIC).Replace(" ", string.Empty) + "/Menu/" +
+                                    GetUniqueName(vm.Image.FileName);
+                                }
+                                else
+                                {
+                                    // image not uploaded
+                                    // do somthing 
+                                }
+                            }
+                            else
+                            {
+
+                            }
+                        }
+                        else
+                        {
+                            bool isDeleted = DeleteImage(env.WebRootPath + vm.ImgUrl);
+                            if (isDeleted)
+                            {
+                                bool isUploaded = UploadImage(vm.Image, menudir);
+                                if (isUploaded == true)
+                                {
+                                    menu.ImgUrl = "/Uploads/Chefs/" +
+                                    HttpContext.Session.GetString(SessionCNIC).Replace(" ", string.Empty) + "/Menu/" +
+                                    GetUniqueName(vm.Image.FileName);
+                                }
+                                else
+                                {
+                                    // image not uploaded
+                                    // do somthing
+                                }
+                            }
+                            else
+                            {
+
+                            }
+                        }
+                    }
                     db.Menu.Update(menu);
                     db.SaveChanges();
 
@@ -252,7 +403,7 @@ namespace FYPFinalKhanaGarKa.Controllers
                     tr.Rollback();
                 }
             }
-            return Redirect("ChefAcc/" + m.ChefId);
+            return Redirect("ChefAcc/" + HttpContext.Session.GetInt32(SessionId));
         }
 
         [HttpGet]
@@ -298,6 +449,50 @@ namespace FYPFinalKhanaGarKa.Controllers
                 }
             }
             return Redirect("ChefAcc/" + o.ChefId);
+        }
+
+        //Helper Methods
+        private string GetUniqueName(string FileName)
+        {
+            return DateTime.Now.ToString("yyyyMMddHHmmss") +
+                        Path.GetExtension(FileName);
+        }
+
+        private bool UploadImage(IFormFile Image, string Name)
+        {
+            if (Image != null && Image.Length > 0 && Image.Length < 1000000)
+            {
+                string ext = Path.GetExtension(Image.FileName);
+
+                if (string.Equals(ext, ".jpeg", StringComparison.OrdinalIgnoreCase) ||
+                   string.Equals(ext, ".png", StringComparison.OrdinalIgnoreCase) ||
+                   string.Equals(ext, ".jpg", StringComparison.OrdinalIgnoreCase))
+                {
+                    var uniqueFileName = GetUniqueName(Image.FileName);
+                    var uploads = Path.Combine(env.WebRootPath, Name);
+                    var filePath = Path.Combine(uploads, uniqueFileName);
+                    Image.CopyTo(new FileStream(filePath, FileMode.Create));
+                }
+
+                return true;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        private bool DeleteImage(string path)
+        {
+            if (System.IO.File.Exists(path.Trim()))
+            {
+                System.IO.File.Delete(path);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

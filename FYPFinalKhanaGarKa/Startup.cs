@@ -8,7 +8,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using FYPFinalKhanaGarKa.Data;
 using FYPFinalKhanaGarKa.Models;
 using FYPFinalKhanaGarKa.Services;
 using Microsoft.AspNetCore.Http;
@@ -27,18 +26,14 @@ namespace FYPFinalKhanaGarKa
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             //configuring our database as service
             services.AddDbContext<KhanaGarKaFinalContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("KhanaGarKaFinalConnection")));
 
-            services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultTokenProviders();
 
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddMvc();
 
