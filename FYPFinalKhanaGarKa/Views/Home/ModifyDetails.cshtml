@@ -60,6 +60,7 @@
                                         <div class="row">
                                             <form enctype="multipart/form-data" asp-action="Update" asp-controller="Home" method="post" class="clearfix">
                                                 <input type="hidden" asp-for="Id" />
+                                                <input type="hidden" asp-for="ImgUrl" />
                                                 <div class="form-group">
                                                     <div class="col-lg-offset-1 col-md-offset-1 col-lg-3 col-md-3 col-sm-12 col-xs-12">
                                                         <label asp-for="Cnic">CNIC *</label>
@@ -81,14 +82,9 @@
                                                         <label>Your Profile Pic</label>
                                                     </div>
                                                     <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-                                                        @if (Model.ImgUrl.Equals("") || Model.ImgUrl == null)
-                                                        {
-                                                        <img alt="image" src="~/img/avatar.png" class="img img-responsive img-thumbnail" width="113" height="113">
-                                                        }
-                                                        else
-                                                        {
-                                                        <img alt="image" src="@Model.ImgUrl.Replace(" ",string.Empty)" class="img img-responsive img-thumbnail" width="113" height="113">
-                                                        }
+                                                        @if (Model.ImgUrl == null) { Model.ImgUrl = "/img/avatar.png"; }
+                                                        <img alt="image" src="@Model.ImgUrl" class="img img-responsive img-thumbnail" width="113" height="113">
+
                                                     </div>
                                                     <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
                                                         <input asp-for="Image" type="file" style="margin-top:30px;" />

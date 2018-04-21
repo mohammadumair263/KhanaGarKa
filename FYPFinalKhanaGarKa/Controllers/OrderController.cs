@@ -15,7 +15,7 @@ namespace FYPFinalKhanaGarKa.Controllers
         const string SessionCNIC = "_UserC";
         const string SessionRole = "_UserR";
         const string SessionId = "_UserI";
-        private static ItemGroup ds = new ItemGroup();
+        //private static ItemGroup ds = new ItemGroup();
         private KhanaGarKaFinalContext db = null;
 
         public OrderController(KhanaGarKaFinalContext db)

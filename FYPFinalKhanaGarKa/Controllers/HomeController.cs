@@ -140,7 +140,7 @@ namespace FYPFinalKhanaGarKa.Controllers
                             }
 
                             db.Chef.Add(c);
-                            //GreetingsEmail(c.Email, c.FirstName, c.LastName);
+                            GreetingsEmail(c.Email, c.FirstName, c.LastName);
                             db.SaveChanges();
 
                             tr.Commit();
@@ -184,7 +184,7 @@ namespace FYPFinalKhanaGarKa.Controllers
                             }
 
                             db.DeliveryBoy.Add(d);
-                            //GreetingsEmail(d.Email, d.FirstName, d.LastName);
+                            GreetingsEmail(d.Email, d.FirstName, d.LastName);
                             db.SaveChanges();
 
                             tr.Commit();
@@ -226,7 +226,7 @@ namespace FYPFinalKhanaGarKa.Controllers
                             }
 
                             db.Customer.Add(cu);
-                            //GreetingsEmail(cu.Email, cu.FirstName, cu.LastName);
+                            GreetingsEmail(cu.Email, cu.FirstName, cu.LastName);
                             db.SaveChanges();
 
                             tr.Commit();
@@ -442,57 +442,57 @@ namespace FYPFinalKhanaGarKa.Controllers
                         {
                         if (vm.Image != null && vm.Image.Length > 0)
                         {
-                            //c.ImgUrl = UploadImageU("/Uploads/Customer/", vm.Cnic, vm.Image, vm.ImgUrl);
-                            string uploaddir = env.WebRootPath + "/Uploads/";
-                            string cusdir = env.WebRootPath + "/Uploads/Customer";
+                            c.ImgUrl = UploadImageU("/Uploads/Customer/", vm.Cnic, vm.Image, vm.ImgUrl);
+                            //string uploaddir = env.WebRootPath + "/Uploads/";
+                            //string cusdir = env.WebRootPath + "/Uploads/Customer";
 
-                            if (!Directory.Exists(uploaddir) ||
-                                !Directory.Exists(cusdir))
-                            {
-                                Directory.CreateDirectory(uploaddir);
-                                Directory.CreateDirectory(cusdir);
+                            //if (!Directory.Exists(uploaddir) ||
+                            //    !Directory.Exists(cusdir))
+                            //{
+                            //    Directory.CreateDirectory(uploaddir);
+                            //    Directory.CreateDirectory(cusdir);
 
-                                new DirectoryInfo(cusdir).CreateSubdirectory(vm.Cnic);
+                            //    new DirectoryInfo(cusdir).CreateSubdirectory(vm.Cnic);
 
-                                bool isDeleted = DeleteImage(env.WebRootPath + c.ImgUrl);
-                                if (isDeleted == true)
-                                {
-                                    bool isUploaded = UploadImage(vm.Image, "Uploads/Customer/" + vm.Cnic.Trim());
-                                    if (isUploaded == true)
-                                    {
-                                        c.ImgUrl = "/Uploads/Customer/" + vm.Cnic.Trim() + "/" + GetUniqueName(vm.Image.FileName);
-                                    }
-                                    else
-                                    {
-                                        // image is not uploaded do somthing
-                                    }
-                                }
-                                else
-                                {
-                                    // image is not deleted and uploaded do somthing
-                                }
-                            }
-                            else
-                            {
-                                new DirectoryInfo(cusdir).CreateSubdirectory(vm.Cnic);
-                                bool isDeleted = DeleteImage(env.WebRootPath + c.ImgUrl);
-                                if (isDeleted)
-                                {
-                                    bool isUploaded = UploadImage(vm.Image, "Uploads/Customer/" + vm.Cnic.Trim());
-                                    if (isUploaded == true)
-                                    {
-                                        c.ImgUrl = "/Uploads/Customer/" + vm.Cnic.Trim() + "/" + GetUniqueName(vm.Image.FileName);
-                                    }
-                                    else
-                                    {
-                                        // image is not deleted do somthing
-                                    }
-                                }
-                                else
-                                {
-                                    // image is not deleted and not uploaded do somthing
-                                }
-                            }
+                            //    bool isDeleted = DeleteImage(env.WebRootPath + c.ImgUrl);
+                            //    if (isDeleted == true)
+                            //    {
+                            //        bool isUploaded = UploadImage(vm.Image, "Uploads/Customer/" + vm.Cnic.Trim());
+                            //        if (isUploaded == true)
+                            //        {
+                            //            c.ImgUrl = "/Uploads/Customer/" + vm.Cnic.Trim() + "/" + GetUniqueName(vm.Image.FileName);
+                            //        }
+                            //        else
+                            //        {
+                            //            // image is not uploaded do somthing
+                            //        }
+                            //    }
+                            //    else
+                            //    {
+                            //        // image is not deleted and uploaded do somthing
+                            //    }
+                            //}
+                            //else
+                            //{
+                            //    new DirectoryInfo(cusdir).CreateSubdirectory(vm.Cnic);
+                            //    bool isDeleted = DeleteImage(env.WebRootPath + c.ImgUrl);
+                            //    if (isDeleted)
+                            //    {
+                            //        bool isUploaded = UploadImage(vm.Image, "Uploads/Customer/" + vm.Cnic.Trim());
+                            //        if (isUploaded == true)
+                            //        {
+                            //            c.ImgUrl = "/Uploads/Customer/" + vm.Cnic.Trim() + "/" + GetUniqueName(vm.Image.FileName);
+                            //        }
+                            //        else
+                            //        {
+                            //            // image is not deleted do somthing
+                            //        }
+                            //    }
+                            //    else
+                            //    {
+                            //        // image is not deleted and not uploaded do somthing
+                            //    }
+                            //}
                         }
 
                             db.Customer.Update(c);
@@ -703,7 +703,7 @@ namespace FYPFinalKhanaGarKa.Controllers
                         Path.GetExtension(FileName);
         }
 
-        private bool UploadImage(IFormFile Image, string Name)
+        private bool UploadImage(IFormFile Image, string path)
         {
             if (Image != null && Image.Length > 0 && Image.Length < 1000000)
             {
@@ -713,7 +713,7 @@ namespace FYPFinalKhanaGarKa.Controllers
                    string.Equals(ext, ".png", StringComparison.OrdinalIgnoreCase) ||
                    string.Equals(ext, ".jpg", StringComparison.OrdinalIgnoreCase))
                 {
-                    var filePath = env.WebRootPath + Name +"/"+ GetUniqueName(Image.FileName);
+                    var filePath = env.WebRootPath + path +"/"+ GetUniqueName(Image.FileName);
                     Image.CopyTo(new FileStream(filePath.Trim(), FileMode.Create));
                 }
 
@@ -730,12 +730,8 @@ namespace FYPFinalKhanaGarKa.Controllers
             if (System.IO.File.Exists(path))
             {
                 System.IO.File.Delete(path);
-                return true;
             }
-            else
-            {
-                return false;
-            }
+            return true;
         }
 
         private void AddInfoToSession(string cnic, string role, int id)
@@ -747,19 +743,19 @@ namespace FYPFinalKhanaGarKa.Controllers
 
         private string UploadImageR(string Dir, string cnic, IFormFile Image)
         {
-            string uploaddir = env.WebRootPath + "/Uploads/";
+            //string uploaddir = env.WebRootPath + "/Uploads/";
             string chefdir = env.WebRootPath + Dir;
 
-            if (!Directory.Exists(uploaddir) ||
+            if (/*!Directory.Exists(uploaddir) ||*/
                 !Directory.Exists(chefdir))
             {
-                Directory.CreateDirectory(uploaddir);
+                //Directory.CreateDirectory(uploaddir);
                 Directory.CreateDirectory(chefdir);
 
                 new DirectoryInfo(chefdir).CreateSubdirectory(cnic);
 
                 bool isUploaded = UploadImage(Image, Dir + cnic);
-                if (isUploaded == true)
+                if (isUploaded)
                 {
                     return Dir + cnic.Trim() + "/" + GetUniqueName(Image.FileName);
                 }
