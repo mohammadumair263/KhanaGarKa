@@ -12,10 +12,11 @@ namespace FYPFinalKhanaGarKa.Controllers
 {
     public class OrderController : Controller
     {
-        const string SessionCNIC = "_UserC";
-        const string SessionRole = "_UserR";
-        const string SessionId = "_UserI";
-        //private static ItemGroup ds = new ItemGroup();
+        private const string SessionCNIC = "_UserC";
+        private const string SessionRole = "_UserR";
+        private const string SessionId = "_UserI";
+        private const string SessionImgUrl = "_UserIU";
+        private const string SessionName = "_UserN";
         private KhanaGarKaFinalContext db = null;
 
         public OrderController(KhanaGarKaFinalContext db)
@@ -49,15 +50,12 @@ namespace FYPFinalKhanaGarKa.Controllers
                 return RedirectToAction("Login","Home");
             }
         }
-
-        [Route("Order/Details/{role?}/{id?}")]
-        public IActionResult Details(string role,int id)
+        
+        public IActionResult Details(int id)
         {
             if (HttpContext.Session.GetString(SessionCNIC) != null &&
             HttpContext.Session.GetString(SessionRole) != null)
             {
-                //if(HttpContext.Session.GetString(SessionRole))
-
                 List<OrderLine> Dishs = db.OrderLine.Where<OrderLine>(i => i.OrderId == id).ToList<OrderLine>();
                 Orders Order = db.Orders.Where<Orders>(i => i.OrderId == id).FirstOrDefault();
                 Chef c = db.Chef.Where<Chef>(i => i.ChefId == Order.ChefId).FirstOrDefault();
@@ -67,7 +65,7 @@ namespace FYPFinalKhanaGarKa.Controllers
                     Dishis = Dishs,
                     Chef = c,
                     Order = Order,
-                    Role = role
+                    Role = HttpContext.Session.GetString(SessionRole)
                 };
 
                 return View(ViewModel);
@@ -86,28 +84,33 @@ namespace FYPFinalKhanaGarKa.Controllers
                 ItemGroup i = HttpContext.Session.Get<ItemGroup>("CartData");
                 if (i != null)
                 {
+                    //ICollection<OrderLine> ol = null;
+                    List<OrderLine> ol = new List<OrderLine>();
+                    foreach (var items in i.Items)
+                    {
+                        ol.Add(new OrderLine
+                        {
+                            Name = items.Name,
+                            Price = items.Price,
+                            Quantity = items.Quantity
+                        });
+                    }
                     Orders o = new Orders
                     {
                         OrderDate = DateTime.Now,
                         OrderStatus = "Pending",
-                        OrderType = i.OrderType
+                        OrderType = "Collection",
+                        ChefId = 2,
+                        DeliveryBoyId = 1,
+                        CustomerId = 1,
+                        OrderLine = ol
                     };
+                    
                     using (var tr = db.Database.BeginTransaction())
                     {
                         try
                         {
                             db.Orders.Add(o);
-                            db.SaveChanges();
-                            int id = o.OrderId;
-                            foreach (var orli in i.Items)
-                            {
-                                db.OrderLine.Add(new OrderLine {
-                                    Name = orli.Name,
-                                    Price = orli.Price,
-                                    Quantity = orli.Quantity,
-                                    OrderId = id
-                                });
-                            }
                             db.SaveChanges();
                             tr.Commit();
                         }
@@ -125,35 +128,34 @@ namespace FYPFinalKhanaGarKa.Controllers
                 return RedirectToAction("Login", "Home");
             }
         }
-
-        [Route("Order/History/{role?}/{id?}")]
-        public IActionResult History(string role,int id)
+        
+        public IActionResult History()
         {
             if (HttpContext.Session.GetString(SessionCNIC) != null &&
             HttpContext.Session.GetString(SessionRole) != null)
             {
 
-                if (string.Equals(role, "chef", StringComparison.OrdinalIgnoreCase))
+                if (string.Equals(HttpContext.Session.GetString(SessionRole), "chef", StringComparison.OrdinalIgnoreCase))
                 {
                     return View(new OrderHistoryViewModel
                     {
-                        Orders = db.Orders.Where<Orders>(i => i.ChefId == id).ToList<Orders>(),
+                        Orders = db.Orders.Where<Orders>(i => i.ChefId == HttpContext.Session.GetInt32(SessionId)).ToList<Orders>(),
                         Role = "chef"
                     });
                 }
-                else if (string.Equals(role, "customer", StringComparison.OrdinalIgnoreCase))
+                else if (string.Equals(HttpContext.Session.GetString(SessionRole), "customer", StringComparison.OrdinalIgnoreCase))
                 {
                     return View(new OrderHistoryViewModel
                     {
-                        Orders = db.Orders.Where<Orders>(i => i.CustomerId == id).ToList<Orders>(),
+                        Orders = db.Orders.Where<Orders>(i => i.CustomerId == HttpContext.Session.GetInt32(SessionId)).ToList<Orders>(),
                         Role = "customer"
                     });
                 }
-                else if (string.Equals(role, "DBoy", StringComparison.OrdinalIgnoreCase))
+                else if (string.Equals(HttpContext.Session.GetString(SessionRole), "DBoy", StringComparison.OrdinalIgnoreCase))
                 {
                     return View(new OrderHistoryViewModel
                     {
-                        Orders = db.Orders.Where<Orders>(i => i.DeliveryBoyId == id).ToList<Orders>(),
+                        Orders = db.Orders.Where<Orders>(i => i.DeliveryBoyId == HttpContext.Session.GetInt32(SessionId)).ToList<Orders>(),
                         Role = "DBoy"
                     });
                 }

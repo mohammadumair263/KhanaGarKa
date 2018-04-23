@@ -3,15 +3,15 @@
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
 
 @if (HttpContextAccessor.HttpContext.Session.GetString("_UserC") != null &&
-                  HttpContextAccessor.HttpContext.Session.GetString("_UserR") != null)
+               HttpContextAccessor.HttpContext.Session.GetString("_UserR") != null)
 {
     <div class="pull-right user-login">
-            <a class="btn btn-sm btn-primary" href="/Home/ModifyDetails/@HttpContextAccessor.HttpContext.Session.GetString("_UserR").Trim()/@HttpContextAccessor.HttpContext.Session.GetInt32("_UserI")">Edit</a> &nbsp;
+            <a class="btn btn-sm btn-primary" href="/Home/ModifyDetails">Edit</a> &nbsp;
             <a class="btn btn-sm btn-primary" asp-controller="Home" asp-action="Logout">Logout</a>
         </div>
-    @*<div class="dropdown pull-right">
-        <img class="img img-circle" src="~/img/avatar.png" width="50px" height="50px"/>
-        <span class="dropdown-toggle" data-toggle="dropdown">Jhon Smith<span class="caret"></span></span>
+    @*<div class="dropdown pull-right" style="margin-top:10px">
+        <img class="img img-circle" src="~/img/avatar.png" width="50px" height="50px" />
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Jhon Smith<span class="caret"></span></a>
         <ul class="dropdown-menu">
             <li><a href="#">Order History</a></li>
             <li><a href="#">My Account</a></li>

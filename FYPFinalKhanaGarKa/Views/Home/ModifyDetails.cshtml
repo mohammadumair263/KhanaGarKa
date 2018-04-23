@@ -135,9 +135,18 @@
                                                     </div>
                                                     <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                                                         <select class="form-control" asp-for="Gender">
-                                                            <option selected>@Model.Gender</option>
-                                                            <option value="female">Female</option>
-                                                            <option value="Male">Male</option>
+                                                            @if(string.Equals(Model.Gender.Trim(), "male", StringComparison.OrdinalIgnoreCase))
+                                                            {
+                                                                <option value="Male" selected>Male</option>
+                                                                <option value="Female">Female</option>
+
+                                                            }
+                                                            else
+                                                            {
+                                                                <option value="Female" selected>Female</option>
+                                                                <option value="Male">Male</option>
+
+                                                            }
                                                         </select>
                                                     </div>
                                                 </div>

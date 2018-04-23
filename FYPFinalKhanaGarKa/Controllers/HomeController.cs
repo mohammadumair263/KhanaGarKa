@@ -20,6 +20,8 @@ namespace FYPFinalKhanaGarKa.Controllers
         private const string SessionCNIC = "_UserC";
         private const string SessionRole = "_UserR";
         private const string SessionId = "_UserI";
+        private const string SessionImgUrl = "_UserIU";
+        private const string SessionName = "_UserN";
         private KhanaGarKaFinalContext db;
         private IHostingEnvironment env = null;
 
@@ -51,8 +53,8 @@ namespace FYPFinalKhanaGarKa.Controllers
                     Chef c = db.Chef.Where(i => i.Email == vm.Email && i.Password == vm.Password).FirstOrDefault();
                     if(c != null)
                     {
-                        AddInfoToSession(c.Cnic, c.Role, c.ChefId);
-                        return Redirect("/Chef/ChefAcc/"+c.ChefId);
+                        AddInfoToSession(c.Cnic, c.Role, c.ChefId, c.ImgUrl, c.FirstName + " " + c.LastName);
+                        return Redirect("/Chef/ChefAcc");
                     }
                     else
                     {
@@ -65,7 +67,7 @@ namespace FYPFinalKhanaGarKa.Controllers
                     Customer c = db.Customer.Where(i => i.Email == vm.Email && i.Password == vm.Password).FirstOrDefault();
                     if (c != null)
                     {
-                        AddInfoToSession(c.Cnic, c.Role, c.CustomerId);
+                        AddInfoToSession(c.Cnic, c.Role, c.CustomerId, c.ImgUrl, c.FirstName + " " + c.LastName);
                         return Redirect("/Home/Index");
                     }
                     else
@@ -78,7 +80,7 @@ namespace FYPFinalKhanaGarKa.Controllers
                     DeliveryBoy d = db.DeliveryBoy.Where(i => i.Email == vm.Email && i.Password == vm.Password).FirstOrDefault();
                     if (d != null)
                     {
-                        AddInfoToSession(d.Cnic, d.Role, d.DeliveryBoyId);
+                        AddInfoToSession(d.Cnic, d.Role, d.DeliveryBoyId, d.ImgUrl, d.FirstName + " " + d.LastName);
                         return Redirect("/Home/Index");
                     }
                     else
@@ -136,17 +138,17 @@ namespace FYPFinalKhanaGarKa.Controllers
                         {
                             if (vm.Image != null && vm.Image.Length > 0)
                             {
-                                c.ImgUrl =  UploadImageR("/Uploads/Chefs/", vm.Cnic, vm.Image);
+                                c.ImgUrl = Utils.UploadImageR(env, "/Uploads/Chefs/"+vm.Cnic, vm.Image);
                             }
 
                             db.Chef.Add(c);
-                            GreetingsEmail(c.Email, c.FirstName, c.LastName);
+                            //GreetingsEmail(c.Email, c.FirstName, c.LastName);
                             db.SaveChanges();
 
                             tr.Commit();
                         }
 
-                        catch
+                        catch(Exception e)
                         {
                             tr.Rollback();
                         }
@@ -180,16 +182,16 @@ namespace FYPFinalKhanaGarKa.Controllers
                         {
                             if (vm.Image != null && vm.Image.Length > 0)
                             {
-                                d.ImgUrl = UploadImageR("/Uploads/DBoy/", vm.Cnic, vm.Image);
+                                d.ImgUrl = Utils.UploadImageR(env, "/Uploads/DBoy/"+vm.Cnic, vm.Image);
                             }
 
                             db.DeliveryBoy.Add(d);
-                            GreetingsEmail(d.Email, d.FirstName, d.LastName);
+                            //GreetingsEmail(d.Email, d.FirstName, d.LastName);
                             db.SaveChanges();
 
                             tr.Commit();
                         }
-                        catch
+                        catch(Exception e)
                         {
                             tr.Rollback();
                         }
@@ -222,16 +224,16 @@ namespace FYPFinalKhanaGarKa.Controllers
                         {
                             if (vm.Image != null && vm.Image.Length > 0)
                             {
-                                cu.ImgUrl = UploadImageR("/Uploads/Customer/", vm.Cnic, vm.Image);
+                                cu.ImgUrl = Utils.UploadImageR(env, "/Uploads/Customer/"+vm.Cnic, vm.Image);
                             }
 
                             db.Customer.Add(cu);
-                            GreetingsEmail(cu.Email, cu.FirstName, cu.LastName);
+                            //GreetingsEmail(cu.Email, cu.FirstName, cu.LastName);
                             db.SaveChanges();
 
                             tr.Commit();
                         }
-                        catch
+                        catch(Exception e)
                         {
                             tr.Rollback();
                         }
@@ -240,16 +242,16 @@ namespace FYPFinalKhanaGarKa.Controllers
             }
             return View();
         }
-
-        [Route("Home/ModifyDetails/{role?}/{id?}")]
-        public IActionResult ModifyDetails(string role,int id)
+        
+        [HttpGet]
+        public IActionResult ModifyDetails()
         {
             if (HttpContext.Session.GetString(SessionCNIC) != null &&
             HttpContext.Session.GetString(SessionRole) != null)
             {
-                if (string.Equals(role.Trim(), "chef", StringComparison.OrdinalIgnoreCase))
+                if (string.Equals(HttpContext.Session.GetString(SessionRole).Trim(), "chef", StringComparison.OrdinalIgnoreCase))
                 {
-                    Chef c = db.Chef.Where(i => i.ChefId == id).FirstOrDefault();
+                    Chef c = db.Chef.Where(i => i.ChefId == HttpContext.Session.GetInt32(SessionId)).FirstOrDefault();
                     return View(new RegisterViewModel
                     {
                         Id = c.ChefId,
@@ -269,9 +271,9 @@ namespace FYPFinalKhanaGarKa.Controllers
                         ImgUrl = c.ImgUrl
                     });
                 }
-                else if (string.Equals(role.Trim(), "customer", StringComparison.OrdinalIgnoreCase))
+                else if (string.Equals(HttpContext.Session.GetString(SessionRole).Trim(), "customer", StringComparison.OrdinalIgnoreCase))
                 {
-                    Customer c = db.Customer.Where(i => i.CustomerId == id).FirstOrDefault();
+                    Customer c = db.Customer.Where(i => i.CustomerId == HttpContext.Session.GetInt32(SessionId)).FirstOrDefault();
                     return View(new RegisterViewModel
                     {
                         Id = c.CustomerId,
@@ -291,9 +293,9 @@ namespace FYPFinalKhanaGarKa.Controllers
                         ImgUrl = c.ImgUrl
                     });
                 }
-                else if (string.Equals(role.Trim(), "DBoy", StringComparison.OrdinalIgnoreCase))
+                else if (string.Equals(HttpContext.Session.GetString(SessionRole).Trim(), "DBoy", StringComparison.OrdinalIgnoreCase))
                 {
-                    DeliveryBoy d = db.DeliveryBoy.Where(i => i.DeliveryBoyId == id).FirstOrDefault();
+                    DeliveryBoy d = db.DeliveryBoy.Where(i => i.DeliveryBoyId == HttpContext.Session.GetInt32(SessionId)).FirstOrDefault();
                     return View(new RegisterViewModel
                     {
                         Id = d.DeliveryBoyId,
@@ -326,7 +328,7 @@ namespace FYPFinalKhanaGarKa.Controllers
         public IActionResult Update(RegisterViewModel vm)
         {
             //if (ModelState.IsValid)
-           // {
+            //{
                 if (string.Equals(vm.Role.Trim(), "chef", StringComparison.OrdinalIgnoreCase))
                 {
                 Chef c = db.Chef.Where(i => i.ChefId == vm.Id).FirstOrDefault();
@@ -341,76 +343,15 @@ namespace FYPFinalKhanaGarKa.Controllers
                 c.Area = vm.Area;
                 c.Street = vm.Street;
                 c.Status = vm.Status;
-                //Chef c = new Chef {
-                //    FirstName = vm.FirstName,
-                //    LastName = vm.LastName,
-                //    Gender = vm.Gender,
-                //    Dob = vm.Dob,
-                //    Email = vm.Email,
-                //    ModifiedDate = DateTime.Now,
-                //    PhoneNo = vm.PhoneNo,
-                //    City = vm.City,
-                //    Area = vm.Area,
-                //    Street = vm.Street,
-                //    Status = vm.Status
-                //};
 
                 using (var tr = db.Database.BeginTransaction())
                     {
                         try
                         {
-                            if (vm.Image != null && vm.Image.Length > 0)
-                            {
-                            //c.ImgUrl = UploadImageU("/Uploads/Chefs/", vm.Cnic, vm.Image, vm.ImgUrl);
-                            string uploaddir = env.WebRootPath + "/Uploads/";
-                            string chefdir = env.WebRootPath + "/Uploads/Chefs";
-
-                            if (!Directory.Exists(uploaddir) ||
-                                !Directory.Exists(chefdir))
-                            {
-                                Directory.CreateDirectory(uploaddir);
-                                Directory.CreateDirectory(chefdir);
-
-                                new DirectoryInfo(chefdir).CreateSubdirectory(vm.Cnic);
-
-                                bool isDeleted = DeleteImage(env.WebRootPath + c.ImgUrl);
-                                if (isDeleted == true)
-                                {
-                                    bool isUploaded = UploadImage(vm.Image, "Uploads/Chefs/" + vm.Cnic.Trim());
-                                    if (isUploaded == true)
-                                    {
-                                        c.ImgUrl = "/Uploads/Chefs/" + vm.Cnic.Trim() + "/" + GetUniqueName(vm.Image.FileName);
-                                    }
-                                    else
-                                    {
-                                        // image is not uploded do somthing
-                                    }
-                                }
-                                else
-                                {
-                                    // image is not deleted and uploaded do somthing
-                                }
-                            }
-                            else
-                            {
-                                new DirectoryInfo(chefdir).CreateSubdirectory(vm.Cnic);
-                                bool isDeleted = DeleteImage(env.WebRootPath + c.ImgUrl);
-                                if (isDeleted)
-                                {
-                                    bool isUploaded = UploadImage(vm.Image, "Uploads/Chefs/" + vm.Cnic.Trim());
-                                    if (isUploaded == true)
-                                    {
-                                        c.ImgUrl = "/Uploads/Chefs/" + vm.Cnic.Trim() + "/" + GetUniqueName(vm.Image.FileName);
-                                    }
-                                    else { }
-                                }
-                                else
-                                {
-
-                                }
-                            }
+                        if (vm.Image != null && vm.Image.Length > 0)
+                        {
+                                c.ImgUrl = Utils.UploadImageU(env, "/Uploads/Chefs/"+vm.Cnic, vm.Image, vm.ImgUrl);
                         }
-
                         db.Chef.Update(c);
                         db.SaveChanges();
                         tr.Commit();
@@ -423,7 +364,7 @@ namespace FYPFinalKhanaGarKa.Controllers
                 }
                 else if (string.Equals(vm.Role.Trim(), "customer", StringComparison.OrdinalIgnoreCase))
                 {
-                    Customer c = db.Customer.Where(i => i.CustomerId == vm.Id).FirstOrDefault();
+                    Customer c = db.Customer.Where(i => i.CustomerId == HttpContext.Session.GetInt32(SessionId)).FirstOrDefault();
                     c.FirstName = vm.FirstName;
                     c.LastName = vm.LastName;
                     c.Gender = vm.Gender;
@@ -433,7 +374,7 @@ namespace FYPFinalKhanaGarKa.Controllers
                     c.PhoneNo = vm.PhoneNo;
                     c.City = vm.City;
                     c.Area = vm.Area;
-                    c.Status = vm.Street;
+                    c.Street = vm.Street;
                     c.Status = vm.Status;
 
                     using (var tr = db.Database.BeginTransaction())
@@ -442,57 +383,7 @@ namespace FYPFinalKhanaGarKa.Controllers
                         {
                         if (vm.Image != null && vm.Image.Length > 0)
                         {
-                            c.ImgUrl = UploadImageU("/Uploads/Customer/", vm.Cnic, vm.Image, vm.ImgUrl);
-                            //string uploaddir = env.WebRootPath + "/Uploads/";
-                            //string cusdir = env.WebRootPath + "/Uploads/Customer";
-
-                            //if (!Directory.Exists(uploaddir) ||
-                            //    !Directory.Exists(cusdir))
-                            //{
-                            //    Directory.CreateDirectory(uploaddir);
-                            //    Directory.CreateDirectory(cusdir);
-
-                            //    new DirectoryInfo(cusdir).CreateSubdirectory(vm.Cnic);
-
-                            //    bool isDeleted = DeleteImage(env.WebRootPath + c.ImgUrl);
-                            //    if (isDeleted == true)
-                            //    {
-                            //        bool isUploaded = UploadImage(vm.Image, "Uploads/Customer/" + vm.Cnic.Trim());
-                            //        if (isUploaded == true)
-                            //        {
-                            //            c.ImgUrl = "/Uploads/Customer/" + vm.Cnic.Trim() + "/" + GetUniqueName(vm.Image.FileName);
-                            //        }
-                            //        else
-                            //        {
-                            //            // image is not uploaded do somthing
-                            //        }
-                            //    }
-                            //    else
-                            //    {
-                            //        // image is not deleted and uploaded do somthing
-                            //    }
-                            //}
-                            //else
-                            //{
-                            //    new DirectoryInfo(cusdir).CreateSubdirectory(vm.Cnic);
-                            //    bool isDeleted = DeleteImage(env.WebRootPath + c.ImgUrl);
-                            //    if (isDeleted)
-                            //    {
-                            //        bool isUploaded = UploadImage(vm.Image, "Uploads/Customer/" + vm.Cnic.Trim());
-                            //        if (isUploaded == true)
-                            //        {
-                            //            c.ImgUrl = "/Uploads/Customer/" + vm.Cnic.Trim() + "/" + GetUniqueName(vm.Image.FileName);
-                            //        }
-                            //        else
-                            //        {
-                            //            // image is not deleted do somthing
-                            //        }
-                            //    }
-                            //    else
-                            //    {
-                            //        // image is not deleted and not uploaded do somthing
-                            //    }
-                            //}
+                            c.ImgUrl = Utils.UploadImageU(env,"/Uploads/Customer/"+vm.Cnic, vm.Image, vm.ImgUrl);
                         }
 
                             db.Customer.Update(c);
@@ -508,7 +399,7 @@ namespace FYPFinalKhanaGarKa.Controllers
                 }
                 else if (string.Equals(vm.Role.Trim(), "DBoy", StringComparison.OrdinalIgnoreCase))
                 {
-                    DeliveryBoy c = db.DeliveryBoy.Where(i => i.DeliveryBoyId == vm.Id).FirstOrDefault();
+                    DeliveryBoy c = db.DeliveryBoy.Where(i => i.DeliveryBoyId == HttpContext.Session.GetInt32(SessionId)).FirstOrDefault();
                     c.FirstName = vm.FirstName;
                     c.LastName = vm.LastName;
                     c.Gender = vm.Gender;
@@ -527,57 +418,7 @@ namespace FYPFinalKhanaGarKa.Controllers
                         {
                         if (vm.Image != null && vm.Image.Length > 0)
                         {
-                            // c.ImgUrl = UploadImageU("/Uploads/DBoy/", vm.Cnic, vm.Image, vm.ImgUrl);
-                            string uploaddir = env.WebRootPath + "/Uploads/";
-                            string cusdir = env.WebRootPath + "/Uploads/DBoy";
-
-                            if (!Directory.Exists(uploaddir) ||
-                                !Directory.Exists(cusdir))
-                            {
-                                Directory.CreateDirectory(uploaddir);
-                                Directory.CreateDirectory(cusdir);
-
-                                new DirectoryInfo(cusdir).CreateSubdirectory(vm.Cnic);
-
-                                bool isDeleted = DeleteImage(env.WebRootPath + c.ImgUrl);
-                                if (isDeleted == true)
-                                {
-                                    bool isUploaded = UploadImage(vm.Image, "Uploads/DBoy/" + vm.Cnic.Trim());
-                                    if (isUploaded == true)
-                                    {
-                                        c.ImgUrl = "/Uploads/DBoy/" + vm.Cnic.Trim() + "/" + GetUniqueName(vm.Image.FileName);
-                                    }
-                                    else
-                                    {
-                                        // image is not uploaded do somthing
-                                    }
-                                }
-                                else
-                                {
-                                    // image is not deleted and uploaded do somthing
-                                }
-                            }
-                            else
-                            {
-                                new DirectoryInfo(cusdir).CreateSubdirectory(vm.Cnic);
-                                bool isDeleted = DeleteImage(env.WebRootPath + c.ImgUrl);
-                                if (isDeleted)
-                                {
-                                    bool isUploaded = UploadImage(vm.Image, "Uploads/DBoy/" + vm.Cnic.Trim());
-                                    if (isUploaded == true)
-                                    {
-                                        c.ImgUrl = "/Uploads/DBoy/" + vm.Cnic.Trim() + "/" + GetUniqueName(vm.Image.FileName);
-                                    }
-                                    else
-                                    {
-                                        // image is not deleted do somthing
-                                    }
-                                }
-                                else
-                                {
-                                    // image is not deleted and not uploaded do somthing
-                                }
-                            }
+                            c.ImgUrl = Utils.UploadImageU(env,"/Uploads/DBoy/"+vm.Cnic, vm.Image, vm.ImgUrl);
                         }
                             db.DeliveryBoy.Update(c);
                             db.SaveChanges();
@@ -589,8 +430,8 @@ namespace FYPFinalKhanaGarKa.Controllers
                         }
                     }
                 }
-           // }
-            return RedirectToAction("index");
+            //}
+            return RedirectToAction("ChefAcc","Chef");
         }
 
         [HttpGet]
@@ -697,159 +538,14 @@ namespace FYPFinalKhanaGarKa.Controllers
         }
 
         //Helper Methods
-        private string GetUniqueName(string FileName)
-        {
-            return DateTime.Now.ToString("yyyyMMddHHmm") +
-                        Path.GetExtension(FileName);
-        }
-
-        private bool UploadImage(IFormFile Image, string path)
-        {
-            if (Image != null && Image.Length > 0 && Image.Length < 1000000)
-            {
-                string ext = Path.GetExtension(Image.FileName);
-
-                if (string.Equals(ext, ".jpeg", StringComparison.OrdinalIgnoreCase) ||
-                   string.Equals(ext, ".png", StringComparison.OrdinalIgnoreCase) ||
-                   string.Equals(ext, ".jpg", StringComparison.OrdinalIgnoreCase))
-                {
-                    var filePath = env.WebRootPath + path +"/"+ GetUniqueName(Image.FileName);
-                    Image.CopyTo(new FileStream(filePath.Trim(), FileMode.Create));
-                }
-
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        private bool DeleteImage(string path)
-        {
-            if (System.IO.File.Exists(path))
-            {
-                System.IO.File.Delete(path);
-            }
-            return true;
-        }
-
-        private void AddInfoToSession(string cnic, string role, int id)
+        
+        private void AddInfoToSession(string cnic, string role, int id, string imgurl, string name)
         {
             HttpContext.Session.SetString(SessionCNIC, cnic);
             HttpContext.Session.SetString(SessionRole, role);
+            HttpContext.Session.SetString(SessionImgUrl, imgurl);
+            HttpContext.Session.SetString(SessionName, name);
             HttpContext.Session.SetInt32(SessionId, id);
-        }
-
-        private string UploadImageR(string Dir, string cnic, IFormFile Image)
-        {
-            //string uploaddir = env.WebRootPath + "/Uploads/";
-            string chefdir = env.WebRootPath + Dir;
-
-            if (/*!Directory.Exists(uploaddir) ||*/
-                !Directory.Exists(chefdir))
-            {
-                //Directory.CreateDirectory(uploaddir);
-                Directory.CreateDirectory(chefdir);
-
-                new DirectoryInfo(chefdir).CreateSubdirectory(cnic);
-
-                bool isUploaded = UploadImage(Image, Dir + cnic);
-                if (isUploaded)
-                {
-                    return Dir + cnic.Trim() + "/" + GetUniqueName(Image.FileName);
-                }
-                else
-                {
-                    // image is not uploaded do somthing
-                    return null;
-                }
-            }
-            else
-            {
-                new DirectoryInfo(chefdir).CreateSubdirectory(cnic);
-                bool isUploaded = UploadImage(Image, Dir + cnic);
-                if (isUploaded == true)
-                {
-                    return Dir + cnic.Trim() + "/" + GetUniqueName(Image.FileName);
-                }
-                else
-                {
-                    // image is not uploaded do somthing
-                    return null;
-                }
-            }
-        }
-
-        private string UploadImageU(string Dir, string cnic, IFormFile Image, string ImgUrl)
-        {
-            string uploaddir = env.WebRootPath + "/Uploads/";
-            string dir = env.WebRootPath + Dir;
-
-            if (!Directory.Exists(uploaddir) ||
-                !Directory.Exists(dir))
-            {
-                Directory.CreateDirectory(uploaddir);
-                Directory.CreateDirectory(dir);
-
-                new DirectoryInfo(dir).CreateSubdirectory(cnic);
-
-                bool isDeleted = DeleteImage(env.WebRootPath + ImgUrl);
-                if (isDeleted == true)
-                {
-                    bool isUploaded = UploadImage(Image, Dir + cnic.Trim());
-                    if (isUploaded == true)
-                    {
-                        return Dir + cnic.Trim() + "/" + GetUniqueName(Image.FileName);
-                    }
-                    else
-                    {
-                        // image is not uploded do somthing
-                        return null;
-                    }
-                }
-                else
-                {
-                    // image is not deleted and uploaded do somthing
-                    return null;
-                }
-            }
-            else
-            {
-                new DirectoryInfo(dir).CreateSubdirectory(cnic);
-                bool isDeleted = DeleteImage(env.WebRootPath + ImgUrl);
-                if (isDeleted)
-                {
-                    bool isUploaded = UploadImage(Image, Dir + cnic.Trim());
-                    if (isUploaded == true)
-                    {
-                        return Dir + cnic.Trim() + "/" + GetUniqueName(Image.FileName);
-                    }
-                    else {
-                        return null;
-                    }
-                }
-                else
-                {
-                    return null;
-                }
-            }
-        }
-
-        public void GreetingsEmail(string mailid, string Fname, string Lname)
-        {
-            MailMessage MM = new MailMessage();
-            MM.From = new MailAddress("khanagarka@gmail.com");
-            MM.To.Add(mailid);
-            MM.Subject = ("Welcome to KhanGarKa.com");
-            MM.Body = "<h1>Dear " + Fname + " " + Lname + "</h1><br>Thanks for registering on our website.<br><br>----<br>Regards,<br> KhanaGarKa Team";
-            MM.IsBodyHtml = true;
-
-            SmtpClient sc = new SmtpClient("smtp.gmail.com", 587);
-            sc.Credentials = new System.Net.NetworkCredential("khanagarka@gmail.com", "stm-7063");
-            sc.EnableSsl = true;
-
-            sc.Send(MM);
         }
     }
 }

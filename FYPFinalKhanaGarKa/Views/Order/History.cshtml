@@ -1,26 +1,6 @@
 ﻿@model FYPFinalKhanaGarKa.Models.ViewModels.OrderHistoryViewModel
 @{
     ViewData["Title"] = "History";
-
-    string url = "#";
-    if (Model != null)
-    {
-        if (Model.Role.Equals("chef"))
-        {
-            url = Url.Action("ModifyDetails", "Home", new { role = "chef", id = Model.Orders.FirstOrDefault().ChefId });
-           // url = "/Home/ModifyDetails/chef/" + Model.Orders.FirstOrDefault().ChefId;
-        }
-        else if (Model.Role.Equals("customer"))
-        {
-            url = Url.Action("ModifyDetails", "Home", new { role = "customer", id = Model.Orders.FirstOrDefault().CustomerId });
-           // url = "/Home/ModifyDetails/customer/" + Model.Orders.FirstOrDefault().CustomerId;
-        }
-        else if (Model.Role.Equals("deliveryboy"))
-        {
-            url = Url.Action("ModifyDetails", "Home", new { role = "deliveryboy", id = Model.Orders.FirstOrDefault().DeliveryBoyId });
-           // url = "/Home/ModifyDetails/deliveryboy/" + Model.Orders.FirstOrDefault().DeliveryBoyId;
-        }
-    }
 }
 
 @section StyleLink
@@ -40,7 +20,7 @@
                     <div class="cfoaccount">
                         <ul class="list-unstyled">
                             <li>
-                                <a href="@url"><i class="fa fa-home" aria-hidden="true"></i>My Account</a>
+                                <a href="Home/ModifyDetails"><i class="fa fa-home" aria-hidden="true"></i>My Account</a>
                             </li>
                             <li><a href="#"><i class="fa fa-history" aria-hidden="true"></i> Order History</a></li>
                         </ul>
