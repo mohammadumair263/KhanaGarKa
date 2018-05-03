@@ -47,10 +47,8 @@
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <div class="address-form">
                                     <div class="row">
-                                        <!-- <form asp-action="profile" asp-controller="Home" method="post" enctype="multipart/form-data" class="clearfix">
-
-     </form>-->
                                         <form asp-action="Register" enctype="multipart/form-data" asp-controller="Home" method="post" class="clearfix">
+                                            <div asp-validation-summary="ModelOnly" class="text-danger text-center"></div>
                                             <div class="form-group">
                                                 <div class="col-lg-offset-1 col-md-offset-1 col-lg-3 col-md-3 col-sm-12 col-xs-12">
                                                     <label>Your Profile Pic*</label>
@@ -60,9 +58,9 @@
                                                 </div>
                                                 <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
                                                     <input asp-for="Image" style="margin-top:30px;" />
-                                                    
+
                                                 </div>
-                                                
+
                                                 <span class="clearfix"></span>
                                             </div>
 
@@ -72,8 +70,8 @@
                                                 </div>
                                                 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                                                     <select class="form-control" asp-for="Role">
-                                                        <option value="customer" selected>Customer</option>
-                                                        <option value="chef">Chef</option>
+                                                        <option value="Customer" selected>Customer</option>
+                                                        <option value="Chef">Chef</option>
                                                         <option value="DBoy">DBoy</option>
                                                     </select>
                                                 </div>
@@ -164,8 +162,6 @@
                                                     <select name="City" asp-for="City" class="search-form-select form-control">
                                                         <option selected>--CITY--</option>
                                                         <option class="sialkot" value="Sialkot">SIALKOT</option>
-
-
                                                     </select>
                                                 </div>
                                                 <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12 select-field-wrap pull-left">
@@ -245,7 +241,7 @@
                                                     <label></label>
                                                 </div>
                                                 <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                                                    <button type="submit"  id="sign-up" name="kkk" class="btn btn-primary btn-block custom-checkout">Sign Up</button>
+                                                    <button type="submit" id="sign-up" name="kkk" class="btn btn-primary btn-block custom-checkout">Sign Up</button>
                                                 </div>
                                             </div>
                                         </form>

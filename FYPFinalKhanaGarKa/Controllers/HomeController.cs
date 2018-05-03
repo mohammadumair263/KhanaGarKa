@@ -20,8 +20,8 @@ namespace FYPFinalKhanaGarKa.Controllers
         private const string SessionCNIC = "_UserC";
         private const string SessionRole = "_UserR";
         private const string SessionId = "_UserI";
-        private const string SessionImgUrl = "_UserIU";
-        private const string SessionName = "_UserN";
+        private const string SessionEmail = "_UserE";
+        private const string SessionCode = "_FPCode";
         private KhanaGarKaFinalContext db;
         private IHostingEnvironment env = null;
 
@@ -54,7 +54,7 @@ namespace FYPFinalKhanaGarKa.Controllers
                     if(c != null)
                     {
                         AddInfoToSession(c.Cnic, c.Role, c.ChefId, c.ImgUrl, c.FirstName + " " + c.LastName);
-                        return Redirect("/Chef/ChefAcc");
+                        return Redirect("/Chef/Account");
                     }
                     else
                     {
@@ -67,8 +67,8 @@ namespace FYPFinalKhanaGarKa.Controllers
                     Customer c = db.Customer.Where(i => i.Email == vm.Email && i.Password == vm.Password).FirstOrDefault();
                     if (c != null)
                     {
-                        AddInfoToSession(c.Cnic, c.Role, c.CustomerId, c.ImgUrl, c.FirstName + " " + c.LastName);
-                        return Redirect("/Home/Index");
+                        AddInfoToSession(c.Cnic, c.Role, c.CustomerId, c.ImgUrl, c.Email);
+                        return RedirectToAction("Index");
                     }
                     else
                     {
@@ -81,7 +81,7 @@ namespace FYPFinalKhanaGarKa.Controllers
                     if (d != null)
                     {
                         AddInfoToSession(d.Cnic, d.Role, d.DeliveryBoyId, d.ImgUrl, d.FirstName + " " + d.LastName);
-                        return Redirect("/Home/Index");
+                        return RedirectToAction("Index");
                     }
                     else
                     {
@@ -117,19 +117,20 @@ namespace FYPFinalKhanaGarKa.Controllers
                         CreatedDate = DateTime.Now,
                         ModifiedDate = DateTime.Now,
                         Category = "3 star",
-                        Role = vm.Role,
-                        Status = "Active",
-                        FirstName = vm.FirstName,
-                        LastName = vm.LastName,
-                        Gender = vm.Gender,
+                        Role = vm.Role.Trim(),
+                        Status = true,
+                        FirstName = vm.FirstName.Trim(),
+                        LastName = vm.LastName.Trim(),
+                        Gender = vm.Gender.Trim(),
                         Dob = vm.Dob,
-                        Email = vm.Email,
+                        Email = vm.Email.Trim(),
                         Password = vm.Password,
-                        PhoneNo = vm.PhoneNo,
+                        PhoneNo = vm.PhoneNo.Trim(),
                         City = vm.City,
                         Area = vm.Area,
                         Street = vm.Street,
-                        Cnic = vm.Cnic
+                        Cnic = vm.Cnic.Trim(),
+                        Rating = 0
                     };
 
                     using (var tr = db.Database.BeginTransaction())
@@ -140,17 +141,27 @@ namespace FYPFinalKhanaGarKa.Controllers
                             {
                                 c.ImgUrl = Utils.UploadImageR(env, "/Uploads/Chefs/"+vm.Cnic, vm.Image);
                             }
+                            else
+                            {
+                                ModelState.AddModelError("", "Cannot upload your image");
+                                return View(vm);
+                            }
 
                             db.Chef.Add(c);
                             //GreetingsEmail(c.Email, c.FirstName, c.LastName);
                             db.SaveChanges();
 
                             tr.Commit();
+
+                            return RedirectToAction("Login", "Home");
                         }
 
-                        catch(Exception e)
+                        catch
                         {
                             tr.Rollback();
+
+                            ModelState.AddModelError("", "We are having some problem in registration");
+                            return View(vm);
                         }
                     }
                 }
@@ -160,19 +171,19 @@ namespace FYPFinalKhanaGarKa.Controllers
                     {
                         CreatedDate = DateTime.Now,
                         ModifiedDate = DateTime.Now,
-                        Status = "Active",
+                        Status = true,
                         Role = "DBoy",
-                        FirstName = vm.FirstName,
-                        LastName = vm.LastName,
-                        Gender = vm.Gender,
+                        FirstName = vm.FirstName.Trim(),
+                        LastName = vm.LastName.Trim(),
+                        Gender = vm.Gender.Trim(),
                         Dob = vm.Dob,
-                        Email = vm.Email,
+                        Email = vm.Email.Trim(),
                         Password = vm.Password,
-                        PhoneNo = vm.PhoneNo,
+                        PhoneNo = vm.PhoneNo.Trim(),
                         City = vm.City,
                         Area = vm.Area,
                         Street = vm.Street,
-                        Cnic = vm.Cnic
+                        Cnic = vm.Cnic.Trim()
                         
                     };
 
@@ -184,16 +195,26 @@ namespace FYPFinalKhanaGarKa.Controllers
                             {
                                 d.ImgUrl = Utils.UploadImageR(env, "/Uploads/DBoy/"+vm.Cnic, vm.Image);
                             }
+                            else
+                            {
+                                ModelState.AddModelError("", "Cannot upload your image");
+                                return View(vm);
+                            }
 
                             db.DeliveryBoy.Add(d);
                             //GreetingsEmail(d.Email, d.FirstName, d.LastName);
                             db.SaveChanges();
 
                             tr.Commit();
+
+                            return RedirectToAction("Login", "Home");
                         }
-                        catch(Exception e)
+                        catch
                         {
                             tr.Rollback();
+
+                            ModelState.AddModelError("", "We are having some problem in registration");
+                            return View(vm);
                         }
                     }
                 }
@@ -203,19 +224,19 @@ namespace FYPFinalKhanaGarKa.Controllers
                     {
                         CreatedDate = DateTime.Now,
                         ModifiedDate = DateTime.Now,
-                        Role = vm.Role,
-                        Status = "Active",
-                        FirstName = vm.FirstName,
-                        LastName = vm.LastName,
-                        Gender = vm.Gender,
+                        Role = vm.Role.Trim(),
+                        Status = true,
+                        FirstName = vm.FirstName.Trim(),
+                        LastName = vm.LastName.Trim(),
+                        Gender = vm.Gender.Trim(),
                         Dob = vm.Dob,
-                        Email = vm.Email,
+                        Email = vm.Email.Trim(),
                         Password = vm.Password,
-                        PhoneNo = vm.PhoneNo,
+                        PhoneNo = vm.PhoneNo.Trim(),
                         City = vm.City,
                         Area = vm.Area,
                         Street = vm.Street,
-                        Cnic = vm.Cnic
+                        Cnic = vm.Cnic.Trim()
                     };
 
                     using (var tr = db.Database.BeginTransaction())
@@ -226,21 +247,32 @@ namespace FYPFinalKhanaGarKa.Controllers
                             {
                                 cu.ImgUrl = Utils.UploadImageR(env, "/Uploads/Customer/"+vm.Cnic, vm.Image);
                             }
+                            else
+                            {
+                                ModelState.AddModelError("", "Cannot upload your image");
+                                return View(vm);
+                            }
 
                             db.Customer.Add(cu);
                             //GreetingsEmail(cu.Email, cu.FirstName, cu.LastName);
                             db.SaveChanges();
 
                             tr.Commit();
+                            
+                            return RedirectToAction("Login", "Home");
                         }
-                        catch(Exception e)
+                        catch
                         {
                             tr.Rollback();
+                            
+                            ModelState.AddModelError("", "We are having some problem in registration.");
+                            return View();
                         }
                     }
                 }
             }
-            return View();
+            ModelState.AddModelError("", "We are having some problem in registration");
+            return View(vm);
         }
         
         [HttpGet]
@@ -355,7 +387,9 @@ namespace FYPFinalKhanaGarKa.Controllers
                         db.Chef.Update(c);
                         db.SaveChanges();
                         tr.Commit();
-                        }
+
+                        return RedirectToAction("Account", "Chef");
+                    }
                         catch
                         {
                             tr.Rollback();
@@ -409,7 +443,7 @@ namespace FYPFinalKhanaGarKa.Controllers
                     c.PhoneNo = vm.PhoneNo;
                     c.City = vm.City;
                     c.Area = vm.Area;
-                    c.Status = vm.Street;
+                    c.Street = vm.Street;
                     c.Status = vm.Status;
 
                     using (var tr = db.Database.BeginTransaction())
@@ -431,7 +465,7 @@ namespace FYPFinalKhanaGarKa.Controllers
                     }
                 }
             //}
-            return RedirectToAction("ChefAcc","Chef");
+            return RedirectToAction("ModifyDetails", "Home", vm);
         }
 
         [HttpGet]
@@ -443,7 +477,7 @@ namespace FYPFinalKhanaGarKa.Controllers
         [HttpPost]
         public IActionResult ForgotPassword(ForgotPasswordViewModel vm)
         {
-            if (string.Equals(vm.Role.Trim(), "chef", StringComparison.OrdinalIgnoreCase))
+            if (string.Equals(HttpContext.Session.GetString(SessionRole).Trim(), "chef", StringComparison.OrdinalIgnoreCase))
             {
                 if (string.Equals(vm.Choice.Trim(), "Phone", StringComparison.OrdinalIgnoreCase))
                 {
@@ -451,11 +485,13 @@ namespace FYPFinalKhanaGarKa.Controllers
                 }
                 else if(string.Equals(vm.Choice.Trim(), "Email", StringComparison.OrdinalIgnoreCase))
                 {
-
+                    string code = Utils.GetCode();
+                    HttpContext.Session.SetString(SessionCode, code);
+                    Utils.FPEmail(HttpContext.Session.GetString(SessionEmail).Trim(),code);
                 }
 
             }
-            else if (string.Equals(vm.Role.Trim(), "customer", StringComparison.OrdinalIgnoreCase))
+            else if (string.Equals(HttpContext.Session.GetString(SessionRole).Trim(), "customer", StringComparison.OrdinalIgnoreCase))
             {
                 if (string.Equals(vm.Choice.Trim(), "Phone", StringComparison.OrdinalIgnoreCase))
                 {
@@ -463,10 +499,12 @@ namespace FYPFinalKhanaGarKa.Controllers
                 }
                 else if (string.Equals(vm.Choice.Trim(), "Email", StringComparison.OrdinalIgnoreCase))
                 {
-
+                    string code = Utils.GetCode();
+                    HttpContext.Session.SetString(SessionCode, code);
+                    Utils.FPEmail(HttpContext.Session.GetString(SessionEmail).Trim(), code);
                 }
             }
-            else if (string.Equals(vm.Role.Trim(), "deliveryboy", StringComparison.OrdinalIgnoreCase))
+            else if (string.Equals(HttpContext.Session.GetString(SessionRole).Trim(), "deliveryboy", StringComparison.OrdinalIgnoreCase))
             {
                 if (string.Equals(vm.Choice.Trim(), "Phone", StringComparison.OrdinalIgnoreCase))
                 {
@@ -474,7 +512,9 @@ namespace FYPFinalKhanaGarKa.Controllers
                 }
                 else if (string.Equals(vm.Choice.Trim(), "Email", StringComparison.OrdinalIgnoreCase))
                 {
-
+                    string code = Utils.GetCode();
+                    HttpContext.Session.SetString(SessionCode, code);
+                    Utils.FPEmail(HttpContext.Session.GetString(SessionEmail).Trim(), code);
                 }
             }
             return View();
@@ -539,12 +579,11 @@ namespace FYPFinalKhanaGarKa.Controllers
 
         //Helper Methods
         
-        private void AddInfoToSession(string cnic, string role, int id, string imgurl, string name)
+        private void AddInfoToSession(string cnic, string role, int id, string imgurl, string email)
         {
             HttpContext.Session.SetString(SessionCNIC, cnic);
             HttpContext.Session.SetString(SessionRole, role);
-            HttpContext.Session.SetString(SessionImgUrl, imgurl);
-            HttpContext.Session.SetString(SessionName, name);
+            HttpContext.Session.SetString(SessionEmail, email);
             HttpContext.Session.SetInt32(SessionId, id);
         }
     }

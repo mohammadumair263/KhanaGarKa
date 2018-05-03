@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
 namespace FYPFinalKhanaGarKa.Models
 {
@@ -12,7 +11,7 @@ namespace FYPFinalKhanaGarKa.Models
         public int Price { get; set; }
         public string ImgUrl { get; set; }
         public int ChefId { get; set; }
-        public string Status { get; set; }
+        public bool Status { get; set; }
         public DateTime? CreatedDate { get; set; }
         public DateTime? ModifiedDate { get; set; }
         public string Feedback { get; set; }

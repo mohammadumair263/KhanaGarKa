@@ -21,7 +21,7 @@
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 zero-pad">
                     <div class="orderonline-search clearfix">
                         <div class="openclose-message">
-                            <p>A 24 by 7 Service!</p>
+                            <p>Enjoy my Menu? Please,Rate Me!<span style="margin-top:-25px;margin-left:300px" id="rateYo"></span></p>
                         </div>
                     </div>
                 </div>
@@ -58,7 +58,7 @@
                                                     @foreach (var menus in Model.Menus)
                                                     {
                                                         <div class="col-md-12">
-                                                            <div class="dish-content" data-name="@menus.DishName" data-price="@menus.Price">
+                                                            <div class="dish-content" data-name="@menus.DishName" data-price="@menus.Price" data-id="@menus.ChefId">
                                                                 <div class="row" style="transition: all 0.50s ease-in-out">
                                                                     <div class="col-md-3 dish-img">
                                                                         @if (menus.ImgUrl == null) { menus.ImgUrl = "/img/foodimg/menuitem.jpg"; }
@@ -107,7 +107,7 @@
                                                     @foreach (var offers in Model.Offers)
                                                     {
                                                         <div class="col-md-12">
-                                                            <div class="dish-content" data-name="@offers.OfferName" data-price="@offers.Price">
+                                                            <div class="dish-content" data-name="@offers.OfferName" data-price="@offers.Price" data-id="@offers.ChefId">
                                                                 <div class="row" style="transition: all 0.50s ease-in-out">
                                                                     <div class="col-md-3 dish-img">
                                                                         @if (offers.ImgUrl == null) { offers.ImgUrl = "/img/foodimg/menuitem.jpg"; }
@@ -153,10 +153,10 @@
                             <div class="ui-order-policy">
                                 <ul class="list-inline">
                                     <li>
-                                        <input class="custom-radio-big" type="radio" name="order-policy" data-value="delivery" id="delivery" checked> <label for="delivery">Delivery</label>
+                                        <input class="custom-radio-big" type="radio" name="order-policy" value="Delivery" id="delivery"> <label for="delivery">Delivery</label>
                                     </li>
                                     <li>
-                                        <input class="custom-radio-big" type="radio" name="order-policy" data-value="collection" id="collection"> <label for="collection">Collection</label>
+                                        <input class="custom-radio-big" type="radio" name="order-policy" value="Collection" id="collection" checked> <label for="collection">Collection</label>
                                     </li>
                                 </ul>
                             </div>
@@ -215,7 +215,7 @@
                                                     <p>Delivery fee : </p>
                                                 </div>
                                                 <div class="col-md-4 text-right">
-                                                    &pound;10
+                                                    Rs 20
                                                 </div>
                                             </div>
                                         </li>
@@ -225,7 +225,7 @@
                                                     <p>Delivery minimum : </p>
                                                 </div>
                                                 <div class="col-md-4 text-right">
-                                                    &pound;200
+                                                    Rs 200
                                                 </div>
                                             </div>
                                         </li>
@@ -271,11 +271,35 @@
     <script src="~/lib/jquery-sticky/jquery.sticky.js"></script>
     <script src="~/js/cart.js"></script>
     <script>
+        @*$("#rateYo").rateYo({
+            starWidth: "20px",
+            fullStar: true,
+            onSet: function (rating, rateYoInstance) {
+                console.log(@Model.Menus.FirstOrDefault().ChefId);
+                
+                var JsonData = {
+                    Id: @Model.Menus.FirstOrDefault().ChefId,
+                    CRating: rating
+                };
+                console.log(JsonData);
+                $.ajax({
+                    url: '@Url.Action("RatingManag", "Order")',
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify(JsonData),
+                    success: function (data) {
+                }
+                });
+                
+            }
+        });*@
         $('#pro').click(function () {
             var prices = Detail.get_prices();
             var quantities = Detail.get_quantities();
             var type = Detail.get_orderType();
             var names = Detail.get_names();
+            //var cid = Detail.get_cid();
+            var cid = @Model.Menus.FirstOrDefault().ChefId;
             //loop to update values in prices array
             for (var i = 0; i < prices.length; i++) {
                 prices[i] = prices[i] * quantities[i];
@@ -295,9 +319,9 @@
                 Subtotal: Detail.get_subtotal(),
                 Total: Detail.get_total(),
                 OrderType: type,
-                Items: CartItems
+                Items: CartItems,
+                Cid: cid
             };
-            console.log(sendJsonData);
             $.ajax({
                 url: '@Url.Action("PostJson", "Order")',
                 type: "POST",

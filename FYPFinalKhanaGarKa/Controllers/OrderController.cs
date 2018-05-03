@@ -15,8 +15,6 @@ namespace FYPFinalKhanaGarKa.Controllers
         private const string SessionCNIC = "_UserC";
         private const string SessionRole = "_UserR";
         private const string SessionId = "_UserI";
-        private const string SessionImgUrl = "_UserIU";
-        private const string SessionName = "_UserN";
         private KhanaGarKaFinalContext db = null;
 
         public OrderController(KhanaGarKaFinalContext db)
@@ -31,8 +29,8 @@ namespace FYPFinalKhanaGarKa.Controllers
             {
                 if (string.Equals(HttpContext.Session.GetString(SessionRole).Trim(), "customer", StringComparison.OrdinalIgnoreCase))
                 {
-                List<Menu> menus = db.Menu.Where<Menu>(i => i.ChefId == id).ToList<Menu>();
-                    List<Offer> offers = db.Offer.Where<Offer>(i => i.ChefId == id).ToList<Offer>();
+                    List<Menu> menus = db.Menu.Where(i => i.ChefId == id).ToList();
+                    List<Offer> offers = db.Offer.Where(i => i.ChefId == id).ToList();
                     MenuOfferViewModel ViewModel = new MenuOfferViewModel
                     {
                         Menus = menus,
@@ -56,9 +54,10 @@ namespace FYPFinalKhanaGarKa.Controllers
             if (HttpContext.Session.GetString(SessionCNIC) != null &&
             HttpContext.Session.GetString(SessionRole) != null)
             {
-                List<OrderLine> Dishs = db.OrderLine.Where<OrderLine>(i => i.OrderId == id).ToList<OrderLine>();
-                Orders Order = db.Orders.Where<Orders>(i => i.OrderId == id).FirstOrDefault();
-                Chef c = db.Chef.Where<Chef>(i => i.ChefId == Order.ChefId).FirstOrDefault();
+                List<OrderLine> Dishs = db.OrderLine.Where(i => i.OrderId == id).ToList();
+                Orders Order = db.Orders.Where(i => i.OrderId == id).FirstOrDefault();
+                Chef c = db.Chef.Where(i => i.ChefId == Order.ChefId).FirstOrDefault();
+                
 
                 OrderDetailViewModel ViewModel = new OrderDetailViewModel
                 {
@@ -76,7 +75,8 @@ namespace FYPFinalKhanaGarKa.Controllers
             }
         }
 
-        public IActionResult Success()
+        [HttpPost]
+        public IActionResult Success(ItemGroup itemGroup)
         {
             if (HttpContext.Session.GetString(SessionCNIC) != null &&
             HttpContext.Session.GetString(SessionRole) != null)
@@ -84,7 +84,6 @@ namespace FYPFinalKhanaGarKa.Controllers
                 ItemGroup i = HttpContext.Session.Get<ItemGroup>("CartData");
                 if (i != null)
                 {
-                    //ICollection<OrderLine> ol = null;
                     List<OrderLine> ol = new List<OrderLine>();
                     foreach (var items in i.Items)
                     {
@@ -98,12 +97,15 @@ namespace FYPFinalKhanaGarKa.Controllers
                     Orders o = new Orders
                     {
                         OrderDate = DateTime.Now,
-                        OrderStatus = "Pending",
-                        OrderType = "Collection",
-                        ChefId = 2,
-                        DeliveryBoyId = 1,
-                        CustomerId = 1,
-                        OrderLine = ol
+                        OrderStatus = false,
+                        OrderType = i.OrderType,
+                        ChefId = i.Cid,
+                        CustomerId = (int)HttpContext.Session.GetInt32(SessionId),
+                        OrderLine = ol,
+                        SpReq = itemGroup.SpReq,
+                        City = itemGroup.City,
+                        Area = itemGroup.Area,
+                        Street = itemGroup.Street
                     };
                     
                     using (var tr = db.Database.BeginTransaction())
@@ -135,29 +137,17 @@ namespace FYPFinalKhanaGarKa.Controllers
             HttpContext.Session.GetString(SessionRole) != null)
             {
 
-                if (string.Equals(HttpContext.Session.GetString(SessionRole), "chef", StringComparison.OrdinalIgnoreCase))
+                if (string.Equals(HttpContext.Session.GetString(SessionRole).Trim(), "chef", StringComparison.OrdinalIgnoreCase))
                 {
-                    return View(new OrderHistoryViewModel
-                    {
-                        Orders = db.Orders.Where<Orders>(i => i.ChefId == HttpContext.Session.GetInt32(SessionId)).ToList<Orders>(),
-                        Role = "chef"
-                    });
+                    return View(db.Orders.Where(i => i.ChefId == HttpContext.Session.GetInt32(SessionId)).ToList());
                 }
-                else if (string.Equals(HttpContext.Session.GetString(SessionRole), "customer", StringComparison.OrdinalIgnoreCase))
+                else if (string.Equals(HttpContext.Session.GetString(SessionRole).Trim(), "customer", StringComparison.OrdinalIgnoreCase))
                 {
-                    return View(new OrderHistoryViewModel
-                    {
-                        Orders = db.Orders.Where<Orders>(i => i.CustomerId == HttpContext.Session.GetInt32(SessionId)).ToList<Orders>(),
-                        Role = "customer"
-                    });
+                    return View(db.Orders.Where(i => i.CustomerId == HttpContext.Session.GetInt32(SessionId)).ToList());
                 }
-                else if (string.Equals(HttpContext.Session.GetString(SessionRole), "DBoy", StringComparison.OrdinalIgnoreCase))
+                else if (string.Equals(HttpContext.Session.GetString(SessionRole).Trim(), "DBoy", StringComparison.OrdinalIgnoreCase))
                 {
-                    return View(new OrderHistoryViewModel
-                    {
-                        Orders = db.Orders.Where<Orders>(i => i.DeliveryBoyId == HttpContext.Session.GetInt32(SessionId)).ToList<Orders>(),
-                        Role = "DBoy"
-                    });
+                    return View(db.Orders.Where(i => i.DeliveryBoyId == HttpContext.Session.GetInt32(SessionId)).ToList());
                 }
 
                 return View();
@@ -195,11 +185,32 @@ namespace FYPFinalKhanaGarKa.Controllers
         }
 
         [HttpPost]
+        public IActionResult RatingManag([FromBody]RatingViewModel data)
+        {
+            var chef = db.Chef.Where(i => i.ChefId == data.Id).FirstOrDefault();
+            chef.Rating = (chef.Rating + data.CRating) / 2;
+            using(var tr = db.Database.BeginTransaction())
+            {
+                try
+                {
+                    db.Chef.Add(chef);
+                    db.SaveChanges();
+
+                    tr.Commit();
+                }
+                catch
+                {
+                    tr.Rollback();
+                }
+            }
+            return null;
+        }
+
+        [HttpPost]
         public JsonResult PostJson([FromBody]ItemGroup data)
         {
             if (data != null)
             {
-                //ds = data;
                 HttpContext.Session.Set<ItemGroup>("CartData", data);
             }
 

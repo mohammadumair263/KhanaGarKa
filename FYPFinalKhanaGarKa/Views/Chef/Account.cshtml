@@ -46,7 +46,7 @@
                                 <div class="orderonline-menu row" id="Menu">
                                     <!-- start category inner content all -->
                                     <div class="col-md-12 col-sm-12">
-                                        <a asp-controller="Chef" asp-action="ChefMenu" class="btn btn-success btn-xs pull-right add-dish-offer-btn">Add Dish</a>
+                                        <a asp-controller="Chef" asp-action="Menu" class="btn btn-success btn-xs pull-right add-dish-offer-btn">Add Dish</a>
                                         <span class="clearfix"></span>
                                         <!-- start category single content -->
                                         <div class="category-dish-content">
@@ -65,14 +65,16 @@
                                                                         <img class="img img-responsive img-thumbnail" alt="Image" src="@menus.ImgUrl" />
                                                                     </div>
                                                                     <div class="col-md-6">
-                                                                        <div class="dish-name">@menus.DishName &nbsp; &nbsp; <span class="label label-warning">@menus.Status</span></div>
+                                                                        <div class="dish-name">@menus.DishName &nbsp; &nbsp; <span class="label label-warning">
+                                                                            @if(menus.Status) { Html.Raw("Avalible"); } else { Html.Raw("Unavalible"); }
+                                                                                </span></div>
                                                                         <p>@menus.Description</p>
                                                                     </div>
                                                                     <div class="col-md-3">
                                                                         <div class="dish-right-content">
                                                                             <div class="dish-price">@menus.Price pkr</div>
                                                                             <div class="text-right pull-right btn-remove">
-                                                                                <a asp-controller="Chef" asp-action="EditChefMenu" asp-route-id="@menus.MenuId" class="btn btn-danger btn-xs">Edit</a>
+                                                                                <a asp-controller="Chef" asp-action="EditMenu" asp-route-id="@menus.MenuId" class="btn btn-danger btn-xs">Edit</a>
                                                                             </div>
                                                                             <div class="clearfix"></div>
                                                                         </div>
@@ -96,7 +98,7 @@
                                 <div class="orderonline-offer row" id="Offer">
                                     <!-- start category inner content all -->
                                     <div class="col-md-12 col-sm-12">
-                                        <a asp-controller="Chef" asp-action="ChefOffer" class="btn btn-success btn-xs pull-right add-dish-offer-btn">Add Offer</a>
+                                        <a asp-controller="Chef" asp-action="Offer" class="btn btn-success btn-xs pull-right add-dish-offer-btn">Add Offer</a>
 
                                         <span class="clearfix"></span>
                                         <!-- start category single content -->
@@ -122,7 +124,7 @@
                                                                         <div class="dish-right-content">
                                                                             <div class="dish-price">@offers.Price pkr</div>
                                                                             <div class="text-right btn-remove pull-right">
-                                                                                <a asp-controller="Chef" asp-action="EditChefOffer" asp-route-id="@offers.OfferId" class="btn btn-danger btn-xs">Edit</a>
+                                                                                <a asp-controller="Chef" asp-action="EditOffer" asp-route-id="@offers.OfferId" class="btn btn-danger btn-xs">Edit</a>
                                                                             </div>
                                                                             <div class="clearfix"></div>
                                                                         </div>

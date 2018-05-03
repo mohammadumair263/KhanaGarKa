@@ -5,8 +5,9 @@ using System.Threading.Tasks;
 
 namespace FYPFinalKhanaGarKa.Models.ViewModels
 {
-    public class ForgotPasswordViewModel
+    public class RatingViewModel
     {
-        public string Choice { get; set; }
+        public int Id { get; set; }
+        public int? CRating { get; set; }
     }
 }

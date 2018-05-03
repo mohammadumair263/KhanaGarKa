@@ -13,12 +13,12 @@ namespace FYPFinalKhanaGarKa.Models.ViewModels
 
         [Required(ErrorMessage = "Your FirstName is Required")]
         [MaxLength(20, ErrorMessage = "Maximum length of your FirstName should not be more than 20 charaters")]
-        [RegularExpression("[a-zA-z]+", ErrorMessage = "Your FirstName can only contain letters")]
+        [RegularExpression("[a-zA-z]+", ErrorMessage = "Your FirstName can only contain letters without space")]
         public string FirstName { get; set; }
 
         [Required(ErrorMessage = "Your LastName is Required")]
         [MaxLength(20, ErrorMessage = "Maximum length of your LastName should not be more than 20 charaters")]
-        [RegularExpression("[a-zA-z]+", ErrorMessage = "Your LastName can only contain letters")]
+        [RegularExpression("[a-zA-z]+", ErrorMessage = "Your LastName can only contain letters without space.")]
         public string LastName { get; set; }
 
         public string Gender { get; set; }
@@ -43,13 +43,15 @@ namespace FYPFinalKhanaGarKa.Models.ViewModels
 
         [Required(ErrorMessage = "Password is Required")]
         [DataType(DataType.Password)]
+        [RegularExpression("^((?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])|(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[^a-zA-Z0-9])|(?=.*?[A-Z])(?=.*?[0-9])(?=.*?[^a-zA-Z0-9])|(?=.*?[a-z])(?=.*?[0-9])(?=.*?[^a-zA-Z0-9])).{8,}$", ErrorMessage = "Passwords must be at least 8 characters and contain at 3 of 4 of the following: upper case (A-Z), lower case (a-z), number (0-9) and special character (e.g. !@#$%^&*)")]
         public string Password { get; set; }
         public string ImgUrl { get; set; }
         public string City { get; set; }
         public string Area { get; set; }
         public string Street { get; set; }
         public string Role { get; set; }
-        public string Status { get; set; }
+        public string About { get; set; }
+        public bool Status { get; set; }
         public IFormFile Image { get; set; }
     }
 }

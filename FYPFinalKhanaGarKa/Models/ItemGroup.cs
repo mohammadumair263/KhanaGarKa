@@ -13,6 +13,16 @@ namespace FYPFinalKhanaGarKa.Models
 
         public string OrderType { get; set; }
 
-        public IList<CartItems> Items { get; set; }
+        public string Area { get; set; }
+
+        public string Street { get; set; }
+
+        public string City { get; set; }
+
+        public string SpReq { get; set; }
+
+        public int Cid { get; set; }
+
+        public ICollection<CartItems> Items { get; set; }
     }
 }

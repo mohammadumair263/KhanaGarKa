@@ -1,4 +1,4 @@
-﻿@model FYPFinalKhanaGarKa.Models.ViewModels.OrderHistoryViewModel
+﻿@model IEnumerable<FYPFinalKhanaGarKa.Models.Orders>
 @{
     ViewData["Title"] = "History";
 }
@@ -20,7 +20,7 @@
                     <div class="cfoaccount">
                         <ul class="list-unstyled">
                             <li>
-                                <a href="Home/ModifyDetails"><i class="fa fa-home" aria-hidden="true"></i>My Account</a>
+                                <a href="/Home/ModifyDetails"><i class="fa fa-home" aria-hidden="true"></i>My Account</a>
                             </li>
                             <li><a href="#"><i class="fa fa-history" aria-hidden="true"></i> Order History</a></li>
                         </ul>
@@ -41,16 +41,16 @@
                                         <th class="pay-th">Payment type</th>
                                         <th class="file-th">View</th>
                                     </tr>
-                                    @if (Model.Orders != null && Model.Orders.Count() > 0)
+                                    @if (Model != null && Model.Count() > 0)
                                     {
-                                        @foreach (var orders in Model.Orders)
+                                        @foreach (var orders in Model)
                                         {
                                             <tr class="orderdata-title">
                                                 <td>@orders.OrderId</td>
                                                 <td>@orders.OrderDate</td>
-                                                <td>&pound;189</td>
+                                                <td>Rs:189</td>
                                                 <td class="pay">Cash</td>
-                                                <td class="file-view"><a href="/Order/Details/@Model.Role/@orders.OrderId"><i class="fa fa-file"></i></a></td>
+                                                <td class="file-view"><a href="/Order/Details/@orders.OrderId"><i class="fa fa-file"></i></a></td>
                                             </tr>
                                         }
                                     }

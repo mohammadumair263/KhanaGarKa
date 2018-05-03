@@ -1,7 +1,6 @@
 ﻿@model FYPFinalKhanaGarKa.Models.ViewModels.RegisterViewModel
 @{
     ViewData["Title"] = "Modify Details";
-    string url = "/Order/History/" + Model.Role + "/" + Model.Id;
 }
 
 @section StyleLink{
@@ -18,7 +17,7 @@
                         <div class="cfoaccount">
                             <ul class="list-unstyled">
                                 <li><a href="#"><i class="fa fa-home" aria-hidden="true"></i> My Account</a></li>
-                                <li><a href="@url.Replace(" ", string.Empty)"><i class="fa fa-history" aria-hidden="true"></i> Order History</a></li>
+                                <li><a href="/Order/History"><i class="fa fa-history" aria-hidden="true"></i> Order History</a></li>
                             </ul>
                         </div>
                         <!-- END OF Myaccount menu  -->
@@ -156,8 +155,8 @@
                                                     </div>
                                                     <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                                                         <select class="form-control" asp-for="Status">
-                                                            <option value="Active" selected>Active</option>
-                                                            <option value="Inactive">Inactive</option>
+                                                            <option value = true selected>Active</option>
+                                                            <option value = false >Inactive</option>
                                                         </select>
                                                     </div>
                                                 </div>

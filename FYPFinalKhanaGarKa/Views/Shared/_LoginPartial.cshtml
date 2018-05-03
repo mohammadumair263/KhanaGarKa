@@ -6,18 +6,29 @@
                HttpContextAccessor.HttpContext.Session.GetString("_UserR") != null)
 {
     <div class="pull-right user-login">
-            <a class="btn btn-sm btn-primary" href="/Home/ModifyDetails">Edit</a> &nbsp;
+            <a class="btn btn-sm btn-primary" href="/Home/ModifyDetails">Account</a> &nbsp;
             <a class="btn btn-sm btn-primary" asp-controller="Home" asp-action="Logout">Logout</a>
         </div>
-    @*<div class="dropdown pull-right" style="margin-top:10px">
-        <img class="img img-circle" src="~/img/avatar.png" width="50px" height="50px" />
-        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Jhon Smith<span class="caret"></span></a>
-        <ul class="dropdown-menu">
-            <li><a href="#">Order History</a></li>
-            <li><a href="#">My Account</a></li>
-            <li><a href="#">Logout</a></li>
-        </ul>
-    </div>*@
+@*<div class="dropdown pull-right" style="margin-top:10px">
+    @if (HttpContextAccessor.HttpContext.Session.GetString("_UserIU") != null &&
+    HttpContextAccessor.HttpContext.Session.GetString("_UserN") != null)
+    {
+        <img class="img img-circle img-thumbnail" src="@HttpContextAccessor.HttpContext.Session.GetString("_UserIU").Trim()" width="50px" height="50px" />
+    }
+    else
+    {
+        <img class="img img-circle img-thumbnail" src="~/img/avatar.png" width="50px" height="50px" />
+
+    }
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown">@HttpContextAccessor.HttpContext.Session.GetString("_UserN") <span class="caret"></span></a>
+     &nbsp;<a href="/Home/ModifyDetails">Edit</a> &nbsp;
+    <a asp-controller="Home" asp-action="Logout">Logout</a>
+    <ul class="dropdown-menu">
+        <li><a href="#">Order History</a></li>
+        <li><a href="#">My Account</a></li>
+        <li><a href="#">Logout</a></li>
+    </ul>
+</div>*@
 }
 else
 {

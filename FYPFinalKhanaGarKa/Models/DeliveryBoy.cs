@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
 namespace FYPFinalKhanaGarKa.Models
 {
@@ -24,7 +23,7 @@ namespace FYPFinalKhanaGarKa.Models
         public string Area { get; set; }
         public string Street { get; set; }
         public string Role { get; set; }
-        public string Status { get; set; }
+        public bool Status { get; set; }
         public DateTime? CreatedDate { get; set; }
         public DateTime? ModifiedDate { get; set; }
         public string ImgUrl { get; set; }

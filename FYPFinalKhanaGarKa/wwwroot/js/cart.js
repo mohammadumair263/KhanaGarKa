@@ -25,6 +25,7 @@
     $(".addItemBtn").off().on('click', function () {
         var cart_item_name = $(this).closest(".dish-content").data("name");
         var cart_item_price = $(this).closest(".dish-content").data("price");
+        var cart_item_cid = $(this).closest(".dish-content").data("id");
 
         $("#cart").find("#cart-empty-view").remove(); //removing empty cart view
         $("#pro").prop('disabled', false); // abling checkout button.
@@ -121,13 +122,15 @@
         });
 
         ID++;
-
         
     });
 
     Detail = {
+        get_cid: function () {
+            return cart_item_cid;
+        },
         get_orderType: function () {
-            return $('input[name=name_of_your_radiobutton]:checked').data("value");
+            return $('input[name=order-policy]:checked').val();
         },
         get_subtotal: function () {
             return subtotal_price;
@@ -170,4 +173,5 @@
         }
 
     };
+
 });

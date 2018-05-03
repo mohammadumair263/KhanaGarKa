@@ -24,7 +24,7 @@ namespace FYPFinalKhanaGarKa.Models.ViewModels
         [RegularExpression("[0-9]+", ErrorMessage = "Price can only contain numaric value")]
         public int Price { get; set; }
         public string ImgUrl { get; set; }
-        public string Status { get; set; }
+        public bool Status { get; set; }
         public IFormFile Image { get; set; }
     }
 }

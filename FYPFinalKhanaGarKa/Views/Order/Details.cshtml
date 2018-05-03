@@ -1,24 +1,6 @@
 ﻿@model FYPFinalKhanaGarKa.Models.ViewModels.OrderDetailViewModel
 @{
     ViewData["Title"] = "Details";
-    string url = "#" , url2 = "#";
-
-    if (Model.Role.Equals("chef"))
-    {
-        url = Url.Action("ModifyDetails", "Home", new { role = "chef", id = Model.Order.ChefId });
-        url2 = Url.Action("History", "Order", new { role = "chef", id = Model.Order.ChefId });
-
-    }
-    else if (Model.Role.Equals("customer"))
-    {
-        url = Url.Action("ModifyDetails", "Home", new { role = "customer", id = Model.Order.CustomerId });
-        url2 = Url.Action("History", "Order", new { role = "customer", id = Model.Order.CustomerId });
-    }
-    else if (Model.Role.Equals("deliveryboy"))
-    {
-        url = Url.Action("ModifyDetails", "Home", new { role = "deliveryboy", id = Model.Order.DeliveryBoyId });
-        url2 = Url.Action("History", "Order", new { role = "deliveryboy", id = Model.Order.DeliveryBoyId });
-    }
 }
 
 @section StyleLink{
@@ -36,8 +18,8 @@
                 <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 account-cfoinfo clearfix">
                     <div class="cfoaccount">
                         <ul class="list-unstyled">
-                            <li><a href="@url"><i class="fa fa-home" aria-hidden="true"></i> My Account</a></li>
-                            <li><a href="@url2"><i class="fa fa-history" aria-hidden="true"></i> Order History</a></li>
+                            <li><a href="/Home/ModifyDetails/"><i class="fa fa-home" aria-hidden="true"></i> My Account</a></li>
+                            <li><a href="/Order/History/"><i class="fa fa-history" aria-hidden="true"></i> Order History</a></li>
                         </ul>
                     </div>
                     <!-- END OF Myaccount menu  -->

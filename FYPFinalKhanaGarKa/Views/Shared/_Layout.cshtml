@@ -20,6 +20,8 @@
         @RenderSection("StyleLink", required: false)
         <!-- Main css -->
         <link href="~/css/main.css" rel="stylesheet" type="text/css">
+        <!-- rateyo css -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.css">
         <!--datatable css cdn-->
         <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" />
 
@@ -58,10 +60,6 @@
             </div>
             <!-- END Logo -->
             <!-- User account -->
-            @*<div class="pull-right user-login">
-            <a class="btn btn-sm btn-primary" asp-controller="Home" asp-action="Login">Login</a> or &nbsp;
-            <a class="user-register-btn btn btn-sm btn-primary" asp-controller="Customer" asp-action="Register">Register</a>
-        </div>*@
             @Html.Partial("_LoginPartial")
             <!-- END User account -->
             <!-- Navigation menu -->
@@ -196,6 +194,8 @@
         <script src="~/lib/wow/dist/wow.min.js"></script>
         <!-- Custom Javascript -->
         <script src="~/js/custom.js"></script>
+        <!--rateyo js-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.js"></script>
         <!-- others -->
         <script src="~/lib/jquery.countdown/dist/jquery.countdown.min.js"></script>
         @RenderSection("ScriptsSrc", required: false)

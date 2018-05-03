@@ -12,6 +12,10 @@
     "jquery.easing": "v1.3.1",
     "jquery-sticky": "v1.0",
     "jquery.countdown": "2.2.0",
-    "jquery-ui": "jquery.ui#1.12.1"
+    "jquery-ui": "jquery.ui#1.12.1",
+    "rateYo": "2.3.2"
+  },
+  "resolutions": {
+    "jquery": "3.3.1"
   }
 }

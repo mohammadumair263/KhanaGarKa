@@ -28,27 +28,29 @@
                                 <header>
                                     @if (chef.ImgUrl == null) { chef.ImgUrl = "/img/avatar.png"; }
                                     else { chef.ImgUrl = chef.ImgUrl; }
-                                    <a href="#"><img src="@chef.ImgUrl.Replace(" ",string.Empty)" alt=""></a>
+                                    <a href="#"><img src="@chef.ImgUrl.Replace(" ", string.Empty)" alt=""></a>
                                     <div class="hgroup">
-                                        <h4><a href="#">@chef.FirstName @chef.LastName</a></h4>
-                                        <h5><span class="label label-warning">Popular</span></h5>
+                                        <h4><a href="#">@chef.FirstName @chef.LastName</a> &nbsp; &nbsp; <span class="label label-warning">Popular</span></h4>
                                     </div>
                                     <div class="header-meta">
                                         <span class="location">@chef.City @chef.Area @chef.Street</span>
                                     </div>
                                 </header>
                                 <footer>
-                                    <p class="status"><strong>Min:</strong> £15</p>
+                                    <p class="status"><strong>Min:</strong> Rs 150</p>
                                     <p class="status"><strong>Delivery:</strong> 60 min</p>
                                     <p class="status">
                                         <span>
+                                            @for (int i = 0; i < chef.Rating; i++)
+                                            {
                                             <span style="color: #ED1C3B;"><i class="fa fa-star"></i></span>
-                                            <span style="color: #ED1C3B;"><i class="fa fa-star"></i></span>
-                                            <span style="color: #ED1C3B;"><i class="fa fa-star"></i></span>
+                                            }
+                                            @for (int i = 0; i < 5 - chef.Rating; i++)
+                                            {
                                             <span style="color: #CCCCCC;"><i class="fa fa-star"></i></span>
-                                            <span style="color: #CCCCCC;"><i class="fa fa-star"></i></span>
+                                            }
                                             <span class="review">
-                                                (<span>135</span>)
+                                                (<span>35</span>)
                                             </span>
                                         </span>
                                     </p>

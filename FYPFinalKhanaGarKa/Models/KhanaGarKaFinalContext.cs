@@ -16,7 +16,7 @@ namespace FYPFinalKhanaGarKa.Models
         public virtual DbSet<OrderLine> OrderLine { get; set; }
         public virtual DbSet<Orders> Orders { get; set; }
 
-        public KhanaGarKaFinalContext(DbContextOptions<KhanaGarKaFinalContext> options) : base(options) 
+        public KhanaGarKaFinalContext(DbContextOptions<KhanaGarKaFinalContext> options):base(options)
         {
 
         }
@@ -120,10 +120,6 @@ namespace FYPFinalKhanaGarKa.Models
                     .IsRequired()
                     .HasColumnType("nchar(10)");
 
-                entity.Property(e => e.Status)
-                    .IsRequired()
-                    .HasMaxLength(10);
-
                 entity.Property(e => e.Street).HasMaxLength(50);
             });
 
@@ -185,10 +181,6 @@ namespace FYPFinalKhanaGarKa.Models
                 entity.Property(e => e.Role)
                     .IsRequired()
                     .HasColumnType("nchar(10)");
-
-                entity.Property(e => e.Status)
-                    .IsRequired()
-                    .HasMaxLength(10);
 
                 entity.Property(e => e.Street).HasMaxLength(50);
             });
@@ -252,10 +244,6 @@ namespace FYPFinalKhanaGarKa.Models
                     .IsRequired()
                     .HasColumnType("nchar(10)");
 
-                entity.Property(e => e.Status)
-                    .IsRequired()
-                    .HasMaxLength(10);
-
                 entity.Property(e => e.Street).HasMaxLength(50);
             });
 
@@ -276,10 +264,6 @@ namespace FYPFinalKhanaGarKa.Models
                 entity.Property(e => e.ImgUrl).HasMaxLength(200);
 
                 entity.Property(e => e.ModifiedDate).HasColumnType("datetime2(6)");
-
-                entity.Property(e => e.Status)
-                    .IsRequired()
-                    .HasColumnType("nchar(10)");
 
                 entity.HasOne(d => d.Chef)
                     .WithMany(p => p.Menu)
@@ -319,10 +303,6 @@ namespace FYPFinalKhanaGarKa.Models
 
                 entity.Property(e => e.StartDate).HasColumnType("date");
 
-                entity.Property(e => e.Status)
-                    .IsRequired()
-                    .HasColumnType("nchar(10)");
-
                 entity.HasOne(d => d.Chef)
                     .WithMany(p => p.Offer)
                     .HasForeignKey(d => d.ChefId)
@@ -353,7 +333,15 @@ namespace FYPFinalKhanaGarKa.Models
 
                 entity.Property(e => e.OrderId).HasColumnName("OrderID");
 
+                entity.Property(e => e.Area)
+                    .IsRequired()
+                    .HasMaxLength(30);
+
                 entity.Property(e => e.ChefId).HasColumnName("ChefID");
+
+                entity.Property(e => e.City)
+                    .IsRequired()
+                    .HasMaxLength(20);
 
                 entity.Property(e => e.CustomerId).HasColumnName("CustomerID");
 
@@ -363,13 +351,11 @@ namespace FYPFinalKhanaGarKa.Models
 
                 entity.Property(e => e.OrderDate).HasColumnType("datetime2(6)");
 
-                entity.Property(e => e.OrderStatus)
-                    .IsRequired()
-                    .HasColumnType("nchar(10)");
-
                 entity.Property(e => e.OrderType)
                     .IsRequired()
                     .HasMaxLength(15);
+
+                entity.Property(e => e.Street).HasMaxLength(100);
 
                 entity.HasOne(d => d.Chef)
                     .WithMany(p => p.Orders)
@@ -386,7 +372,6 @@ namespace FYPFinalKhanaGarKa.Models
                 entity.HasOne(d => d.DeliveryBoy)
                     .WithMany(p => p.Orders)
                     .HasForeignKey(d => d.DeliveryBoyId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK__Orders__Delivery__3E52440B");
             });
         }
