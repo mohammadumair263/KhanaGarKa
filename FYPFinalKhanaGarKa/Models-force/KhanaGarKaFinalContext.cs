@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace FYPFinalKhanaGarKa.Models
+namespace FYPFinalKhanaGarKa.Models_force
 {
     public partial class KhanaGarKaFinalContext : DbContext
     {
@@ -64,8 +64,6 @@ namespace FYPFinalKhanaGarKa.Models
                     .IsUnique();
 
                 entity.Property(e => e.ChefId).HasColumnName("ChefID");
-
-                entity.Property(e => e.About).HasMaxLength(300);
 
                 entity.Property(e => e.Area)
                     .IsRequired()

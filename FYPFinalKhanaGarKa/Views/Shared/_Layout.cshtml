@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="TheFoody is a food ordering platform which brings restaurants and food lovers together. Food ordering online is easier than any other platforms.">
+    <meta name="description" content="KhanaGarKa is a food ordering platform which brings Chefs and food lovers together. Food ordering online is easier than any other platforms.">
     <meta name="keywords" content="food, order online, restaurant, reservation, book a table, foodies, cafe, recipes, menu, dishes, chefs and cooking experts ">
     <meta name="author" content="iglyphic">
     <title>@ViewData["Title"] - KhanaGarKa</title>
@@ -17,7 +17,7 @@
         <!-- icon CSS -->
         <link href="~/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet">
         <!--others-->
-        @RenderSection("StyleLink", required: false)
+        @RenderSection("Styles", required: false)
         <!-- Main css -->
         <link href="~/css/main.css" rel="stylesheet" type="text/css">
         <!-- rateyo css -->
@@ -68,7 +68,7 @@
                     <a asp-controller="Home" asp-action="Index">Home</a>
                 </li>
                 <li>
-                    <a asp-controller="Order" asp-action="Index">Order</a>
+                    <a asp-controller="Home" asp-action="Index">Order</a>
                 </li>
                 <li>
                     <a asp-controller="Home" asp-action="About">About Us</a>
@@ -189,16 +189,15 @@
         <!-- Bootstrap Javascript -->
         <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
         <!-- Mynav Bar Script -->
-        <script src="~/js/app.min.js"></script>
-        <script src="~/lib/smoothscroll/dist/smoothscroll.min.js"></script>
+        @*<script src="~/js/app.min.js"></script>*@
+        @*<script src="~/lib/smoothscroll/dist/smoothscroll.min.js"></script>*@
         <script src="~/lib/wow/dist/wow.min.js"></script>
         <!-- Custom Javascript -->
         <script src="~/js/custom.js"></script>
         <!--rateyo js-->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.js"></script>
         <!-- others -->
-        <script src="~/lib/jquery.countdown/dist/jquery.countdown.min.js"></script>
-        @RenderSection("ScriptsSrc", required: false)
+        @RenderSection("Scripts", required: false)
 
     </environment>
     <environment exclude="Development">
@@ -216,7 +215,5 @@
         </script>
         <script src="~/js/site.min.js" asp-append-version="true"></script>
     </environment>
-
-    @RenderSection("Scripts", required: false)
 </body>
 </html>

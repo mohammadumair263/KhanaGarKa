@@ -17,10 +17,7 @@ namespace FYPFinalKhanaGarKa.Controllers
     
     public class HomeController : Controller
     {
-        private const string SessionCNIC = "_UserC";
-        private const string SessionRole = "_UserR";
-        private const string SessionId = "_UserI";
-        private const string SessionEmail = "_UserE";
+        private const string SessionUser = "_User";
         private const string SessionCode = "_FPCode";
         private KhanaGarKaFinalContext db;
         private IHostingEnvironment env = null;
@@ -40,7 +37,14 @@ namespace FYPFinalKhanaGarKa.Controllers
         [HttpGet]
         public IActionResult Login()
         {
-            return View();
+            if (HttpContext.Session.Get<SessionData>(SessionUser) == null)
+            {
+                return View();
+            }
+            else
+            {
+                return NotFound();
+            }
         }
 
         [HttpPost]
@@ -53,26 +57,43 @@ namespace FYPFinalKhanaGarKa.Controllers
                     Chef c = db.Chef.Where(i => i.Email == vm.Email && i.Password == vm.Password).FirstOrDefault();
                     if(c != null)
                     {
-                        AddInfoToSession(c.Cnic, c.Role, c.ChefId, c.ImgUrl, c.FirstName + " " + c.LastName);
+                        HttpContext.Session.Set<SessionData>(SessionUser, new SessionData {
+                            Id = c.ChefId,
+                            Name = c.FirstName+" "+c.LastName,
+                            CNIC = c.Cnic,
+                            PhNo = c.PhoneNo,
+                            Email = c.Email,
+                            ImgUrl = c.ImgUrl,
+                            Role = c.Role
+                        });
                         return Redirect("/Chef/Account");
                     }
                     else
                     {
-                        ModelState.AddModelError("", "Incorrect Email or Password");
+                        ModelState.AddModelError("", "Incorrect Email or Password.Do you selected your role?");
                     }
 
                 }
                 else if (string.Equals(vm.Role, "customer", StringComparison.OrdinalIgnoreCase))
                 {
-                    Customer c = db.Customer.Where(i => i.Email == vm.Email && i.Password == vm.Password).FirstOrDefault();
-                    if (c != null)
+                    Customer cu = db.Customer.Where(i => i.Email == vm.Email && i.Password == vm.Password).FirstOrDefault();
+                    if (cu != null)
                     {
-                        AddInfoToSession(c.Cnic, c.Role, c.CustomerId, c.ImgUrl, c.Email);
+                        HttpContext.Session.Set<SessionData>(SessionUser, new SessionData
+                        {
+                            Id = cu.CustomerId,
+                            Name = cu.FirstName + " " + cu.LastName,
+                            CNIC = cu.Cnic,
+                            PhNo = cu.PhoneNo,
+                            Email = cu.Email,
+                            ImgUrl = cu.ImgUrl,
+                            Role = cu.Role
+                        });
                         return RedirectToAction("Index");
                     }
                     else
                     {
-                        ModelState.AddModelError("", "Incorrect Email or Password");
+                        ModelState.AddModelError("", "Incorrect Email or Password.Do you selected your role?");
                     }
                 }
                 else if (string.Equals(vm.Role, "DBoy", StringComparison.OrdinalIgnoreCase))
@@ -80,12 +101,21 @@ namespace FYPFinalKhanaGarKa.Controllers
                     DeliveryBoy d = db.DeliveryBoy.Where(i => i.Email == vm.Email && i.Password == vm.Password).FirstOrDefault();
                     if (d != null)
                     {
-                        AddInfoToSession(d.Cnic, d.Role, d.DeliveryBoyId, d.ImgUrl, d.FirstName + " " + d.LastName);
+                        HttpContext.Session.Set<SessionData>(SessionUser, new SessionData
+                        {
+                            Id = d.DeliveryBoyId,
+                            Name = d.FirstName + " " + d.LastName,
+                            CNIC = d.Cnic,
+                            PhNo = d.PhoneNo,
+                            Email = d.Email,
+                            ImgUrl = d.ImgUrl,
+                            Role = d.Role
+                        });
                         return RedirectToAction("Index");
                     }
                     else
                     {
-                        ModelState.AddModelError("", "Incorrect Email or Password");
+                        ModelState.AddModelError("", "Incorrect Email or Password.Do you selected your role?");
                     }
                 }
             }
@@ -116,12 +146,12 @@ namespace FYPFinalKhanaGarKa.Controllers
                     {
                         CreatedDate = DateTime.Now,
                         ModifiedDate = DateTime.Now,
-                        Category = "3 star",
+                        Category = 3,
                         Role = vm.Role.Trim(),
                         Status = true,
                         FirstName = vm.FirstName.Trim(),
                         LastName = vm.LastName.Trim(),
-                        Gender = vm.Gender.Trim(),
+                        Gender = vm.Gender,
                         Dob = vm.Dob,
                         Email = vm.Email.Trim(),
                         Password = vm.Password,
@@ -175,7 +205,7 @@ namespace FYPFinalKhanaGarKa.Controllers
                         Role = "DBoy",
                         FirstName = vm.FirstName.Trim(),
                         LastName = vm.LastName.Trim(),
-                        Gender = vm.Gender.Trim(),
+                        Gender = vm.Gender,
                         Dob = vm.Dob,
                         Email = vm.Email.Trim(),
                         Password = vm.Password,
@@ -228,7 +258,7 @@ namespace FYPFinalKhanaGarKa.Controllers
                         Status = true,
                         FirstName = vm.FirstName.Trim(),
                         LastName = vm.LastName.Trim(),
-                        Gender = vm.Gender.Trim(),
+                        Gender = vm.Gender,
                         Dob = vm.Dob,
                         Email = vm.Email.Trim(),
                         Password = vm.Password,
@@ -278,12 +308,11 @@ namespace FYPFinalKhanaGarKa.Controllers
         [HttpGet]
         public IActionResult ModifyDetails()
         {
-            if (HttpContext.Session.GetString(SessionCNIC) != null &&
-            HttpContext.Session.GetString(SessionRole) != null)
+            if (HttpContext.Session.Get<SessionData>(SessionUser) != null)
             {
-                if (string.Equals(HttpContext.Session.GetString(SessionRole).Trim(), "chef", StringComparison.OrdinalIgnoreCase))
+                if (string.Equals(HttpContext.Session.Get<SessionData>(SessionUser).Role, "chef", StringComparison.OrdinalIgnoreCase))
                 {
-                    Chef c = db.Chef.Where(i => i.ChefId == HttpContext.Session.GetInt32(SessionId)).FirstOrDefault();
+                    Chef c = db.Chef.Where(i => i.ChefId == HttpContext.Session.Get<SessionData>(SessionUser).Id).FirstOrDefault();
                     return View(new RegisterViewModel
                     {
                         Id = c.ChefId,
@@ -300,12 +329,13 @@ namespace FYPFinalKhanaGarKa.Controllers
                         Area = c.Area,
                         Street = c.Street,
                         Cnic = c.Cnic,
-                        ImgUrl = c.ImgUrl
+                        ImgUrl = c.ImgUrl,
+                        About = c.About
                     });
                 }
-                else if (string.Equals(HttpContext.Session.GetString(SessionRole).Trim(), "customer", StringComparison.OrdinalIgnoreCase))
+                else if (string.Equals(HttpContext.Session.Get<SessionData>(SessionUser).Role, "customer", StringComparison.OrdinalIgnoreCase))
                 {
-                    Customer c = db.Customer.Where(i => i.CustomerId == HttpContext.Session.GetInt32(SessionId)).FirstOrDefault();
+                    Customer c = db.Customer.Where(i => i.CustomerId == HttpContext.Session.Get<SessionData>(SessionUser).Id).FirstOrDefault();
                     return View(new RegisterViewModel
                     {
                         Id = c.CustomerId,
@@ -325,9 +355,9 @@ namespace FYPFinalKhanaGarKa.Controllers
                         ImgUrl = c.ImgUrl
                     });
                 }
-                else if (string.Equals(HttpContext.Session.GetString(SessionRole).Trim(), "DBoy", StringComparison.OrdinalIgnoreCase))
+                else if (string.Equals(HttpContext.Session.Get<SessionData>(SessionUser).Role, "DBoy", StringComparison.OrdinalIgnoreCase))
                 {
-                    DeliveryBoy d = db.DeliveryBoy.Where(i => i.DeliveryBoyId == HttpContext.Session.GetInt32(SessionId)).FirstOrDefault();
+                    DeliveryBoy d = db.DeliveryBoy.Where(i => i.DeliveryBoyId == HttpContext.Session.Get<SessionData>(SessionUser).Id).FirstOrDefault();
                     return View(new RegisterViewModel
                     {
                         Id = d.DeliveryBoyId,
@@ -363,7 +393,7 @@ namespace FYPFinalKhanaGarKa.Controllers
             //{
                 if (string.Equals(vm.Role.Trim(), "chef", StringComparison.OrdinalIgnoreCase))
                 {
-                Chef c = db.Chef.Where(i => i.ChefId == vm.Id).FirstOrDefault();
+                Chef c = db.Chef.Where(i => i.ChefId == HttpContext.Session.Get<SessionData>(SessionUser).Id).FirstOrDefault();
                 c.FirstName = vm.FirstName;
                 c.LastName = vm.LastName;
                 c.Gender = vm.Gender;
@@ -375,6 +405,7 @@ namespace FYPFinalKhanaGarKa.Controllers
                 c.Area = vm.Area;
                 c.Street = vm.Street;
                 c.Status = vm.Status;
+                c.About = vm.About;
 
                 using (var tr = db.Database.BeginTransaction())
                     {
@@ -398,7 +429,7 @@ namespace FYPFinalKhanaGarKa.Controllers
                 }
                 else if (string.Equals(vm.Role.Trim(), "customer", StringComparison.OrdinalIgnoreCase))
                 {
-                    Customer c = db.Customer.Where(i => i.CustomerId == HttpContext.Session.GetInt32(SessionId)).FirstOrDefault();
+                    Customer c = db.Customer.Where(i => i.CustomerId == HttpContext.Session.Get<SessionData>(SessionUser).Id).FirstOrDefault();
                     c.FirstName = vm.FirstName;
                     c.LastName = vm.LastName;
                     c.Gender = vm.Gender;
@@ -433,7 +464,7 @@ namespace FYPFinalKhanaGarKa.Controllers
                 }
                 else if (string.Equals(vm.Role.Trim(), "DBoy", StringComparison.OrdinalIgnoreCase))
                 {
-                    DeliveryBoy c = db.DeliveryBoy.Where(i => i.DeliveryBoyId == HttpContext.Session.GetInt32(SessionId)).FirstOrDefault();
+                    DeliveryBoy c = db.DeliveryBoy.Where(i => i.DeliveryBoyId == HttpContext.Session.Get<SessionData>(SessionUser).Id).FirstOrDefault();
                     c.FirstName = vm.FirstName;
                     c.LastName = vm.LastName;
                     c.Gender = vm.Gender;
@@ -465,7 +496,7 @@ namespace FYPFinalKhanaGarKa.Controllers
                     }
                 }
             //}
-            return RedirectToAction("ModifyDetails", "Home", vm);
+            return RedirectToAction("ModifyDetails", "Home");
         }
 
         [HttpGet]
@@ -477,7 +508,7 @@ namespace FYPFinalKhanaGarKa.Controllers
         [HttpPost]
         public IActionResult ForgotPassword(ForgotPasswordViewModel vm)
         {
-            if (string.Equals(HttpContext.Session.GetString(SessionRole).Trim(), "chef", StringComparison.OrdinalIgnoreCase))
+            if (string.Equals(HttpContext.Session.Get<SessionData>(SessionUser).Role, "chef", StringComparison.OrdinalIgnoreCase))
             {
                 if (string.Equals(vm.Choice.Trim(), "Phone", StringComparison.OrdinalIgnoreCase))
                 {
@@ -487,11 +518,11 @@ namespace FYPFinalKhanaGarKa.Controllers
                 {
                     string code = Utils.GetCode();
                     HttpContext.Session.SetString(SessionCode, code);
-                    Utils.FPEmail(HttpContext.Session.GetString(SessionEmail).Trim(),code);
+                    Utils.FPEmail(HttpContext.Session.Get<SessionData>(SessionUser).Email, code);
                 }
 
             }
-            else if (string.Equals(HttpContext.Session.GetString(SessionRole).Trim(), "customer", StringComparison.OrdinalIgnoreCase))
+            else if (string.Equals(HttpContext.Session.Get<SessionData>(SessionUser).Role, "customer", StringComparison.OrdinalIgnoreCase))
             {
                 if (string.Equals(vm.Choice.Trim(), "Phone", StringComparison.OrdinalIgnoreCase))
                 {
@@ -501,10 +532,10 @@ namespace FYPFinalKhanaGarKa.Controllers
                 {
                     string code = Utils.GetCode();
                     HttpContext.Session.SetString(SessionCode, code);
-                    Utils.FPEmail(HttpContext.Session.GetString(SessionEmail).Trim(), code);
+                    Utils.FPEmail(HttpContext.Session.Get<SessionData>(SessionUser).Email, code);
                 }
             }
-            else if (string.Equals(HttpContext.Session.GetString(SessionRole).Trim(), "deliveryboy", StringComparison.OrdinalIgnoreCase))
+            else if (string.Equals(HttpContext.Session.Get<SessionData>(SessionUser).Role, "deliveryboy", StringComparison.OrdinalIgnoreCase))
             {
                 if (string.Equals(vm.Choice.Trim(), "Phone", StringComparison.OrdinalIgnoreCase))
                 {
@@ -514,7 +545,7 @@ namespace FYPFinalKhanaGarKa.Controllers
                 {
                     string code = Utils.GetCode();
                     HttpContext.Session.SetString(SessionCode, code);
-                    Utils.FPEmail(HttpContext.Session.GetString(SessionEmail).Trim(), code);
+                    Utils.FPEmail(HttpContext.Session.Get<SessionData>(SessionUser).Email, code);
                 }
             }
             return View();
@@ -528,12 +559,6 @@ namespace FYPFinalKhanaGarKa.Controllers
 
         [HttpGet]
         public IActionResult Contact()
-        {
-            return View();
-        }
-
-        [HttpGet]
-        public IActionResult ComingSoon()
         {
             return View();
         }
@@ -566,25 +591,9 @@ namespace FYPFinalKhanaGarKa.Controllers
             return View();
         }
 
-        [HttpGet]
-        public IActionResult Page404()
-        {
-            return View();
-        }
-
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
-
-        //Helper Methods
-        
-        private void AddInfoToSession(string cnic, string role, int id, string imgurl, string email)
-        {
-            HttpContext.Session.SetString(SessionCNIC, cnic);
-            HttpContext.Session.SetString(SessionRole, role);
-            HttpContext.Session.SetString(SessionEmail, email);
-            HttpContext.Session.SetInt32(SessionId, id);
         }
     }
 }

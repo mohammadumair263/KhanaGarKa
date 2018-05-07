@@ -25,7 +25,6 @@
     $(".addItemBtn").off().on('click', function () {
         var cart_item_name = $(this).closest(".dish-content").data("name");
         var cart_item_price = $(this).closest(".dish-content").data("price");
-        var cart_item_cid = $(this).closest(".dish-content").data("id");
 
         $("#cart").find("#cart-empty-view").remove(); //removing empty cart view
         $("#pro").prop('disabled', false); // abling checkout button.
@@ -126,9 +125,6 @@
     });
 
     Detail = {
-        get_cid: function () {
-            return cart_item_cid;
-        },
         get_orderType: function () {
             return $('input[name=order-policy]:checked').val();
         },

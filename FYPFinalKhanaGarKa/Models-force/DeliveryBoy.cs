@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace FYPFinalKhanaGarKa.Models
+namespace FYPFinalKhanaGarKa.Models_force
 {
     public partial class DeliveryBoy
     {

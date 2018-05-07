@@ -11,5 +11,7 @@ namespace FYPFinalKhanaGarKa.Models.ViewModels
         public string LastName { get; set; }
         public DateTime OrderDate { get; set; }
         public string OrderType { get; set; }
+        public string OrderStatus { get; set; }
+
     }
 }

@@ -7,7 +7,7 @@ namespace FYPFinalKhanaGarKa.Models
 {
     public class MenuOfferViewModel
     {
-        public List<Menu> Menus { get; set; }
-        public List<Offer> Offers { get; set; }
+        public IEnumerable<Menu> Menus { get; set; }
+        public IEnumerable<Offer> Offers { get; set; }
     }
 }

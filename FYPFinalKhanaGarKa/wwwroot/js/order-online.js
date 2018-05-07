@@ -12,13 +12,13 @@ $(document).ready(function(){
      /* SMOOTH SCROLLING
      /*-----------------------*/
 
-    $('.scroll-section').bind('click', function(event) {
-        var $anchor = $(this);
-        $('html, body').stop().animate({
-            scrollTop: $($anchor.attr('href')).offset().top - 10
-        }, 1500, 'easeInOutExpo');
-        event.preventDefault();
-    });
+    //$('.scroll-section').bind('click', function(event) {
+    //    var $anchor = $(this);
+    //    $('html, body').stop().animate({
+    //        scrollTop: $($anchor.attr('href')).offset().top - 10
+    //    }, 1500, 'easeInOutExpo');
+    //    event.preventDefault();
+    //});
 
 
     /*--------------------------------------/

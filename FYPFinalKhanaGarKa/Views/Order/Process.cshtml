@@ -3,7 +3,7 @@
     ViewData["Title"] = "Process";
 }
 
-@section StyleLink{
+@section Styles{
     <link href="~/css/order-online.css" rel="stylesheet" />
 }
 
@@ -136,15 +136,18 @@
                                                 <div class="cart-table">
                                                     <table class="table table-striped">
                                                         <tbody>
-                                                            @foreach (var item in Model.Items)
+                                                            @if (Model.Items.Count > 0 && Model.Items != null)
                                                             {
-                                                            <tr class="hobtr">
-                                                            <td class="cross-td custom-spinner">
-                                                            <span>@item.Quantity x</span>
-                                                            </td>
-                                                            <td>@item.Name</td>
-                                                            <td>@item.Price</td>
-                                                            </tr>
+                                                                @foreach (var item in Model.Items)
+                                                                {
+                                                                <tr class="hobtr">
+                                                                <td class="cross-td custom-spinner">
+                                                                <span>@item.Quantity x</span>
+                                                                </td>
+                                                                <td>@item.Name</td>
+                                                                <td>@item.Price</td>
+                                                                </tr>
+                                                                }
                                                             }
                                                         </tbody>
                                                     </table>
@@ -179,7 +182,6 @@
                                                 <!-- End of Order Info -->
 
                                                 <div class="cfo-checkoutarea">
-                                                    @*<a href="/Order/Success" class="btn btn-primary btn-block custom-checkout">Proceed to Checkout</a>*@
                                                     <input type="submit" class="btn btn-primary btn-block custom-checkout" value="Proceed to Checkout" />
                                                 </div>
                                             </div>

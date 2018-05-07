@@ -21,7 +21,7 @@ namespace FYPFinalKhanaGarKa.Models.ViewModels
         [RegularExpression("[a-zA-z]+", ErrorMessage = "Your LastName can only contain letters without space.")]
         public string LastName { get; set; }
 
-        public string Gender { get; set; }
+        public bool Gender { get; set; }
 
         [Required(ErrorMessage = "Your Date of Birth is Required")]
         [DataType(DataType.Date)]
@@ -48,9 +48,10 @@ namespace FYPFinalKhanaGarKa.Models.ViewModels
         public string ImgUrl { get; set; }
         public string City { get; set; }
         public string Area { get; set; }
+        [MaxLength(20,ErrorMessage ="Only 300 charcters are allowd.")]
+        public string About { get; set; }
         public string Street { get; set; }
         public string Role { get; set; }
-        public string About { get; set; }
         public bool Status { get; set; }
         public IFormFile Image { get; set; }
     }

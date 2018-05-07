@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace FYPFinalKhanaGarKa.Models
+namespace FYPFinalKhanaGarKa.Models_force
 {
-    public partial class DeliveryBoy
+    public partial class Customer
     {
-        public DeliveryBoy()
+        public Customer()
         {
             Orders = new HashSet<Orders>();
         }
 
-        public int DeliveryBoyId { get; set; }
+        public int CustomerId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public bool Gender { get; set; }

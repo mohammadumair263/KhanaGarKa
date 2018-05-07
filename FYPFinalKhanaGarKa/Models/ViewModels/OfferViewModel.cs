@@ -12,7 +12,7 @@ namespace FYPFinalKhanaGarKa.Models.ViewModels
         public int OfferId { get; set; }
 
         [Range(0, 100, ErrorMessage = "Please Enter discount from 0 to 10")]
-        public string Percentage { get; set; }
+        public int? Percentage { get; set; }
 
         [Required(ErrorMessage = "Price is Required")]
         [RegularExpression("[0-9]+", ErrorMessage = "Price can only contain numaric value")]

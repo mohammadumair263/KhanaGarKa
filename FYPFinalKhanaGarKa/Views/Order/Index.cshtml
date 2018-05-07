@@ -2,9 +2,14 @@
 
 @{
     ViewData["Title"] = "Order";
+    int cid = 0;
+    if(Model.Menus.Count() > 0)
+    {
+        cid = Model.Menus.FirstOrDefault().ChefId;
+    }
 }
 
-@section StyleLink{
+@section Styles{
     <link href="~/css/order-online.css" rel="stylesheet" />
 }
 
@@ -72,7 +77,7 @@
                                                                         <div class="dish-right-content">
                                                                             <div class="dish-price">@menus.Price pkr</div>
                                                                             <div class="text-right ui-order-btn">
-                                                                                <a href="#"><i class="fa fa-plus addItemBtn"></i></a>
+                                                                                <a><i class="fa fa-plus addItemBtn"></i></a>
                                                                             </div>
                                                                             <div class="clearfix"></div>
                                                                         </div>
@@ -83,6 +88,13 @@
                                                         </div>
                                                         <!-- /.col-md-12 -->
                                                     }
+                                                }
+                                                else
+                                                {
+                                                   <div>
+                                                        <h4 class="text-capitalize text-center">Sorry..</h4>
+                                                        <p class="text-capitalize text-center">Do not have any Menu yet.</p>
+                                                   </div>
                                                 }
                                             </div>
 
@@ -115,14 +127,19 @@
                                                                     </div>
                                                                     <div class="col-md-6">
                                                                         <div class="dish-name">@offers.OfferName</div>
-                                                                        <span class="label label-danger">until:@offers.EndDate</span>
+                                                                        <span class="label label-danger">&nbsp; &nbsp; &nbsp; until: @offers.EndDate.ToString("dd-MM-yyyy")</span>
+                                                                        @if(offers.Percentage != null)
+                                                                        {
+                                                                        <span class="label label-success">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; @offers.Percentage % &nbsp;</span>
+
+                                                                        }
                                                                         <p>@offers.Description</p>
                                                                     </div>
                                                                     <div class="col-md-3">
                                                                         <div class="dish-right-content">
                                                                             <div class="dish-price">@offers.Price pkr</div>
                                                                             <div class="text-right ui-order-btn">
-                                                                                <a href="#"><i class="fa fa-plus addItemBtn"></i></a>
+                                                                                <a><i class="fa fa-plus addItemBtn"></i></a>
                                                                             </div>
                                                                             <div class="clearfix"></div>
                                                                         </div>
@@ -133,6 +150,13 @@
                                                         </div>
                                                         <!-- /.col-md-12 -->
                                                     }
+                                                }
+                                                else
+                                                {
+                                                    <div>
+                                                        <h4 class="text-capitalize text-center">Sorry..</h4>
+                                                        <p class="text-capitalize text-center">Do not have any Offer yet.</p>
+                                                    </div>
                                                 }
                                             </div>
 
@@ -265,74 +289,74 @@
 </main>
 <!-- Content End -->
 
-@section ScriptsSrc{
+@section Scripts{
     <script src="~/js/order-online.js"></script>
-    <script src="~/lib/jquery.easing/js/jquery.easing.min.js"></script>
+    @*<script src="~/lib/jquery.easing/js/jquery.easing.min.js"></script>*@
     <script src="~/lib/jquery-sticky/jquery.sticky.js"></script>
     <script src="~/js/cart.js"></script>
     <script>
-        @*$("#rateYo").rateYo({
-            starWidth: "20px",
-            fullStar: true,
-            onSet: function (rating, rateYoInstance) {
-                console.log(@Model.Menus.FirstOrDefault().ChefId);
-                
-                var JsonData = {
-                    Id: @Model.Menus.FirstOrDefault().ChefId,
-                    CRating: rating
-                };
-                console.log(JsonData);
-                $.ajax({
-                    url: '@Url.Action("RatingManag", "Order")',
-                    type: "POST",
-                    contentType: "application/json",
-                    data: JSON.stringify(JsonData),
-                    success: function (data) {
-                }
-                });
-                
-            }
-        });*@
-        $('#pro').click(function () {
-            var prices = Detail.get_prices();
-            var quantities = Detail.get_quantities();
-            var type = Detail.get_orderType();
-            var names = Detail.get_names();
-            //var cid = Detail.get_cid();
-            var cid = @Model.Menus.FirstOrDefault().ChefId;
-            //loop to update values in prices array
-            for (var i = 0; i < prices.length; i++) {
-                prices[i] = prices[i] * quantities[i];
+            $("#rateYo").rateYo({
+                starWidth: "20px",
+                fullStar: true,
+                onSet: function (rating, rateYoInstance) {
 
-            }
+                    var JsonData = {
+                        Id: @cid,
+                        CRating: rating
+                    };
+                    $.ajax({
+                        url: '@Url.Action("RatingManag", "Order")',
+                        type: "POST",
+                        contentType: "application/json",
+                        data: JSON.stringify(JsonData),
+                        success: function (data) {
+                            if (data.state == 0) {
+                                window.alert("Thank you for yor rating!");
+                            }
+                        }
+                    });
 
-            var CartItems = [];
-            for (var i = 0; i < prices.length; i++) {
-                var obj = {
-                    Quantity: quantities[i],
-                    Name: names[i],
-                    Price: prices[i]
-                };
-                CartItems[i] = obj;
-            }
-            var sendJsonData = {
-                Subtotal: Detail.get_subtotal(),
-                Total: Detail.get_total(),
-                OrderType: type,
-                Items: CartItems,
-                Cid: cid
-            };
-            $.ajax({
-                url: '@Url.Action("PostJson", "Order")',
-                type: "POST",
-                contentType: "application/json",
-                data: JSON.stringify(sendJsonData),
-                success: function (data) {
-                    if (data.state == 0) {
-                        window.location.href = '@Url.Action("Process", "Order")';
-                    }
                 }
             });
-        });
+            $('#pro').click(function () {
+                var prices = Detail.get_prices();
+                var quantities = Detail.get_quantities();
+                var type = Detail.get_orderType();
+                var names = Detail.get_names();
+                var cid = @cid;
+                //loop to update values in prices array
+                for (var i = 0; i < prices.length; i++) {
+                    prices[i] = prices[i] * quantities[i];
+
+                }
+
+                var CartItems = [];
+                for (var i = 0; i < prices.length; i++) {
+                    var obj = {
+                        Quantity: quantities[i],
+                        Name: names[i],
+                        Price: prices[i]
+                    };
+                    CartItems[i] = obj;
+                }
+                var sendJsonData = {
+                    Subtotal: Detail.get_subtotal(),
+                    Total: Detail.get_total(),
+                    OrderType: type,
+                    Items: CartItems,
+                    Cid: cid
+                };
+                $.ajax({
+                    url: '@Url.Action("PostJson", "Order")',
+                    type: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify(sendJsonData),
+                    success: function (data) {
+                        if (data.state == 0) {
+                            window.location.href = '@Url.Action("Process", "Order")';
+                        }
+                    }
+                });
+            });
     </script>
 }

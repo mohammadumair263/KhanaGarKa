@@ -3,7 +3,7 @@
     ViewData["Title"] = "Modify Details";
 }
 
-@section StyleLink{
+@section Styles{
     <link href="~/css/order-online.css" rel="stylesheet" />
     }
 @Html.Partial("_PageTitlePartial", ViewData["Title"])
@@ -127,6 +127,19 @@
                                                         <span asp-validation-for="PhoneNo" class="text-danger"></span>
                                                     </div>
                                                 </div>
+                                                @if (string.Equals(Model.Role, "chef", StringComparison.OrdinalIgnoreCase))
+                                                {
+                                                    <div class="form-group">
+                                                        <div class="col-lg-offset-1 col-md-offset-1 col-lg-3 col-md-3 col-sm-12 col-xs-12">
+                                                            <label asp-for="About">About Yourself *</label>
+                                                        </div>
+                                                        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                                            <textarea asp-for="About" class="form-control" value="@Model.About"></textarea>
+                                                            <span asp-validation-for="PhoneNo" class="text-danger"></span>
+                                                        </div>
+                                                    </div>
+
+                                                }
 
                                                 <div class="form-group">
                                                     <div class="col-lg-offset-1 col-md-offset-1 col-lg-3 col-md-3 col-sm-12 col-xs-12">
@@ -134,16 +147,16 @@
                                                     </div>
                                                     <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                                                         <select class="form-control" asp-for="Gender">
-                                                            @if(string.Equals(Model.Gender.Trim(), "male", StringComparison.OrdinalIgnoreCase))
+                                                            @if(Model.Gender)
                                                             {
-                                                                <option value="Male" selected>Male</option>
-                                                                <option value="Female">Female</option>
+                                                                <option value="True" selected>Male</option>
+                                                                <option value="False">Female</option>
 
                                                             }
                                                             else
                                                             {
-                                                                <option value="Female" selected>Female</option>
-                                                                <option value="Male">Male</option>
+                                                                <option value=False selected>Female</option>
+                                                                <option value=True>Male</option>
 
                                                             }
                                                         </select>
@@ -155,8 +168,19 @@
                                                     </div>
                                                     <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
                                                         <select class="form-control" asp-for="Status">
-                                                            <option value = true selected>Active</option>
-                                                            <option value = false >Inactive</option>
+                                                            @if (Model.Status)
+                                                            {
+                                                                <option value = "True" selected>Active</option>
+                                                                <option value = "False">Inactive</option>
+
+                                                            }
+                                                            else
+                                                            {
+                                                                <option value = "False" selected>Inactive</option>
+                                                                <option value = "True">Active</option>
+
+                                                            }
+
                                                         </select>
                                                     </div>
                                                 </div>
@@ -249,7 +273,7 @@
                                                         </select>
                                                     </div>
                                                     <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12 select-field-wrap pull-left">
-                                                        <input asp-for="Street" class="form-control" value="@Model.Street" />
+                                                        <input asp-for="Street" class="form-control" placeholder="Street" value="@Model.Street" />
                                                     </div>
                                                 </div>
 

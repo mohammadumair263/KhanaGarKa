@@ -1,16 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace FYPFinalKhanaGarKa.Models
+namespace FYPFinalKhanaGarKa.Models_force
 {
-    public partial class DeliveryBoy
+    public partial class Chef
     {
-        public DeliveryBoy()
+        public Chef()
         {
+            Menu = new HashSet<Menu>();
+            Offer = new HashSet<Offer>();
             Orders = new HashSet<Orders>();
         }
 
-        public int DeliveryBoyId { get; set; }
+        public int ChefId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public bool Gender { get; set; }
@@ -22,12 +24,16 @@ namespace FYPFinalKhanaGarKa.Models
         public string City { get; set; }
         public string Area { get; set; }
         public string Street { get; set; }
+        public int Category { get; set; }
         public string Role { get; set; }
+        public int? Rating { get; set; }
         public bool Status { get; set; }
         public DateTime? CreatedDate { get; set; }
         public DateTime? ModifiedDate { get; set; }
         public string ImgUrl { get; set; }
 
+        public ICollection<Menu> Menu { get; set; }
+        public ICollection<Offer> Offer { get; set; }
         public ICollection<Orders> Orders { get; set; }
     }
 }

@@ -15,7 +15,7 @@ namespace FYPFinalKhanaGarKa.Models
         public int ChefId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public string Gender { get; set; }
+        public bool Gender { get; set; }
         public DateTime Dob { get; set; }
         public string Cnic { get; set; }
         public string PhoneNo { get; set; }
@@ -24,13 +24,14 @@ namespace FYPFinalKhanaGarKa.Models
         public string City { get; set; }
         public string Area { get; set; }
         public string Street { get; set; }
-        public string Category { get; set; }
+        public int Category { get; set; }
         public string Role { get; set; }
         public int? Rating { get; set; }
         public bool Status { get; set; }
         public DateTime? CreatedDate { get; set; }
         public DateTime? ModifiedDate { get; set; }
         public string ImgUrl { get; set; }
+        public string About { get; set; }
 
         public ICollection<Menu> Menu { get; set; }
         public ICollection<Offer> Offer { get; set; }
